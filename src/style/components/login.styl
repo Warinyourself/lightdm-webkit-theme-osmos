@@ -1,0 +1,181 @@
+.login-transition
+  width 100%
+  height 100vh
+  position relative
+
+.login-view
+  --login-width 330px
+  padding 12px
+  position absolute 
+  border-radius 20px
+  background var(--background-block)
+  display flex
+  flex-direction column
+  transition .25s
+  width var(--login-width)
+  min-width var(--login-width)
+  height 230px
+  z-index 10
+  &.login-view--center
+    transform translate(calc(100vw / 2 - 50%), calc(100vh / 2 - 50%))
+  &.login-view--top
+    transform translate(calc(100vw / 2 - 50%), 12px)
+  &.login-view--right
+    transform translate(calc(100vw - 100% - 12px), calc(100vh / 2 - 50%))
+  &.login-view--bottom
+    transform translate(calc(100vw / 2 - 50%), calc(100vh - 100% - 12px))
+  &.login-view--left
+    transform translate(12px, calc(100vh / 2 - 50%))
+
+  .slash
+    stroke-dasharray 29
+    stroke-dashoffset 29
+    transition stroke-dashoffset .3s
+
+  .hide
+    .slash
+      stroke-dashoffset 0
+
+.login-empty-title
+  position absolute
+  bottom 20px
+  left 50%
+  transform translateX(-50%)
+  font-weight 200
+  font-size 2rem
+  opacity 0.7
+
+.login-content-settings
+  .login-view
+    transform translate(calc(100vw / 2 - 50%), calc(100vh / 2 - 50%))
+    height 50vmin
+    width 80vmin
+  .user-choice
+    margin-bottom 8px
+    display flex
+    .user-avatar, svg
+      display block
+      width 60px
+      height 60px
+      margin 0
+    .time
+      position absolute
+      transform translate(74px, 32px)
+    .user-name
+      margin 8px 12px
+
+
+.user-choice
+  width 100%
+  svg
+    width 50px
+    height 50px
+
+.time
+  text-align center
+  color var(--color-unfocus)
+  font-size 0.95rem
+
+.user-avatar, .user-choice svg
+  border-radius 50%
+  width 100px
+  height 100px
+  display block
+  transition .3s
+  margin auto
+  background-repeat no-repeat
+  background-size cover
+  background-position center
+
+.user-name
+  color white
+  width fit-content
+  font-size 1.2rem
+  margin 8px auto
+  transition .3s
+  text-align center
+
+.user-input
+  display flex
+  align-items center
+  input
+    background none
+    padding 5px 12px
+    color white
+    margin 0 8px
+    border 1px var(--color-unfocus) solid
+    transition .15s border
+    border-radius 5px
+    line-height 25px
+    width 100%
+    &:focus
+      outline none
+      border-color var(--color-active)
+    &::placeholder
+      color white
+      opacity .45
+
+.user-input-login
+  border-radius 50%
+  flex-shrink 0
+  padding 0
+  background none
+  border none
+  transition .2s
+
+.icon, .settings-button, .desktop-icon, .user-input-login, .system-icon
+  width 25px
+  min-width 25px
+  height 25px
+  cursor pointer
+  fill var(--color-unfocus)
+  color var(--color-unfocus)
+  transition .15s
+  &:focus
+    outline none
+  &:hover
+    color white
+    fill white
+  svg
+    transition .15s
+
+.icon-eye
+  padding 2px
+  margin-right 8px
+
+.desktop-icon, .system-icon
+  padding 0
+  z-index 2
+  border 0
+  position absolute
+  background none
+  border-radius 5px
+  border 1px solid transparent
+
+.system-icon
+  right 12px
+  top 12px
+
+.desktop-icon
+  top 12px
+  left 12px
+
+.user-input .password-input--error
+  border-color red
+  //animation errorInput .2s 10!important
+
+stepBounce = 2px
+
+@keyframes errorInput
+  0%
+    border-color red
+  25%
+    border-color red
+    transform translateX(stepBounce)
+  75%
+    border-color red
+    transform translateX(-stepBounce)
+  100%
+    border-color var(--color-unfocus)
+    transform translateX(0%)
+

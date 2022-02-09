@@ -1,0 +1,81 @@
+.user-settings
+  height 100%
+  overflow-y auto
+
+.user-settings-themes
+  display grid
+  grid-template-columns repeat(3, 1fr)
+  grid-template-rows repeat(auto-fit, 150px)
+  gap 8px
+
+.user-settings-theme
+  height 150px
+  border-radius 12px
+  cursor pointer
+  position relative
+  border: 2px solid transparent
+  transition .2s border
+  &.active
+    border-color: var(--color-active)
+
+.user-settings-tabs
+  display flex
+  justify-content center 
+  align-items center
+  margin-bottom 4px
+  position sticky
+  top 0px
+  
+.user-settings-tab
+  padding 4px 8px
+  color white
+  cursor pointer
+  border-bottom 2px solid transparent
+  &.active
+    border-bottom 2px solid var(--color-active)
+
+.user-settings-general
+  display grid
+  gap 12px
+
+.grid-two
+  display grid
+  grid-template-columns repeat(2, 1fr)
+  gap 12px
+  .title
+    grid-column 1 / 3
+
+.user-settings-custom
+  display grid
+  grid-template-columns repeat(auto-fit, minmax(200px, 1fr))
+  gap 12px
+
+.users-grid
+  display grid
+  gap 12px
+  grid-template-columns repeat(auto-fit, minmax(60px, calc(16.6666% - 12px)))
+
+.settings-user-block
+  cursor pointer
+  display flex
+  padding 12px
+  align-items center
+  border-radius 12px
+  border 1px solid var(--color-unfocus)
+  flex-direction column
+  justify-content center
+  &.active
+    border-color var(--color-active)
+
+.settings-user-name
+  margin-top 8px
+  text-overflow ellipsis
+  white-space nowrap
+  overflow hidden
+
+.settings-user-image
+  border-radius 50%
+  width 100%
+  height 100%
+  background-size cover
+  background-position center

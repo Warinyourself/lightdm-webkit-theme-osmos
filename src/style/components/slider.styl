@@ -1,0 +1,95 @@
+.slider-input
+  touch-action none
+  user-select none
+  width calc(100% - 50px)
+  height 2px
+  border-radius 1px
+  background #CDD9ED
+  position relative
+  margin-bottom 10px
+  .noUi-connects
+    cursor pointer
+    .noUi-connect
+      background var(--color-active)
+  .noUi-handle
+    &::before,
+    &::after
+      border-radius 20px
+      transform scale(var(--s))
+      transition transform .3s ease, border-radius .3s ease
+    &::before
+      --s .5
+      background var(--color-active)
+    &::after
+      --s .2
+      background #fff
+    &.noUi-active
+      &::before
+        --s .6
+      &::after
+        --s .55
+
+  *
+    touch-action none
+    user-select none
+    -webkit-tap-highlight-color transparent
+  &.noUi-state-tap .noUi-connect,
+  &.noUi-state-tap .noUi-origin
+    transition transform .3s
+  .noUi-target
+    position relative
+  .noUi-base,
+  .noUi-connects
+    position relative
+    z-index 1
+    width 100%
+    height 100%
+  .noUi-origin,
+  .noUi-connect
+    position absolute
+    will-change transform
+    transform-origin 0 0
+    top 0
+    left 0
+    z-index 1
+  .noUi-connects
+    overflow hidden
+    z-index 0
+    border-radius 1px
+    .noUi-connect
+      width 100%
+      height 100%
+  .noUi-handle
+    backface-visibility hidden
+    position absolute
+    outline none
+    cursor pointer
+    width 30px
+    height 30px
+    right -10px
+    top -19px
+    &::before,
+    &::after
+      content ''
+      position absolute
+    &::before
+      left 0
+      top 0
+      width 40px
+      height 40px
+    &::after
+      left 2px
+      top 2px
+      width 36px
+      height 36px
+  .noUi-origin
+    left auto
+    right 0
+    height 0
+    width 10%
+
+.app-slider__content
+  white-space nowrap
+  display flex
+  justify-content space-between
+  padding 0 3.5%

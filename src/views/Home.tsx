@@ -1,0 +1,105 @@
+import { Component, Vue } from 'vue-property-decorator'
+import { LoginPosition } from '@/models/page'
+
+import { AppModule } from '@/store/app'
+import { PageModule } from '@/store/page'
+
+import AppMenu from '@/components/app/AppMenu'
+import SettingsComponent from '@/components/base/SettingsComponent'
+import LoginComponent from '@/components/base/LoginComponent'
+import FrameRateBlock from '@/components/base/FrameRateBlock'
+import BackgroundImage from '@/components/base/BackgroundImage'
+import ShutdownButton from '@/components/base/ShutdownButton'
+import GithubButton from '@/components/base/GithubButton'
+
+@Component({
+  components: {
+    AppMenu,
+    GithubButton,
+    ShutdownButton,
+    FrameRateBlock,
+    LoginComponent,
+    BackgroundImage,
+    SettingsComponent
+  }
+})
+export default class HomePage extends Vue {
+  get activeBlock() {
+    return PageModule.activeBlock
+  }
+
+  get menu() {
+    return PageModule.menu
+  }
+
+  get showFrameRate() {
+    return AppModule.showFrameRate
+  }
+
+  get isOpenLogin() {
+    return PageModule.isOpenBlock('login')
+  }
+
+  get isOpenSettings() {
+    return PageModule.isOpenBlock('settings')
+  }
+
+  get isViewThemeOnly() {
+    return AppModule.viewThemeOnly
+  }
+
+  get showLogin() {
+    return !this.isViewThemeOnly && this.isOpenLogin
+  }
+
+  created() {
+    // Set language
+    const language = localStorage.getItem('language') || 'en'
+    this.$i18n.locale = language
+    PageModule.SET_STATE_PAGE({ key: 'language', value: language })
+
+    // Set login position
+    const loginPosition = localStorage.getItem('loginPosition') as LoginPosition || 'center'
+    PageModule.SET_STATE_PAGE({ key: 'loginPosition', value: loginPosition })
+
+    // Set active block
+    PageModule.openBlock({ id: 'login' })
+    PageModule.SET_STATE_PAGE({ key: 'languages', value: this.$i18n.availableLocales })
+
+    document.addEventListener('mousedown', this.handleClick)
+  }
+
+  handleClick(event: MouseEvent) {
+    if (!this.activeBlock) {
+      return PageModule.openBlock({ id: 'login' })
+    }
+
+    const target = event.target as Node
+    const activeBlocks = document.querySelectorAll(`.block-${this.activeBlock.id}`)
+    const isClickOnAciveBlock = Array.from(activeBlocks).some(node => node.contains(target))
+    const menuNode = document.querySelector('#menu')
+    const isClickOnMenu = menuNode?.contains(target)
+
+    if (this.menu.view && !isClickOnMenu) {
+      PageModule.ASSIGN_MENU({ view: false })
+    } else if (!isClickOnAciveBlock) {
+      PageModule.closeBlock()
+    }
+  }
+
+  render() {
+    return <div class="index">
+      { this.showFrameRate && <FrameRateBlock /> }
+      <BackgroundImage />
+
+      <transition-group class="login-transition" name='fade' tag="div">
+        { this.showLogin && <LoginComponent key='LoginComponent' /> }
+        { this.isOpenSettings && <SettingsComponent key='SettingsComponent' /> }
+      </transition-group>
+
+      { !this.isViewThemeOnly && <ShutdownButton /> }
+      { !this.isViewThemeOnly && <GithubButton /> }
+      <AppMenu />
+    </div>
+  }
+}

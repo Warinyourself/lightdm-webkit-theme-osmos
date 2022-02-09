@@ -1,0 +1,50 @@
+.shutdown-block
+  position absolute 
+  right 12px
+  bottom 12px
+  &:hover
+    .shutdown-menu
+      opacity 1
+      transform translateY(0%)
+    .shutdown-button
+      border-radius 0 0 12px 12px
+
+.github-link
+  position absolute
+  left 12px
+  bottom 12px
+
+.shutdown-button
+  padding 12px
+  border-radius 12px
+  cursor pointer
+  background var(--background-block)
+  width 40px
+  transition border-radius .15s
+  height 40px
+  svg
+    color var(--color-unfocus)
+    display block
+    transition 0.15s
+    margin 0
+    &:hover
+      color white
+
+.shutdown-menu
+  border-radius 12px 12px 0 0
+  width 40px
+  display flex
+  background var(--background-block)
+  transition .3s
+  opacity 0
+  flex-direction column
+  transform translateY(calc(100% + 12px + 44px))
+
+.shutdown-item
+  height 40px
+  padding 12px
+  color var(--color-unfocus)
+  transition .2s color
+  &:hover
+    color white
+

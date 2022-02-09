@@ -1,0 +1,69 @@
+{
+  "input": {
+    "time": "Time",
+    "color": "Select color",
+    "color-active": "Select active color",
+    "color-second": "Select second color",
+    "slider-amount": "Choice slider amount",
+    "dark-mode": "Dark mode",
+    "perspective": "Perspective",
+    "depth": "Depth",
+    "size": "Size",
+    "position": "Position",
+    "amount": "Amount",
+    "hue": "Hue",
+    "zoom": "Zoom",
+    "pxratio": "Resolution",
+    "animation-speed": "Animation speed",
+    "invert": "Invert",
+    "brightness": "Brightness",
+    "random": "Random"
+  },
+  "text": {
+    "themes": "themes",
+    "welcome": "welcome",
+    "password": "password",
+    "yes": "yes",
+    "no": "no",
+    "emptyPage": "Press any key to login"
+  },
+  "modals": {
+    "shutdown": {
+      "title": "Shutdown",
+      "text": "Are you sure you want to turn off the computer?"
+    },
+    "restart": {
+      "title": "Restart",
+      "text": "Are you sure you want to restart your computer?"
+    },
+    "suspend": {
+      "title": "Suspend",
+      "text": "Are you sure you want to suspend your computer?"
+    }
+  },
+  "settings": {
+    "title": "settings",
+    "themes": "themes",
+    "users": "users",
+    "performance": "performance",
+    "choice-desktop": "Choice desktop",
+    "choice-language": "Choice language",
+    "choice-os": "Choice os",
+    "save-theme": "Save theme",
+    "language": "Language",
+    "general": "General",
+    "choice-themes": "Choice themes",
+    "customize-theme": "Customize theme",
+    "reset-settings": "Reset settings",
+    "login-position": {
+      "title": "Position",
+      "about": "Choice login position",
+      "center": "center",
+      "top": "top",
+      "left": "left",
+      "right": "right",
+      "bottom": "bottom"
+    },
+    "about": "Settings system"
+  }
+}
