@@ -35,7 +35,6 @@ export default class SettingsCustom extends Vue {
   @Debounce()
   updateQuery() {
     if (this.syncThemeWithQuery) {
-      // console.log('AppModule.syncStoreWithQuery')
       AppModule.syncStoreWithQuery()
     }
   }

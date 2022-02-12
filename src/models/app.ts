@@ -142,8 +142,8 @@ export const defaultTheme: AppTheme = {
 export const AppThemes: AppTheme[] = [
   defaultTheme,
   {
-    name: 'shere',
-    component: 'shere',
+    name: 'Sphere',
+    component: 'sphere',
     color: {
       active: '#04ded4',
       background: 'black'
@@ -164,7 +164,7 @@ export const AppThemes: AppTheme[] = [
     ]
   },
   {
-    name: 'planet',
+    name: 'Planet',
     component: 'planet',
     color: {
       active: '#04ded4',
@@ -190,7 +190,7 @@ export const AppThemes: AppTheme[] = [
     ]
   },
   {
-    name: 'destruction',
+    name: 'Destruction',
     component: 'destruction',
     color: {
       active: '#04ded4',
@@ -229,7 +229,7 @@ export const AppThemes: AppTheme[] = [
     ]
   },
   {
-    name: 'rings',
+    name: 'Rings',
     component: 'rings',
     color: {
       active: '#04ded4',
@@ -269,7 +269,7 @@ export const AppThemes: AppTheme[] = [
     ]
   },
   {
-    name: 'tenderness',
+    name: 'Tenderness',
     component: 'tenderness',
     color: {
       active: '#04ded4',
@@ -296,8 +296,8 @@ export const AppThemes: AppTheme[] = [
     ]
   },
   {
-    name: 'Magic',
-    component: 'magic',
+    name: 'Flow',
+    component: 'flow',
     color: {
       active: '#04ded4',
       background: 'black'
@@ -357,8 +357,8 @@ export const AppThemes: AppTheme[] = [
     }
   },
   {
-    name: 'Malevich',
-    component: 'malevich',
+    name: 'Suprematism',
+    component: 'suprematism',
     settings: [
       {
         name: 'activeColor',

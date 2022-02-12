@@ -4,7 +4,7 @@ import { AppModule } from '@/store/app'
 let render: GL
 
 @Component
-export default class MagicTheme extends Vue {
+export default class FlowTheme extends Vue {
   get animationSpeed() {
     return AppModule.getThemeInput('animation-speed')?.value as number || 45
   }

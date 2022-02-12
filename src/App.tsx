@@ -34,8 +34,6 @@ export default class MainApp extends Vue {
 
     Mousetrap.bind('escape', () => {
       const isFocusPassword = document.querySelector('#password:focus') as HTMLInputElement
-      console.log({ isFocusPassword })
-      console.log('Escape')
 
       if (isFocusPassword) {
         isFocusPassword.blur()
