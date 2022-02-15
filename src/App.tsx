@@ -15,7 +15,7 @@ export default class MainApp extends Vue {
   }
 
   initKeybinds() {
-    const modKey = 'fn'
+    const modKey = 'ctrl'
 
     Mousetrap.bind(`${modKey}+t`, () => {
       PageModule.openTab({ type: 'themes' })

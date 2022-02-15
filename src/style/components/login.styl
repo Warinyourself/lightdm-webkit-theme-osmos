@@ -162,20 +162,18 @@
 
 .user-input .password-input--error
   border-color red
-  //animation errorInput .2s 10!important
+  animation errorInput .3s linear 2
 
-stepBounce = 2px
+stepBounce = 5px
 
 @keyframes errorInput
   0%
-    border-color red
+    transform translateX(0)
   25%
-    border-color red
-    transform translateX(stepBounce)
+    transform translateX(-(stepBounce))
   75%
-    border-color red
-    transform translateX(-stepBounce)
+    transform translateX(stepBounce)
   100%
-    border-color var(--color-unfocus)
-    transform translateX(0%)
+    transform translateX(0)
+     
 

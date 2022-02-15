@@ -1,17 +1,13 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { appWindow } from '@/models/lightdm'
 
-const DEBUG_PASSWORD = 'password'
+const DEBUG_PASSWORD = '1'
 
 const lightdmDebug = appWindow.lightdm === undefined
+let password: string
+let completeCallback: undefined | Function
 
 if (lightdmDebug) {
-  // window.greeter_config = {
-  // branding: {
-  //   background_images: 'no where this is live test'
-  // }
-  // }
-
   appWindow.lightdm = {
     is_authenticated: false,
     authentication_user: undefined,
@@ -20,75 +16,38 @@ if (lightdmDebug) {
     can_restart: true,
     can_hibernate: true,
     can_shutdown: true,
-    // sessions: [
-    //   {
-    //     name: 'i3wm',
-    //     key: 'i3'
-    //   },
-    //   {
-    //     name: 'KDE 5',
-    //     key: 'plasma-shell'
-    //   },
-    //   {
-    //     name: 'Kodi',
-    //     key: 'kodi'
-    //   },
-    //   {
-    //     name: 'Gnome 3',
-    //     key: 'gnome-shell'
-    //   },
-    //   {
-    //     name: 'XFCE 4',
-    //     key: 'xfce'
-    //   },
-    //   {
-    //     name: 'Openbox',
-    //     key: 'openbox'
-    //   },
-    //   {
-    //     name: 'Cinnamon',
-    //     key: 'cinnamon'
-    //   },
-    //   {
-    //     name: 'xmonad',
-    //     key: 'xmonad'
-    //   }
-    // ],
     sessions: [
       {
-        name: 'GNOME',
-        key: 'gnome',
-        comment: 'This session logs you into GNOME'
+        name: 'i3wm',
+        key: 'i3'
       },
       {
-        name: 'GNOME',
-        key: 'gnome',
-        comment: 'This session logs you into GNOME'
+        name: 'KDE 5',
+        key: 'plasma-shell'
       },
       {
-        name: 'GNOME on Xorg',
-        key: 'gnome-xorg',
-        comment: 'This session logs you into GNOME'
+        name: 'Kodi',
+        key: 'kodi'
+      },
+      {
+        name: 'Gnome 3',
+        key: 'gnome-shell'
+      },
+      {
+        name: 'XFCE 4',
+        key: 'xfce'
       },
       {
         name: 'Openbox',
-        key: 'openbox',
-        comment: 'Log in using the Openbox window manager (without a session manager)'
+        key: 'openbox'
       },
       {
-        name: 'awesome',
-        key: 'awesome',
-        comment: 'Highly configurable framework window manager'
+        name: 'Cinnamon',
+        key: 'cinnamon'
       },
       {
-        name: 'i3',
-        key: 'i3',
-        comment: 'improved dynamic tiling window manager'
-      },
-      {
-        name: 'i3 (with debug log)',
-        key: 'i3-with-shmlog',
-        comment: 'improved dynamic tiling window manager'
+        name: 'xmonad',
+        key: 'xmonad'
       }
     ],
     users: [
@@ -114,13 +73,19 @@ if (lightdmDebug) {
     ],
     language: 'American English',
     start_authentication: (username) => {
-      console.log(`Starting authenticating : '${username}'`)
+      console.log(`Starting authenticating here: '${username}'`)
+      // appWindow.lightdm.cancel_autologin();
+      // appWindow.lightdm.cancel_authentication()
+      // appWindow.lightdm.authenticate(String(accounts.getDefaultUserName()))
 
-      if (appWindow?.lightdm !== undefined) {
-        appWindow.lightdm.authentication_user = username
-      }
+      // lightdm.is_authenticated = true;
+      // appWindow.lightdm.authentication_user = username
 
-      appWindow.show_prompt('Password: ')
+      // appWindow.show_prompt('Password: ')
+      appWindow.lightdm.respond(password)
+    },
+    authenticate: (username) => {
+      console.log(`Starting authenticating user: '${username}'`)
     },
     cancel_authentication: () => {
       console.log('Auth cancelled')
@@ -128,19 +93,16 @@ if (lightdmDebug) {
     respond: (password) => {
       console.log(`Password provided : '${password}'`)
 
-      if (password === DEBUG_PASSWORD && appWindow?.lightdm !== undefined) {
+      if (password === DEBUG_PASSWORD) {
         appWindow.lightdm.is_authenticated = true
-      } else {
-        const now = new Date().getTime()
-        while (new Date().getTime() < now + 2000);
       }
 
       appWindow.authentication_complete()
     },
-    login: (user, session) => {
+    login(user, session) {
       alert(`Logged with '${user}' (Session: '${session}') !`)
     },
-    shutdown: () => {
+    shutdown() {
       alert('(DEBUG: System is shutting down)')
     },
     hibernate() {
@@ -155,24 +117,41 @@ if (lightdmDebug) {
   }
 }
 
-let password: string
-let globalErrorCallback: undefined | Function
-let completeCallback: undefined | Function
-
-appWindow.lightdm_login = (username, pass, callback, errorCallback) => {
+appWindow.lightdmLogin = (username, pass, callback) => {
   completeCallback = callback
-  globalErrorCallback = errorCallback
   password = pass
-  console.log(`lightdm_login ${username}, ${pass}`)
+  console.log(`lightdmLogin ${username}, ${pass}`)
 
+  appWindow.lightdm.start_authentication(username)
+}
+
+appWindow.lightdmStart = desktop => {
   if (appWindow.lightdm) {
-    appWindow.lightdm.start_authentication(username)
+    appWindow.lightdm.login(appWindow.lightdm.authentication_user || '', desktop)
   }
 }
 
-appWindow.lightdm_start = desktop => {
-  if (appWindow.lightdm) {
-    appWindow.lightdm.login(appWindow.lightdm.authentication_user || '', desktop)
+let inputErrorTimer: null | any
+
+appWindow.authentication_complete = () => {
+  if (appWindow?.lightdm?.is_authenticated && completeCallback) {
+    completeCallback()
+  } else {
+    appWindow.lightdm.cancel_authentication()
+
+    const inputNode = document.getElementById('password')
+    if (!inputNode) return
+
+    inputNode.classList.add('password-input--error')
+
+    if (inputErrorTimer) {
+      clearTimeout(inputErrorTimer)
+    }
+
+    inputErrorTimer = setTimeout(() => {
+      inputNode.classList.remove('password-input--error')
+      inputErrorTimer = null
+    }, 10000)
   }
 }
 
@@ -184,21 +163,6 @@ appWindow.show_prompt = (text, _type) => {
   }
 }
 
-appWindow.authentication_complete = () => {
-  if (appWindow?.lightdm?.is_authenticated && completeCallback) {
-    completeCallback()
-  } else if (appWindow?.lightdm && globalErrorCallback) {
-    appWindow.lightdm.cancel_authentication()
-    globalErrorCallback('Invalid username/password')
-  } else {
-    alert('SOMETHING WRONG')
-  }
-}
-
 appWindow.show_message = (text, type) => {
-  if (globalErrorCallback) {
-    globalErrorCallback(text)
-  } else {
-    alert('SOMETHING WRONG with show_message')
-  }
+  alert(text)
 }

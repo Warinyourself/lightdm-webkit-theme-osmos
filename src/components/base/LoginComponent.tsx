@@ -73,7 +73,6 @@ export default class LoginComponent extends Vue {
       <div class={ `login-view login-view--${PageModule.loginPosition}` }>
         <AppIcon name={ this.currentDesktop?.key } class='desktop-icon'/>
         <AppIcon name={ AppModule.currentOs } class='system-icon'/>
-        {/* nativeOn */}
         <UserAvatar />
         <UserInput />
       </div>

@@ -202,26 +202,8 @@ class App extends VuexModule implements AppState {
 
   @Action
   login() {
-    console.log('Start login')
-    appWindow.lightdm_login(this.username, this.password, () => {
-      console.log('FINISH LOGIN?!')
-      appWindow.lightdm_start(this.currentDesktop?.key || appWindow?.lightdm?.sessions[0].key || 'i3')
-    }, (error) => {
-      console.log(`error AUTH ${error}`)
-      const inputNode = document.getElementById('password')
-
-      if (!inputNode) return
-
-      inputNode.classList.add('password-input--error')
-
-      if (inputErrorTimer) {
-        clearTimeout(inputErrorTimer)
-      }
-
-      // inputErrorTimer = setTimeout(() => {
-      //   inputNode.classList.remove('password-input--error')
-      //   inputErrorTimer = null
-      // }, 10000)
+    appWindow.lightdmLogin(this.username, this.password, () => {
+      appWindow.lightdmStart(this.currentDesktop?.key || appWindow?.lightdm?.sessions[0].key || 'i3')
     })
   }
 

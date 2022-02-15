@@ -2,13 +2,12 @@
 export interface ExpandedWindow {
   lightdm: Lightdm;
   authentication_complete(): void;
-  lightdm_login(
+  lightdmLogin(
     username: string,
     password: string,
     callback: () => void,
-    errorCallback: (error: string) => void
   ): void;
-  lightdm_start(desktop: string): void;
+  lightdmStart(desktop: string): void;
   show_prompt(text: string, type?: any): void;
   show_message(text: string, type: any): void;
 }
@@ -26,6 +25,7 @@ export interface Lightdm {
   languages: LightdmLanguage[];
   language: string;
   start_authentication(username: string): void;
+  authenticate(username: string): void;
   cancel_authentication(): void;
   respond(password: string): void;
   login(user: string, session: string): void;
@@ -49,7 +49,7 @@ export interface LightdmLanguage {
 export interface LightdmSession {
   name: string;
   key: string;
-  comment: string;
+  comment?: string;
 }
 
 export const appWindow = (window as unknown) as Window & ExpandedWindow
