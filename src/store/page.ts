@@ -6,24 +6,17 @@ import {
   Action
 } from 'vuex-module-decorators'
 import store from '@/store/index'
-import { InteractiveBlock, InteractiveBlockIds, AppMenu, LoginPosition, AppMenuMain } from '@/models/page'
+import { InteractiveBlock, InteractiveBlockIds, AppMenu, LoginPosition, AppMenuMain, DialogInterface } from '@/models/page'
 import { AppModule } from './app'
 
-export interface PageState {
-  menu: AppMenuMain | AppMenu;
-  language: string;
-  languages: string[];
-  loginPosition: LoginPosition;
-  activeBlocks: InteractiveBlock[];
-  interactiveBlocks: InteractiveBlock[];
-}
-
 @Module({ dynamic: true, store, name: 'page' })
-class Page extends VuexModule implements PageState {
+class Page extends VuexModule {
   menu: AppMenuMain | AppMenu = {
     view: false,
     items: []
   }
+
+  dialog: DialogInterface | null = null
 
   mainTabIndex = 0
   language = ''
@@ -33,7 +26,8 @@ class Page extends VuexModule implements PageState {
   interactiveBlocks: InteractiveBlock[] = [
     {
       id: 'login',
-      closeBeforeMount: ['settings']
+      closeBeforeMount: ['settings'],
+      mayOpen: () => !AppModule.viewThemeOnly
     },
     {
       id: 'settings',
@@ -79,9 +73,12 @@ class Page extends VuexModule implements PageState {
   @Mutation
   OPEN_ACTIVE_BLOCK(id: InteractiveBlockIds) {
     const activeBlock = this.interactiveBlocks.find((block) => block.id === id)
-    if (activeBlock) {
-      this.activeBlocks.push(activeBlock)
-    }
+    if (!activeBlock) { return }
+
+    const canOpen = activeBlock?.mayOpen ? activeBlock?.mayOpen() : true
+    if (!canOpen) { return }
+
+    this.activeBlocks.push(activeBlock)
   }
 
   @Mutation
@@ -128,6 +125,19 @@ class Page extends VuexModule implements PageState {
   }
 
   @Action
+  openFirstBlock() {
+    for (let i = 0; i < this.interactiveBlocks.length; i++) {
+      const block = this.interactiveBlocks[i]
+      const open = block.mayOpen ? block.mayOpen() : true
+
+      if (open) {
+        this.OPEN_ACTIVE_BLOCK(block.id)
+        break
+      }
+    }
+  }
+
+  @Action
   async openBlock(settings: { id: InteractiveBlockIds }) {
     settings = settings || {}
     const { id } = settings
@@ -158,6 +168,7 @@ class Page extends VuexModule implements PageState {
     if (!block) { return }
 
     const openBlocks = block.openAfterDestroy
+
     if (openBlocks) {
       openBlocks.forEach((id) => this.OPEN_ACTIVE_BLOCK(id))
     }
@@ -170,6 +181,16 @@ class Page extends VuexModule implements PageState {
     if (needToClose) {
       this.CLOSE_ACTIVE_BLOCK(id)
     }
+  }
+
+  @Action
+  openDialog(dialog: DialogInterface) {
+    this.SET_STATE_PAGE({ key: 'dialog', value: dialog })
+  }
+
+  @Action
+  closeDialog() {
+    this.SET_STATE_PAGE({ key: 'dialog', value: null })
   }
 }
 

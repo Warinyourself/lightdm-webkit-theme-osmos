@@ -5,6 +5,7 @@ import { AppModule } from '@/store/app'
 import { PageModule } from '@/store/page'
 
 import AppMenu from '@/components/app/AppMenu'
+import AppDialog from '@/components/app/AppDialog'
 import SettingsComponent from '@/components/base/SettingsComponent'
 import LoginComponent from '@/components/base/LoginComponent'
 import FrameRateBlock from '@/components/base/FrameRateBlock'
@@ -40,12 +41,24 @@ export default class HomePage extends Vue {
     return PageModule.isOpenBlock('login')
   }
 
+  get isOpenBlock() {
+    return !!PageModule.activeBlock
+  }
+
   get isOpenSettings() {
     return PageModule.isOpenBlock('settings')
   }
 
   get isViewThemeOnly() {
     return AppModule.viewThemeOnly
+  }
+
+  get isGithubMode() {
+    return AppModule.isGithubMode
+  }
+
+  get showGithubButton() {
+    return this.isGithubMode && this.isOpenBlock
   }
 
   get showLogin() {
@@ -71,7 +84,7 @@ export default class HomePage extends Vue {
 
   handleClick(event: MouseEvent) {
     if (!this.activeBlock) {
-      return PageModule.openBlock({ id: 'login' })
+      return PageModule.openFirstBlock()
     }
 
     const target = event.target as Node
@@ -98,7 +111,7 @@ export default class HomePage extends Vue {
       </transition-group>
 
       { !this.isViewThemeOnly && <ShutdownButton /> }
-      { !this.isViewThemeOnly && <GithubButton /> }
+      { this.showGithubButton && <GithubButton /> }
       <AppMenu />
     </div>
   }

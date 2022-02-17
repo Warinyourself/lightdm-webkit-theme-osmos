@@ -31,8 +31,6 @@ export interface AppState extends AppSettings {
   users: LightdmUsers[];
 }
 
-let inputErrorTimer: null | any
-
 @Module({ dynamic: true, store, name: 'app' })
 class App extends VuexModule implements AppState {
   version = '2.0.0'

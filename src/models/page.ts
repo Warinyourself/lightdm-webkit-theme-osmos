@@ -6,6 +6,7 @@ export interface InteractiveBlock {
   openAfterDestroy?: InteractiveBlockIds[];
   closeBeforeMount?: InteractiveBlockIds[];
   callbackBeforeClose?: Array<() => boolean>;
+  mayOpen?: () => boolean;
 }
 
 export interface PageTimestamp {
