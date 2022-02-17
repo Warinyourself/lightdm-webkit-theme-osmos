@@ -112,6 +112,8 @@ export default class HomePage extends Vue {
 
       { !this.isViewThemeOnly && <ShutdownButton /> }
       { this.showGithubButton && <GithubButton /> }
+
+      <AppDialog />
       <AppMenu />
     </div>
   }

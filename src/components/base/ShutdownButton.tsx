@@ -15,13 +15,30 @@ export default class ShutdownBlock extends Vue {
 
   shutdown(event: MouseEvent) {
     event.stopPropagation()
-    appWindow.lightdm.suspend()
+    this.openShutdownDialog()
+  }
+
+  openShutdownDialog() {
+    PageModule.openDialog({
+      title: 'modals.shutdown.title',
+      text: 'modals.shutdown.text',
+      actions: [
+        {
+          title: 'text.yes',
+          callback: appWindow.lightdm.shutdown
+        },
+        {
+          title: 'text.no',
+          callback: PageModule.closeDialog
+        }
+      ]
+    })
   }
 
   render() {
     const button = <div class="shutdown-block">
       <ShutdownMenu />
-      <div class="shutdown-button" onClick={ this.shutdown }>
+      <div class="shutdown-button" >
         <AppIcon name="shutdown" />
       </div>
     </div>

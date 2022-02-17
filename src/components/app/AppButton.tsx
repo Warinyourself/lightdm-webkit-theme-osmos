@@ -38,17 +38,18 @@ export default class AppButton extends Vue implements AppButtonPropsInterface {
   @Prop({ type: String }) target!: string
   @Prop({ type: Boolean }) loading!: boolean
   @Prop({ type: Boolean }) nuxt!: boolean
+  @Prop({ type: String, default: 'transparent' }) color!: string
   @Prop({ type: Boolean }) disabled!: boolean
   @Prop({ type: String, default: 'button' }) tag!: string
   @Prop({ type: [Object, String] }) to!: Route | string
   @Prop({ type: [Object, String] }) href!: Route | string
 
   get classes() {
-    const classes: any = { [prefix]: true }
+    const classes: Record<string, boolean> = { [prefix]: true, [`${prefix}--${this.color}`]: true }
     const propertyList: Array<keyof AppButtonPropsInterface> = ['fab', 'block']
 
     propertyList.forEach(property => {
-      classes[`${prefix}--${property}`] = this[property]
+      classes[`${prefix}--${property}`] = !!this[property]
     })
 
     return {
@@ -106,6 +107,7 @@ export default class AppButton extends Vue implements AppButtonPropsInterface {
 
     if (tag === 'button') {
       data.attrs!.type = this.type
+      data.attrs!.autofocus = true
       data.attrs!.disabled = this.disabled
     }
 

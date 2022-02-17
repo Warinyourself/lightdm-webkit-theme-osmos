@@ -8,9 +8,14 @@
   color black
   align-items center
   justify-content center
-  transition: .3s background
+  transition: .2s background, .2s border, .2s color
   &:hover
     background var(--color-active)
+  &:focus
+    border: 1px solid var(--color-active)
+    background: none
+    outline: none
+    color white
 
 .app-button--block
   display: flex;

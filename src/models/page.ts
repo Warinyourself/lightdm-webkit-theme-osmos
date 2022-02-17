@@ -49,3 +49,15 @@ export interface AppMenuPosition {
   top?: number;
   bottom?: number;
 }
+
+export interface DialogButtonInterface {
+  title: string;
+  callback: () => void;
+
+}
+
+export interface DialogInterface {
+  title: string;
+  text: string;
+  actions: DialogButtonInterface[];
+}

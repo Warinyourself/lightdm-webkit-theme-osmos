@@ -34,11 +34,14 @@ export default class MainApp extends Vue {
 
     Mousetrap.bind('escape', () => {
       const isFocusPassword = document.querySelector('#password:focus') as HTMLInputElement
+      const isShowModal = !!PageModule.dialog
 
-      if (isFocusPassword) {
-        isFocusPassword.blur()
+      if (isShowModal) {
+        PageModule.closeDialog()
       } else if (PageModule.menu.view) {
         PageModule.ASSIGN_MENU({ view: false })
+      } else if (isFocusPassword) {
+        isFocusPassword.blur()
       } else if (PageModule.activeBlock) {
         PageModule.closeBlock()
       }
