@@ -12,6 +12,7 @@ import FrameRateBlock from '@/components/base/FrameRateBlock'
 import BackgroundImage from '@/components/base/BackgroundImage'
 import ShutdownButton from '@/components/base/ShutdownButton'
 import GithubButton from '@/components/base/GithubButton'
+import { hasSomeParentClass } from '@/utils/helper'
 
 @Component({
   components: {
@@ -87,14 +88,13 @@ export default class HomePage extends Vue {
       return PageModule.openFirstBlock()
     }
 
-    const target = event.target as Node
+    const target = event.target as HTMLElement
     const activeBlocks = document.querySelectorAll(`.block-${this.activeBlock.id}`)
     const isClickOnAciveBlock = Array.from(activeBlocks).some(node => node.contains(target))
-    const menuNode = document.querySelector('#menu')
-    const isClickOnMenu = menuNode?.contains(target)
+    const isClickOnIgnoreBlock = hasSomeParentClass(target, '.active-block')
 
-    if (this.menu.view && !isClickOnMenu) {
-      PageModule.ASSIGN_MENU({ view: false })
+    if (isClickOnIgnoreBlock) {
+      return undefined
     } else if (!isClickOnAciveBlock) {
       PageModule.closeBlock()
     }

@@ -47,12 +47,10 @@ export default class AppMenu extends Vue {
 
   mounted() {
     window.addEventListener('resize', this.handleResize, { passive: true })
-    this.menuNode && this.menuNode.addEventListener('mousedown', this.stopPreventEvent, { passive: true })
   }
 
   beforeDestroy() {
     window.removeEventListener('resize', this.handleResize)
-    this.menuNode && this.menuNode.removeEventListener('mousedown', this.stopPreventEvent)
   }
 
   handleResize() {
@@ -100,9 +98,9 @@ export default class AppMenu extends Vue {
   }
 
   render() {
-    return <div onClick={ this.stopPreventEvent } class='menu-wrapper' ref='menu'>
+    return <div class='menu-wrapper' ref='menu'>
       <transition name='fade-menu'>
-        { this.menu.view && <ul class='menu-list' id='menu' style={ this.style }>
+        { this.menu.view && <ul class='menu-list active-block' id='menu' style={ this.style }>
           { this.menu.items.map(this.buildElementItem) }
         </ul>
         }

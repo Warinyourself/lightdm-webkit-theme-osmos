@@ -24,7 +24,7 @@ export default class ShutdownBlock extends Vue {
   }
 
   render() {
-    const button = <div class="shutdown-block">
+    const button = <div class="shutdown-block active-block">
       <ShutdownMenu />
       <div class="shutdown-button" onClick={ this.shutdown }>
         <AppIcon name="shutdown" />

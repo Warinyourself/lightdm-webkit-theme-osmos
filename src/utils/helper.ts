@@ -42,9 +42,11 @@ export function parseQueryValue(value: string) {
   return value
 }
 
-export const randomize = (min: number, max: number) => (Math.random() * (max - min)) + min
+export function randomize(min: number, max: number) {
+  return (Math.random() * (max - min)) + min
+}
 
-export const generateRandomSliderValue = (input: AppInputThemeSlider) => {
+export function generateRandomSliderValue(input: AppInputThemeSlider) {
   const ignoreSliders = ['pxratio', 'brightness']
 
   if (ignoreSliders.includes(input.name)) { return input.value }
@@ -56,11 +58,11 @@ export const generateRandomSliderValue = (input: AppInputThemeSlider) => {
   return newValue
 }
 
-export const generateRandomColor = () => {
+export function generateRandomColor() {
   return '#' + (Math.floor(Math.random() * 2 ** 24 - 1)).toString(16)
 }
 
-export const generateDesktopIcons = () => {
+export function generateDesktopIcons() {
   return AppModule.desktops.map((desktop) => {
     const iconMap = {
       gnome: /gnome/,
@@ -90,7 +92,7 @@ export const generateDesktopIcons = () => {
 const systemActions = ['hibernate', 'restart', 'shutdown', 'suspend'] as const
 type systemActionsType = typeof systemActions[number]
 
-export const buildSystemDialog = (callbackName: systemActionsType) => {
+export function buildSystemDialog(callbackName: systemActionsType) {
   return () => PageModule.openDialog({
     title: `modals.${callbackName}.title`,
     text: `modals.${callbackName}.text`,
@@ -114,6 +116,11 @@ export const systemActionsObject = systemActions.reduce((acc, action) => {
   }
 }, {} as Record<systemActionsType, () => void>)
 
-export const preventDefault = (event: Event) => {
+export function preventDefault(event: Event, callback?: Function) {
   event.preventDefault()
+  callback && callback()
+}
+
+export function hasSomeParentClass(element: HTMLElement, tag: string): boolean {
+  return !!element.closest(tag)
 }
