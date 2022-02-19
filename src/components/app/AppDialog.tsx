@@ -2,8 +2,8 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import { PageModule } from '@/store/page'
 import AppIcon from '@/components/app/AppIcon.vue'
 import AppButton from './AppButton'
+import { preventDefault } from '@/utils/helper'
 
-// let showDialog = false
 @Component({
   components: { AppIcon }
 })
@@ -20,7 +20,7 @@ export default class AppDialog extends Vue {
   }
 
   generateDialog() {
-    return <div class="dialog-overlay">
+    return <div class="dialog-overlay" onClick={ preventDefault }>
       <div class="dialog-body">
         <h5 class="dialog-title"> { this.$t(this.dialog?.title + '') } </h5>
         <p class="dialog-text"> { this.$t(this.dialog?.text + '') } </p>

@@ -2,6 +2,7 @@ import { Component, Vue } from 'vue-property-decorator'
 import Mousetrap from 'mousetrap'
 import { AppModule } from '@/store/app'
 import { PageModule } from './store/page'
+import { modKey } from './utils/helper'
 
 @Component
 export default class MainApp extends Vue {
@@ -15,8 +16,6 @@ export default class MainApp extends Vue {
   }
 
   initKeybinds() {
-    const modKey = 'ctrl'
-
     Mousetrap.bind(`${modKey}+t`, () => {
       PageModule.openTab({ type: 'themes' })
       PageModule.openBlock({ id: 'settings' })
@@ -67,14 +66,6 @@ export default class MainApp extends Vue {
     Mousetrap.bind(`${modKey}+h`, () => {
       console.log('hide all windows')
       PageModule.CLOSE_ALL_ACTIVE_BLOCK()
-    })
-
-    Mousetrap.bind(`${modKey}+p`, () => {
-      console.log('power off')
-    })
-
-    Mousetrap.bind(`${modKey}+r`, () => {
-      console.log('restart')
     })
 
     Mousetrap.bind(`${modKey}+R`, () => {

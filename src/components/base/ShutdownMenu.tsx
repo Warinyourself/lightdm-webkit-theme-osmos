@@ -2,6 +2,7 @@ import { Component, Vue } from 'vue-property-decorator'
 
 import AppIcon from '@/components/app/AppIcon.vue'
 import { appWindow } from '@/models/lightdm'
+import { systemActionsObject } from '@/utils/helper'
 
 @Component({
   components: { AppIcon }
@@ -12,17 +13,17 @@ export default class ShutdownMenu extends Vue {
       {
         icon: 'restart',
         show: appWindow.lightdm.can_restart,
-        callback: appWindow.lightdm.restart
+        callback: systemActionsObject.restart
       },
       {
         icon: 'suspend',
         show: appWindow.lightdm.can_suspend,
-        callback: appWindow.lightdm.suspend
+        callback: systemActionsObject.suspend
       },
       {
         icon: 'hibernate',
         show: appWindow.lightdm.can_hibernate,
-        callback: appWindow.lightdm.hibernate
+        callback: systemActionsObject.hibernate
       }
     ].filter(({ show }) => show)
   }

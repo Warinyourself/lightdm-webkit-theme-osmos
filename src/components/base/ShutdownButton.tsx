@@ -3,7 +3,8 @@ import { Component, Vue } from 'vue-property-decorator'
 import { PageModule } from '@/store/page'
 import AppIcon from '@/components/app/AppIcon.vue'
 import ShutdownMenu from '@/components/base/ShutdownMenu'
-import { appWindow } from '@/models/lightdm'
+import Mousetrap from 'mousetrap'
+import { modKey, systemActionsObject } from '@/utils/helper'
 
 @Component({
   components: { AppIcon, ShutdownMenu }
@@ -13,32 +14,19 @@ export default class ShutdownBlock extends Vue {
     return !!PageModule.activeBlock
   }
 
-  shutdown(event: MouseEvent) {
-    event.stopPropagation()
-    this.openShutdownDialog()
+  mounted() {
+    Mousetrap.bind(`${modKey}+p`, systemActionsObject.shutdown)
   }
 
-  openShutdownDialog() {
-    PageModule.openDialog({
-      title: 'modals.shutdown.title',
-      text: 'modals.shutdown.text',
-      actions: [
-        {
-          title: 'text.yes',
-          callback: appWindow.lightdm.shutdown
-        },
-        {
-          title: 'text.no',
-          callback: PageModule.closeDialog
-        }
-      ]
-    })
+  shutdown(event: MouseEvent) {
+    event.stopPropagation()
+    systemActionsObject.shutdown()
   }
 
   render() {
     const button = <div class="shutdown-block">
       <ShutdownMenu />
-      <div class="shutdown-button" >
+      <div class="shutdown-button" onClick={ this.shutdown }>
         <AppIcon name="shutdown" />
       </div>
     </div>

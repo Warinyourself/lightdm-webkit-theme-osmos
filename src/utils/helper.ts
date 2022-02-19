@@ -1,6 +1,10 @@
 import { AppInputThemeSlider } from '@/models/app'
+import { appWindow, Lightdm } from '@/models/lightdm'
 import { AppModule } from '@/store/app'
+import { PageModule } from '@/store/page'
 import { debounce, DebounceSettings } from 'lodash'
+
+export const modKey = 'fn'
 
 export function Debounce(time = 500, options?: DebounceSettings): MethodDecorator {
   const map = new Map<number, any>()
@@ -81,4 +85,35 @@ export const generateDesktopIcons = () => {
       icon
     }
   })
+}
+
+const systemActions = ['hibernate', 'restart', 'shutdown', 'suspend'] as const
+type systemActionsType = typeof systemActions[number]
+
+export const buildSystemDialog = (callbackName: systemActionsType) => {
+  return () => PageModule.openDialog({
+    title: `modals.${callbackName}.title`,
+    text: `modals.${callbackName}.text`,
+    actions: [
+      {
+        title: 'text.yes',
+        callback: appWindow.lightdm[callbackName]
+      },
+      {
+        title: 'text.no',
+        callback: PageModule.closeDialog
+      }
+    ]
+  })
+}
+
+export const systemActionsObject = systemActions.reduce((acc, action) => {
+  return {
+    ...acc,
+    [action]: buildSystemDialog(action)
+  }
+}, {} as Record<systemActionsType, () => void>)
+
+export const preventDefault = (event: Event) => {
+  event.preventDefault()
 }
