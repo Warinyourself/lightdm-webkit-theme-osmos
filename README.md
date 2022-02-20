@@ -1,5 +1,17 @@
 # [Osmos theme](https://warinyourself.github.io/lightdm-webkit-theme-osmos/)
 
+## Installation
+
+### Arch Linux
+
+```
+yay -S lightdm-webkit-theme-osmos
+```
+
+### Manual installation
+
+Or set `greeter-session=lightdm-webkit2-greeter` in `/etc/lightdm/lightdm.conf`, then edit `/etc/lightdm/lightdm-webkit2-greeter.conf` to set `webkit_theme=lightdm-webkit-theme-osmos`.
+
 ## Themes
 ### [Random](https://warinyourself.github.io/lightdm-webkit-theme-osmos/?pxratio=0.8&animation-speed=5&symmetry=0.01&thickness=0.1&hue=360&brightness=1&invert=false&blur=false&no-transition=false&show-framerate=false&only-ui=true&themeName=Random)
 ![Random](https://user-images.githubusercontent.com/83131232/153943224-2264f687-7c81-4d06-8424-3f31f8aefd66.png)
@@ -21,5 +33,3 @@
 
 ### [Infinity](https://warinyourself.github.io/lightdm-webkit-theme-osmos/?palette=3&size=11&amount=50&animation-speed=20&blur=false&no-transition=false&show-framerate=false&only-ui=true&themeName=Infinity)
 ![Infinity](https://user-images.githubusercontent.com/83131232/153943210-e4cc3bc3-3ade-4323-a216-acf787b61d76.png)
-
-https://warinyourself.github.io/lightdm-webkit-theme-osmos/
