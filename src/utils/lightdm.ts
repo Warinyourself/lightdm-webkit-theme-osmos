@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { appWindow } from '@/models/lightdm'
 
-const DEBUG_PASSWORD = '1'
+const DEBUG_PASSWORD = 'password'
 
 const lightdmDebug = appWindow.lightdm === undefined
 let password: string
@@ -52,9 +52,9 @@ if (lightdmDebug) {
     ],
     users: [
       {
-        display_name: 'Tyler Durden',
-        username: 'Tyler Durden',
-        image: 'https://ychef.files.bbci.co.uk/976x549/p07h2zhs.jpg'
+        display_name: 'Warinyourself',
+        username: 'Warinyourself',
+        image: 'https://avatars.githubusercontent.com/u/83131232?s=200&u=26fbedfe561a2b37225c78c10b1c5d67d6fe1832&v=4'
       },
       {
         display_name: 'Bob',
@@ -74,14 +74,6 @@ if (lightdmDebug) {
     language: 'American English',
     start_authentication: (username) => {
       console.log(`Starting authenticating here: '${username}'`)
-      // appWindow.lightdm.cancel_autologin();
-      // appWindow.lightdm.cancel_authentication()
-      // appWindow.lightdm.authenticate(String(accounts.getDefaultUserName()))
-
-      // lightdm.is_authenticated = true;
-      // appWindow.lightdm.authentication_user = username
-
-      // appWindow.show_prompt('Password: ')
       appWindow.lightdm.respond(password)
     },
     authenticate: (username) => {
