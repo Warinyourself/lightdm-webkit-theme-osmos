@@ -1,5 +1,7 @@
 # [Osmos theme](https://warinyourself.github.io/lightdm-webkit-theme-osmos/)
 
+![INTRO](https://user-images.githubusercontent.com/83131232/154862858-3acede10-9987-4d58-bae4-d173e51dc833.gif)
+
 ## Installation
 
 ### Arch Linux
