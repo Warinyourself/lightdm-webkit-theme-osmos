@@ -40,15 +40,7 @@ export default class UserInput extends Vue {
 
   render() {
     return <div class='user-input'>
-      {/* <AppIcon class='settings-button' name={ 'settings' } onClick={ this.openSettings }/> */}
-      <AppIcon { ...{
-        class: 'settings-button',
-        props: { name: 'settings' },
-        on: {
-          click: this.openSettings
-        }
-      }}
-      />
+      <AppIcon class='settings-button' name='settings' onClick={ this.openSettings } />
 
       <input
         id='password'
@@ -65,13 +57,9 @@ export default class UserInput extends Vue {
       />
 
       <AppIcon
-        { ...{
-          class: ['icon icon-eye', { hide: !this.viewPassword }],
-          props: { name: 'eye' },
-          on: {
-            click: this.toggleShowPassword
-          }
-        } }
+        class={ ['icon icon-eye', { hide: !this.viewPassword }] }
+        name='eye'
+        onClick={ this.toggleShowPassword }
       />
 
       <button

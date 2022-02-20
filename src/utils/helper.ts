@@ -69,7 +69,7 @@ export function generateRandomColor() {
   return '#' + (Math.floor(Math.random() * 2 ** 24 - 1)).toString(16)
 }
 
-export function getDesktopIcon(desktop: string) {
+export function getDesktopIcon(desktop = '') {
   const iconMap = {
     gnome: /gnome/,
     openbox: /openbox/,

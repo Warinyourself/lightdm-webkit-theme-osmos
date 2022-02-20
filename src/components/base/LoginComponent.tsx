@@ -7,6 +7,7 @@ import AppIcon from '@/components/app/AppIcon.vue'
 import UserAvatar from '@/components/base/UserAvatar'
 import UserInput from '@/components/base/UserInput'
 import SettingsView from '@/components/base/settings/SettingsView'
+import { getDesktopIcon } from '@/utils/helper'
 
 @Component({
   components: {
@@ -35,6 +36,10 @@ export default class LoginComponent extends Vue {
     return AppModule.currentDesktop
   }
 
+  get currentDesktopIcon() {
+    return getDesktopIcon(this.currentDesktop?.key)
+  }
+
   get mainTabIndex() {
     return PageModule.mainTabIndex
   }
@@ -54,25 +59,19 @@ export default class LoginComponent extends Vue {
     PageModule.SET_STATE_PAGE({ key: 'mainTabIndex', value: index })
   }
 
-  openSettings(event: Event) {
+  openSettingsTab(event: Event) {
     event.preventDefault()
     event.stopPropagation()
 
     PageModule.openBlock({ id: 'settings' })
+    PageModule.openTab({ type: 'settings' })
   }
 
   render() {
-    const nativeOn = {
-      click: (event: Event) => {
-        this.openSettings(event)
-        PageModule.openTab({ type: 'settings' })
-      }
-    }
-
     return <div class={ `block-${this.activeBlock?.id}` }>
       <div class={ `login-view login-view--${PageModule.loginPosition}` }>
-        <AppIcon name={ this.currentDesktop?.key } class='desktop-icon'/>
-        <AppIcon name={ AppModule.currentOs } class='system-icon'/>
+        <AppIcon name={ this.currentDesktopIcon } onClick={ this.openSettingsTab } class='desktop-icon'/>
+        <AppIcon name={ AppModule.currentOs } onClick={ this.openSettingsTab } class='system-icon'/>
         <UserAvatar />
         <UserInput />
       </div>

@@ -52,27 +52,27 @@ export default class UserAvatar extends Vue {
     setInterval(() => { this.updater = new Date().getTime() }, 1000)
   }
 
+  buildUserAvatar(image: string | undefined) {
+    const defaultAvatar = <AppIcon name='user'/>
+    const userAvatar = <div
+      class='user-avatar'
+      style={ { 'background-image': `url("${image}")` } }
+    />
+
+    return image ? userAvatar : defaultAvatar
+  }
+
+  buildUser(user: LightdmUsers) {
+    return <div class='user-choice' key={ user.username }>
+      <p class='time' key={ this.updater }> { this.currentTime } </p>
+      { this.buildUserAvatar(user?.image) }
+      <div class='user-name'> { user?.display_name } </div>
+    </div>
+  }
+
   render() {
-    const buildUserAvatar = (image: string | undefined) => {
-      const defaultAvatar = <AppIcon name='user'/>
-      const userAvatar = <div
-        class='user-avatar'
-        style={ { 'background-image': `url("${image}")` } }
-      />
-
-      return image ? userAvatar : defaultAvatar
-    }
-
-    const buildUser = (user: LightdmUsers) => {
-      return <div class='user-choice' key={ user.username }>
-        <p class='time' key={ this.updater }> { this.currentTime } </p>
-        { buildUserAvatar(user?.image) }
-        <div class='user-name'> { user?.display_name } </div>
-      </div>
-    }
-
     return <transition-group tag="div" name="fade-bottom" class="transition-group">
-      { this.users.filter(({ username }) => username === this.user?.username).map(buildUser) }
+      { this.users.filter(({ username }) => username === this.user?.username).map(this.buildUser) }
     </transition-group>
   }
 }
