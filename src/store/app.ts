@@ -292,7 +292,7 @@ class App extends VuexModule implements AppState {
       return bodyClass
     }, {})
 
-    this.SET_STATE_APP({ key: 'bodyClass', value: { ...queryBodyClass, ...settings.bodyClass } })
+    this.SET_STATE_APP({ key: 'bodyClass', value: { ...settings.bodyClass, ...queryBodyClass } })
   }
 
   @Action
