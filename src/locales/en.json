@@ -17,15 +17,14 @@
     "animation-speed": "Animation speed",
     "invert": "Invert",
     "brightness": "Brightness",
-    "random": "Random"
+    "random": "Random",
+    "symmetry": "Symmetry",
+    "thickness": "Thickness"
   },
   "text": {
-    "themes": "themes",
-    "welcome": "welcome",
     "password": "password",
     "yes": "yes",
-    "no": "no",
-    "emptyPage": "Press any key to login"
+    "no": "no"
   },
   "modals": {
     "shutdown": {
@@ -39,12 +38,20 @@
     "suspend": {
       "title": "Suspend",
       "text": "Are you sure you want to suspend your computer?"
+    },
+    "hibernate": {
+      "title": "Hibernate",
+      "text": "Are you sure you want to hibernate your computer?"
     }
   },
   "settings": {
     "title": "settings",
     "themes": "themes",
     "users": "users",
+    "blur": "Blur",
+    "no-transition": "Disable animations",
+    "show-framerate": "Show framerate",
+    "only-ui": "Show only ui",
     "performance": "performance",
     "choice-desktop": "Choice desktop",
     "choice-language": "Choice language",

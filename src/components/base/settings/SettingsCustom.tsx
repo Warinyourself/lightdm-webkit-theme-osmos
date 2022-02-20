@@ -69,7 +69,7 @@ export default class SettingsCustom extends Vue {
 
   buildCheckbox(input: AppInputThemeGeneral) {
     const { label, value } = input
-    const props = { label, value }
+    const props = { label: this.$t(label), value }
     const handler = (value: boolean) => {
       AppModule.changeSettingsThemeInput({ key: input.name, value })
 

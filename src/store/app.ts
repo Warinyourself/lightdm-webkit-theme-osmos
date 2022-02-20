@@ -49,8 +49,8 @@ class App extends VuexModule implements AppState {
   bodyClass: Record<string, boolean> = {
     blur: false,
     'no-transition': false,
-    'show-frame-rate': false,
-    'only-graphic': false
+    'show-framerate': false,
+    'only-ui': false
   }
 
   // TODO: replace this on localStorageSettings
@@ -77,7 +77,7 @@ class App extends VuexModule implements AppState {
   }
 
   get showFrameRate() {
-    return this.bodyClass['show-frame-rate']
+    return this.bodyClass['show-framerate']
   }
 
   get activeTheme() {
@@ -103,7 +103,7 @@ class App extends VuexModule implements AppState {
   }
 
   get viewThemeOnly() {
-    return this.bodyClass['only-graphic']
+    return this.bodyClass['only-ui']
   }
 
   get isGithubMode() {
@@ -131,7 +131,6 @@ class App extends VuexModule implements AppState {
   SAVE_STATE_APP<S extends this, K extends keyof this>({ key, value }: { key: K; value: S[K] }) {
     this[key] = value
 
-    // TODO: write sync function this.syncLocalStorageWithStore()
     const settings = JSON.parse(localStorage.getItem('settings') || '')
     settings[key] = value
     localStorage.setItem('settings', JSON.stringify(settings))
@@ -140,7 +139,6 @@ class App extends VuexModule implements AppState {
   @Mutation
   CHANGE_BODY_CLASS({ key, value }: { key: string; value: boolean }) {
     this.bodyClass[key] = value
-    // TODO: write sync function this.syncLocalStorageWithStore()
   }
 
   @Mutation

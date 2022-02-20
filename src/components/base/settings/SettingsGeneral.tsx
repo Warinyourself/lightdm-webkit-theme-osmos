@@ -6,7 +6,7 @@ import { PageModule } from '@/store/page'
 import { LoginPosition } from '@/models/page'
 import { AppModule } from '@/store/app'
 import AppIcon from '@/components/app/AppIcon.vue'
-import { generateDesktopIcons } from '@/utils/helper'
+import { generateDesktopIcons, languageMap } from '@/utils/helper'
 import AppButton from '@/components/app/AppButton'
 import { osList } from '@/models/app'
 import { LightdmUsers } from '@/models/lightdm'
@@ -31,7 +31,7 @@ export default class SettingsGeneral extends Vue {
 
   get languageList() {
     return PageModule.languages.map((language) => ({
-      text: language,
+      text: languageMap[language],
       value: language
     }))
   }
@@ -70,11 +70,14 @@ export default class SettingsGeneral extends Vue {
     AppModule.SAVE_STATE_APP({ key: 'currentOs', value })
   }
 
-  buildCheckbox(label: string, bodyClass: string) {
+  buildCheckbox(name: string) {
     return <AppCheckbox
-      label={ this.$t(label) }
-      value={ this.bodyClass[bodyClass] }
-      onInput={ (value: boolean) => AppModule.CHANGE_BODY_CLASS({ key: bodyClass, value }) }
+      label={ this.$t(`settings.${name}`) }
+      value={ this.bodyClass[name] }
+      onInput={ (value: boolean) => {
+        AppModule.CHANGE_BODY_CLASS({ key: name, value })
+        AppModule.syncStoreWithQuery()
+      }}
     />
   }
 
@@ -129,10 +132,10 @@ export default class SettingsGeneral extends Vue {
   buildCheckboxSection() {
     return <div class="grid-two">
       <h2 class="title"> { this.$t('settings.performance') } </h2>
-      { this.buildCheckbox('Blur', 'blur') }
-      { this.buildCheckbox('Show framerate block', 'show-frame-rate') }
-      { this.buildCheckbox('Disable animation', 'no-transition') }
-      { this.buildCheckbox('Show only ui', 'only-graphic') }
+      { this.buildCheckbox('blur') }
+      { this.buildCheckbox('show-framerate') }
+      { this.buildCheckbox('no-transition') }
+      { this.buildCheckbox('only-ui') }
     </div>
   }
 

@@ -38,11 +38,10 @@ class Page extends VuexModule {
 
   get locale() {
     const localesMap: Record<string, string> = {
-      en: 'en-US',
       ru: 'ru-RU',
+      en: 'en-US',
       fr: 'fr-FR',
       de: 'de-DE',
-      pl: 'pl-PL',
       es: 'es-ES'
     }
 

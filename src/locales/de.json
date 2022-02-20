@@ -1,7 +1,27 @@
 {
+  "input": {
+    "time": "Zeit",
+    "color": "Farbe auswählen",
+    "color-active": "Aktive Farbe auswählen",
+    "color-second": "Zweite Farbe auswählen",
+    "slider-amount": "Schiebereglerbetrag auswählen",
+    "dark-mode": "Dunkler Modus",
+    "perspective": "Perspektive",
+    "depth": "Tiefe",
+    "size": "Größe",
+    "position": "Position",
+    "amount": "Betrag",
+    "hue": "Farbton",
+    "zoom": "Zoom",
+    "pxratio": "Auflösung",
+    "animation-speed": "Animationsgeschwindigkeit",
+    "invert": "Invertieren",
+    "brightness": "Helligkeit",
+    "random": "zufällig",
+    "symmetry": "Symmetrie",
+    "thickness": "Dicke"
+  },
   "text": {
-    "themes": "themen",
-    "welcome": "herzlich willkommen",
     "password": "passwort",
     "yes": "ja",
     "no": "nein"
@@ -9,30 +29,48 @@
   "modals": {
     "shutdown": {
       "title": "Herunterfahren",
-      "text": "Möchten Sie den Computer wirklich ausschalten?"
+      "text": "Sind Sie sicher, dass Sie den Computer ausschalten möchten?"
     },
     "restart": {
       "title": "Neustart",
-      "text": "Möchten Sie Ihren Computer wirklich neu starten?"
+      "text": "Sind Sie sicher, dass Sie Ihren Computer neu starten möchten?"
     },
     "suspend": {
       "title": "Aussetzen",
-      "text": "Möchten Sie Ihren Computer wirklich anhalten?"
+      "text": "Sind Sie sicher, dass Sie Ihren Computer anhalten möchten?"
+    },
+    "hibernate": {
+      "title": "Ruhezustand",
+      "text": "Sind Sie sicher, dass Sie Ihren Computer in den Ruhezustand versetzen möchten?"
     }
   },
   "settings": {
-    "title": "die einstellungen",
-    "choice-language": "Wahl Sprache",
+    "title": "Einstellungen",
+    "themes": "themen",
+    "users": "benutzer",
+    "blur": "Unschärfe",
+    "no-transition": "Animationen deaktivieren",
+    "show-framerate": "Framerate anzeigen",
+    "only-ui": "Nur ui anzeigen",
+    "performance": "leistung",
+    "choice-desktop": "Auswahl-Desktop",
+    "choice-language": "Sprache auswählen",
+    "choice-os": "Wahl os",
+    "save-theme": "Design speichern",
     "language": "Sprache",
+    "general": "allgemein",
+    "choice-themes": "Auswahlthemen",
+    "customize-theme": "Design anpassen",
+    "reset-settings": "Einstellungen zurücksetzen",
     "login-position": {
       "title": "Position",
-      "about": "Wahl Login-Position",
-      "center": "center",
-      "top": "oben",
+      "about": "Anmeldeposition auswählen",
+      "center": "zentrum",
+      "top": "top",
       "left": "links",
       "right": "richtig",
       "bottom": "unten"
     },
-    "about": "Systemeinstellun"
+    "about": "Systemeinstellungen"
   }
 }

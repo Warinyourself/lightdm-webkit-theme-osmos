@@ -5,6 +5,13 @@ import { PageModule } from '@/store/page'
 import { debounce, DebounceSettings } from 'lodash'
 
 export const modKey = 'fn'
+export const languageMap: Record<string, string> = {
+  ru: 'Русский',
+  en: 'English',
+  fr: 'Français',
+  de: 'Deutsch',
+  es: 'Español'
+}
 
 export function Debounce(time = 500, options?: DebounceSettings): MethodDecorator {
   const map = new Map<number, any>()
@@ -62,24 +69,30 @@ export function generateRandomColor() {
   return '#' + (Math.floor(Math.random() * 2 ** 24 - 1)).toString(16)
 }
 
+export function getDesktopIcon(desktop: string) {
+  const iconMap = {
+    gnome: /gnome/,
+    openbox: /openbox/,
+    awesome: /awesome/,
+    i3: /i3/,
+    elementary: /elementary/,
+    cinnamon: /cinnamon/,
+    plasma: /plasma/,
+    mate: /mate/,
+    xfce: /xfce/,
+    kodi: /kodi/
+  }
+
+  const [icon] = Object.entries(iconMap).find(([icon, regEx]) => {
+    return desktop.match(regEx)
+  }) || ['unknown']
+
+  return icon
+}
+
 export function generateDesktopIcons() {
   return AppModule.desktops.map((desktop) => {
-    const iconMap = {
-      gnome: /gnome/,
-      openbox: /openbox/,
-      awesome: /awesome/,
-      i3: /i3/,
-      elementary: /elementary/,
-      cinnamon: /cinnamon/,
-      plasma: /plasma/,
-      mate: /mate/,
-      xfce: /xfce/,
-      kodi: /kodi/
-    }
-
-    const [icon] = Object.entries(iconMap).find(([icon, regEx]) => {
-      return desktop.key.match(regEx)
-    }) || ['unknown']
+    const icon = getDesktopIcon(desktop.key)
 
     return {
       text: desktop.name,
