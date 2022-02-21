@@ -107,7 +107,6 @@ export default class AppButton extends Vue implements AppButtonPropsInterface {
 
     if (tag === 'button') {
       data.attrs!.type = this.type
-      data.attrs!.autofocus = true
       data.attrs!.disabled = this.disabled
     }
 
