@@ -135,6 +135,11 @@ export function preventDefault(event: Event, callback?: Function) {
   callback && callback()
 }
 
+export function stopPropagation(event: Event, callback?: Function) {
+  event.stopPropagation()
+  callback && callback()
+}
+
 export function hasSomeParentClass(element: HTMLElement, tag: string): boolean {
   return !!element.closest(tag)
 }

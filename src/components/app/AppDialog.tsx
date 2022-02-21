@@ -2,6 +2,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import { PageModule } from '@/store/page'
 import AppIcon from '@/components/app/AppIcon.vue'
 import AppButton from './AppButton'
+import { stopPropagation } from '@/utils/helper'
 
 @Component({
   components: { AppIcon }
@@ -19,8 +20,8 @@ export default class AppDialog extends Vue {
   }
 
   generateDialog() {
-    return <div class="dialog-overlay active-block">
-      <div class="dialog-body">
+    return <div class="dialog-overlay active-block" onClick={ PageModule.closeDialog }>
+      <div class="dialog-body" onClick={ stopPropagation }>
         <h5 class="dialog-title"> { this.$t(this.dialog?.title + '') } </h5>
         <p class="dialog-text"> { this.$t(this.dialog?.text + '') } </p>
         { this.generateButtons() }
