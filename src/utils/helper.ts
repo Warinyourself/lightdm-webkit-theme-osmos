@@ -1,10 +1,11 @@
 import { AppInputThemeSlider } from '@/models/app'
-import { appWindow, Lightdm } from '@/models/lightdm'
+import { appWindow } from '@/models/lightdm'
 import { AppModule } from '@/store/app'
 import { PageModule } from '@/store/page'
 import { debounce, DebounceSettings } from 'lodash'
 
-export const modKey = 'fn'
+const isFinalBuild = process.env.VUE_APP_VIEW === 'build'
+export const modKey = 'ctrl'
 export const languageMap: Record<string, string> = {
   ru: 'Русский',
   en: 'English',
