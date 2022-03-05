@@ -135,6 +135,14 @@ export function preventDefault(event: Event, callback?: Function) {
   callback && callback()
 }
 
+export function focusInputPassword() {
+  const inputPassword = document.querySelector('#password') as HTMLInputElement
+
+  if (inputPassword) {
+    inputPassword.focus()
+  }
+}
+
 export function stopPropagation(event: Event, callback?: Function) {
   event.stopPropagation()
   callback && callback()
