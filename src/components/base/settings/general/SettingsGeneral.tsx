@@ -9,16 +9,20 @@ import AppIcon from '@/components/app/AppIcon.vue'
 import { generateDesktopIcons, languageMap } from '@/utils/helper'
 import AppButton from '@/components/app/AppButton'
 import { osList } from '@/models/app'
-import { LightdmUsers } from '@/models/lightdm'
+import SettingsUsers from './SettingsUsers'
+import SettingsHotkeys from './SettingsHotkeys'
 
-@Component({ components: { AppIcon, AppSelector } })
+@Component({
+  components: {
+    AppIcon,
+    AppSelector,
+    SettingsUsers,
+    SettingsHotkeys
+  }
+})
 export default class SettingsGeneral extends Vue {
   get bodyClass() {
     return AppModule.bodyClass
-  }
-
-  get users() {
-    return AppModule.users
   }
 
   get showFrameRate() {
@@ -99,26 +103,6 @@ export default class SettingsGeneral extends Vue {
     if (hasQyery) { this.$router.replace({}) }
   }
 
-  buildUserBlock(user: LightdmUsers) {
-    const isActive = user.username === AppModule.username
-    const activateUser = () => AppModule.SAVE_STATE_APP({ key: 'username', value: user.username })
-
-    return <div
-      onClick={ activateUser }
-      class={`settings-user-block ${isActive ? 'active' : ''}`}
-    >
-      <AppIcon class='settings-user-image' name={ user.image || 'user' } />
-      <p class="settings-user-name"> { user.display_name } </p>
-    </div>
-  }
-
-  buildUsersBlock() {
-    return [
-      <h2 class="title mb-1"> { this.$t('settings.users') } </h2>,
-      <div class="users-grid"> { this.users.map(this.buildUserBlock) } </div>
-    ]
-  }
-
   buildSettingsSection() {
     return <div class="grid-two">
       <h2 class="title"> { this.$t('settings.title') } </h2>
@@ -144,7 +128,9 @@ export default class SettingsGeneral extends Vue {
       { this.buildCheckboxSection() }
       { this.buildSettingsSection() }
 
-      { !this.isViewThemeOnly && this.buildUsersBlock() }
+      { !this.isViewThemeOnly && <SettingsUsers /> }
+
+      { <SettingsHotkeys />}
 
       <div class="help-block">
         <AppButton onClick={ this.resetSettings } block>
