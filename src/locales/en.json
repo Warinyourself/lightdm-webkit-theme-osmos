@@ -55,6 +55,17 @@
     "performance": "performance",
     "choice-desktop": "Choice desktop",
     "choice-language": "Choice language",
+    "keyboard": {
+      "title": "Hotkeys",
+      "open-themes": "Open theme",
+      "open-custom": "Open custom settings",
+      "open-settings": "Open general settings",
+      "hide-windows": "Close windows",
+      "randomize-theme": "Choose random theme settings",
+      "poweroff": "Poweroff",
+      "restart": "Restart",
+      "suspend": "Suspend"
+    },
     "choice-os": "Choice os",
     "save-theme": "Save theme",
     "language": "Language",

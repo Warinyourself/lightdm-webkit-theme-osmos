@@ -7,7 +7,7 @@ import AppIcon from '@/components/app/AppIcon.vue'
 import UserAvatar from '@/components/base/UserAvatar'
 import UserInput from '@/components/base/UserInput'
 import SettingsView from '@/components/base/settings/SettingsView'
-import { getDesktopIcon } from '@/utils/helper'
+import { focusInputPassword, getDesktopIcon } from '@/utils/helper'
 
 @Component({
   components: {
@@ -53,6 +53,10 @@ export default class LoginComponent extends Vue {
     }
 
     return tabs
+  }
+
+  mounted() {
+    focusInputPassword()
   }
 
   activateTab(index: number) {

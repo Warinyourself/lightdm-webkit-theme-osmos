@@ -4,7 +4,7 @@ import { AppModule } from '@/store/app'
 import AppIcon from '@/components/app/AppIcon.vue'
 import SettingsThemes from '@/components/base/settings/SettingsThemes'
 import SettingsCustom from '@/components/base/settings/SettingsCustom'
-import SettingsGeneral from '@/components/base/settings/SettingsGeneral'
+import SettingsGeneral from '@/components/base/settings/general/SettingsGeneral'
 import { PageModule } from '@/store/page'
 
 @Component({
