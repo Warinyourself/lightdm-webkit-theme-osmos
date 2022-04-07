@@ -1,8 +1,10 @@
-import { AppInputThemeSlider } from '@/models/app'
+import { AppInputThemeGeneral, AppInputThemeSlider, AppInputThemeValue, AppTheme } from '@/models/app'
 import { appWindow } from '@/models/lightdm'
 import { AppModule } from '@/store/app'
 import { PageModule } from '@/store/page'
 import { debounce, DebounceSettings } from 'lodash'
+import { RawLocation } from 'vue-router'
+import router from '../router'
 
 const isFinalBuild = process.env.VUE_APP_VIEW === 'build'
 export const modKey = 'ctrl'
@@ -12,6 +14,13 @@ export const languageMap: Record<string, string> = {
   fr: 'Français',
   de: 'Deutsch',
   es: 'Español'
+}
+
+export function isDifferentRoute(to: RawLocation) {
+  const { app: { $route, $router } } = router
+  const resolve = $router.resolve(to)
+
+  return $route.fullPath !== resolve.href
 }
 
 export function Debounce(time = 500, options?: DebounceSettings): MethodDecorator {
@@ -150,4 +159,23 @@ export function stopPropagation(event: Event, callback?: Function) {
 
 export function hasSomeParentClass(element: HTMLElement, tag: string): boolean {
   return !!element.closest(tag)
+}
+
+export function randomizeSettingsTheme(theme: AppTheme) {
+  const generateValueObject: Record<string, (input: AppInputThemeSlider) => AppInputThemeValue> = {
+    slider: (input: AppInputThemeSlider) => generateRandomSliderValue(input),
+    checkbox: () => Math.random() > 0.5,
+    color: () => generateRandomColor(),
+    palette: (input: AppInputThemeGeneral) => Math.floor(randomize(0, (input.values?.length || 2) - 1))
+  }
+
+  return theme.settings?.map(input => {
+    const changeValueFunction = generateValueObject[input.type]
+
+    if (changeValueFunction) {
+      input.value = changeValueFunction(input as AppInputThemeSlider)
+    }
+
+    return input
+  })
 }

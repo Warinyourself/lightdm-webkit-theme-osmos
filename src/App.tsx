@@ -1,14 +1,25 @@
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import Mousetrap from 'mousetrap'
 import { AppModule } from '@/store/app'
 import { PageModule } from './store/page'
-import { focusInputPassword } from './utils/helper'
+import { Debounce, focusInputPassword } from './utils/helper'
 import { hotkeys } from '@/utils/hotkeys'
 
 @Component
 export default class MainApp extends Vue {
   get bodyClass() {
     return AppModule.bodyClass
+  }
+
+  get getMainSettings() {
+    return AppModule.getMainSettings
+  }
+
+  @Debounce(100)
+  @Watch('getMainSettings', { deep: true })
+  handleSettingsThemes() {
+    console.log('Update Settings')
+    AppModule.syncSettingsWithCache()
   }
 
   created() {

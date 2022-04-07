@@ -6,6 +6,7 @@ export interface AppSettings {
   username: string;
   desktop: string;
   defaultColor: string;
+  generateRandomThemes: boolean;
   bodyClass: Record<string, boolean>;
   themes: AppTheme[];
 }
@@ -304,6 +305,7 @@ export const AppThemes: AppTheme[] = [
     },
     settings: [
       pxratio(),
+      hueInput(),
       buildInputSlider({ value: 10, max: 15 }),
       buildInputSlider({ value: 1, max: 2.8, min: 0.2, name: 'size' }),
       randomButton
@@ -318,12 +320,13 @@ export const AppThemes: AppTheme[] = [
         type: 'palette',
         label: 'input.slider-amount',
         value: 0,
-        // TODO: Add more colors
         values: [
           ['#fcb2bf', '#cf56a1', '#8b2f97', '#511e78'],
-          ['#e3fdfd', '#cbf1f5', '#a6e3e9', '#71c9ce'],
           ['#e8f79a', '#49d292', '#3b445b', '#383746'],
-          ['#f5f5f5', '#fc5185', '#3fc1c9', '#364f6b']
+          ['#f5f5f5', '#fc5185', '#3fc1c9', '#364f6b'],
+          ['#00A8CC', '#0C7B93', '#27496D', '#142850'],
+          ['#F9F7F7', '#DBE2EF', '#3F72AF', '#112D4E'],
+          ['#ABEDD8', '#46CDCF', '#3D84A8', '#48466D']
         ]
       },
       {

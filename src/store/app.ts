@@ -20,7 +20,7 @@ import {
   defaultTheme
 } from '@/models/app'
 import { appWindow, LightdmSession, LightdmUsers } from '@/models/lightdm'
-import { generateRandomColor, generateRandomSliderValue, parseQueryValue, randomize } from '@/utils/helper'
+import { generateRandomColor, generateRandomSliderValue, isDifferentRoute, parseQueryValue, randomize, randomizeSettingsTheme } from '@/utils/helper'
 
 export interface AppState extends AppSettings {
   themes: AppTheme[];
@@ -43,7 +43,8 @@ class App extends VuexModule implements AppState {
 
   users = appWindow?.lightdm?.users || []
   desktops = appWindow?.lightdm?.sessions || []
-
+  showPassword = false
+  generateRandomThemes = false
   themes = AppThemes
 
   bodyClass: Record<string, boolean> = {
@@ -62,7 +63,8 @@ class App extends VuexModule implements AppState {
       bodyClass,
       currentOs,
       currentTheme,
-      defaultColor
+      defaultColor,
+      generateRandomThemes
     } = this
 
     return {
@@ -72,7 +74,8 @@ class App extends VuexModule implements AppState {
       bodyClass,
       currentOs,
       currentTheme,
-      defaultColor
+      defaultColor,
+      generateRandomThemes
     }
   }
 
@@ -158,24 +161,8 @@ class App extends VuexModule implements AppState {
   @Action
   randomizeSettingsTheme() {
     const theme = this.activeTheme
-    const generateValueObject: Record<string, (input: AppInputThemeSlider) => AppInputThemeValue> = {
-      slider: (input: AppInputThemeSlider) => generateRandomSliderValue(input),
-      checkbox: () => Math.random() > 0.5,
-      color: () => generateRandomColor(),
-      palette: (input: AppInputThemeGeneral) => Math.floor(randomize(0, (input.values?.length || 2) - 1))
-    }
+    theme.settings = randomizeSettingsTheme(theme)
 
-    theme.settings = theme.settings?.map(input => {
-      const changeValueFunction = generateValueObject[input.type]
-
-      if (changeValueFunction) {
-        input.value = changeValueFunction(input as AppInputThemeSlider)
-      }
-
-      return input
-    })
-
-    this.syncSettingsWithCache()
     this.syncStoreWithQuery()
   }
 
@@ -193,7 +180,6 @@ class App extends VuexModule implements AppState {
 
     this.syncThemeColor()
     this.syncStoreWithQuery()
-    this.syncSettingsWithCache()
   }
 
   @Action
@@ -210,9 +196,12 @@ class App extends VuexModule implements AppState {
 
     if (input) {
       this.CHANGE_THEME_INPUT({ input, value })
-
-      this.syncSettingsWithCache()
     }
+  }
+
+  @Action
+  toggleShowPassword() {
+    this.SET_STATE_APP({ key: 'showPassword', value: !this.showPassword })
   }
 
   @Action
@@ -249,29 +238,47 @@ class App extends VuexModule implements AppState {
       return query
     }, {})
 
-    $router.push({ name: $route.name || '/', query: { ...inputQuery, ...bodyClassQuery, themeName: this.currentTheme } })
+    const query = { ...inputQuery, ...bodyClassQuery, themeName: this.currentTheme }
+    const routeTo = { name: $route.name || '/', query }
+    const mayReplace = isDifferentRoute(routeTo)
+
+    if (mayReplace) {
+      $router.replace(routeTo)
+    }
   }
 
   @Action
   syncThemeWithStore({ settings, query }: { settings: AppSettings; query: Route['query'] }) {
-    const themeName = query.themeName as string || settings.currentTheme
+    let themeName = query.themeName as string || settings.currentTheme
+    const { generateRandomThemes } = settings
+    const indexTheme = Math.floor(randomize(0, this.themes.length - 1))
 
-    const syncTheme = this.themes.reduce((themes: AppTheme[], theme) => {
+    const syncTheme = this.themes.reduce((themes: AppTheme[], theme, index) => {
       const cachedTheme = settings.themes.find(({ name }) => name === theme.name)
-      const isActiveTheme = theme.name === themeName
+      const isActiveTheme = generateRandomThemes ? indexTheme === index : theme.name === themeName
+      const hasCachedTheme = cachedTheme && cachedTheme?.settings
 
-      if (cachedTheme && cachedTheme?.settings) {
-        theme.settings = theme.settings?.map(input => {
-          const cachedThemeInput = this.getThemeInput(input.name, cachedTheme)
-          let value = cachedThemeInput?.value ?? input.value
+      if (hasCachedTheme) {
+        const randomSettings = isActiveTheme && generateRandomThemes
+        console.log({ indexTheme, index, randomSettings })
 
-          if (isActiveTheme) {
-            const queryThemeInput = input.name in query ? parseQueryValue(query[input.name] as string) : null
-            value = queryThemeInput ?? value
-          }
+        if (randomSettings) {
+          themeName = theme.name
+        }
 
-          return Object.assign(input, { value })
-        })
+        theme.settings = randomSettings
+          ? randomizeSettingsTheme(theme)
+          : theme.settings?.map(input => {
+            const cachedThemeInput = this.getThemeInput(input.name, cachedTheme)
+            let value = cachedThemeInput?.value ?? input.value
+
+            if (isActiveTheme) {
+              const queryThemeInput = input.name in query ? parseQueryValue(query[input.name] as string) : null
+              value = queryThemeInput ?? value
+            }
+
+            return Object.assign(input, { value })
+          })
       }
 
       themes.push(theme)
@@ -302,6 +309,7 @@ class App extends VuexModule implements AppState {
 
     try {
       const settings: AppSettings = JSON.parse(localStorage.getItem('settings') || '{}')
+      this.SET_STATE_APP({ key: 'generateRandomThemes', value: settings.generateRandomThemes || false })
 
       if (settings.themes) {
         this.syncThemeWithStore({ settings, query })
@@ -324,9 +332,7 @@ class App extends VuexModule implements AppState {
       this.SET_STATE_APP({ key: 'currentOs', value: settings.currentOs || 'arch-linux' })
       this.SET_STATE_APP({ key: 'desktop', value: settings.desktop })
       this.SET_STATE_APP({ key: 'username', value: settings.username })
-      this.syncSettingsWithCache()
     } catch (error) {
-      this.syncSettingsWithCache()
       this.setUpSettings()
     }
   }

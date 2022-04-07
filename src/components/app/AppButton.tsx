@@ -2,8 +2,6 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import AppIcon from '@/components/app/AppIcon.vue'
 import { Route } from 'vue-router'
 import { CreateElement, VNode, VNodeData } from 'vue'
-import { RenderContext } from 'vue/types/umd'
-import { spawn } from 'child_process'
 
 const prefix = 'app-button'
 
@@ -52,9 +50,7 @@ export default class AppButton extends Vue implements AppButtonPropsInterface {
       classes[`${prefix}--${property}`] = !!this[property]
     })
 
-    return {
-      ...classes
-    }
+    return classes
   }
 
   get isLink() {

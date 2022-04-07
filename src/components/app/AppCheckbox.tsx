@@ -5,11 +5,18 @@ import AppIcon from '@/components/app/AppIcon.vue'
   components: { AppIcon }
 })
 export default class AppCheckbox extends Vue {
-  @Prop({ type: Boolean, default: false }) value!: boolean
+  @Prop({ default: false }) value!: boolean
   @Prop({ default: '' }) label!: string
 
   get isActive() {
     return this.value
+  }
+
+  get classes() {
+    return {
+      checkbox: true,
+      'checkbox--active': this.value
+    }
   }
 
   get idCheckbox() {
@@ -21,7 +28,7 @@ export default class AppCheckbox extends Vue {
   }
 
   render() {
-    return <label class={['checkbox', this.value ? 'checkbox--active' : '']}>
+    return <label class={ this.classes }>
       <div class="checkbox-control">
         <div class="checkbox-control-box">
           <AppIcon name="checkbox"></AppIcon>

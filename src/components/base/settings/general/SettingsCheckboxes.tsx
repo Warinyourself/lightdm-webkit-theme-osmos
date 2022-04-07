@@ -23,6 +23,10 @@ export default class SettingsCheckboxes extends Vue {
     />
   }
 
+  generateRandomTheme(value: boolean) {
+    AppModule.SET_STATE_APP({ key: 'generateRandomThemes', value })
+  }
+
   render() {
     return <div class="grid-two">
       <h2 class="title"> { this.$t('settings.performance') } </h2>
@@ -30,6 +34,13 @@ export default class SettingsCheckboxes extends Vue {
       { this.buildCheckbox('show-framerate') }
       { this.buildCheckbox('no-transition') }
       { this.buildCheckbox('only-ui') }
+
+      <AppCheckbox
+        inline={ true }
+        label={ this.$t('settings.generate-random-theme') }
+        value={ AppModule.generateRandomThemes }
+        onInput={ this.generateRandomTheme }
+      />
     </div>
   }
 }

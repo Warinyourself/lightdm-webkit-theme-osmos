@@ -5,8 +5,8 @@ import AppIcon from '@/components/app/AppIcon.vue'
 import AppButton from '@/components/app/AppButton'
 import SettingsUsers from './SettingsUsers'
 import SettingsHotkeys from './SettingsHotkeys'
-import SettingsCheckboxes from './SettingsCheckboxes'
 import SettingsSelectors from './SettingsSelectors'
+import SettingsCheckboxes from './SettingsCheckboxes'
 
 @Component({
   components: {

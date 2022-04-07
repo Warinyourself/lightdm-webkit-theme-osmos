@@ -55,6 +55,7 @@
     "performance": "performance",
     "choice-desktop": "Choice desktop",
     "choice-language": "Choice language",
+    "generate-random-theme": "Generate random theme",
     "keyboard": {
       "title": "Hotkeys",
       "open-themes": "Open theme",
