@@ -56,7 +56,7 @@ export default class LoginComponent extends Vue {
   }
 
   mounted() {
-    focusInputPassword()
+    this.$nextTick(focusInputPassword)
   }
 
   activateTab(index: number) {
