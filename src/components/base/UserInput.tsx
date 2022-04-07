@@ -9,7 +9,6 @@ import { PageModule } from '@/store/page'
 })
 export default class UserInput extends Vue {
   logging = false
-  viewPassword = false
 
   get user() {
     return AppModule.currentUser
@@ -19,16 +18,16 @@ export default class UserInput extends Vue {
     return AppModule.password
   }
 
+  get showPassword() {
+    return AppModule.showPassword
+  }
+
   login() {
     AppModule.login()
   }
 
   handleKeyup(event: InputEvent) {
     AppModule.SET_STATE_APP({ key: 'password', value: (event.target as HTMLInputElement)?.value || '' })
-  }
-
-  toggleShowPassword() {
-    this.viewPassword = !this.viewPassword
   }
 
   openSettings(event: Event) {
@@ -44,7 +43,7 @@ export default class UserInput extends Vue {
 
       <input
         id='password'
-        type={ this.viewPassword ? 'text' : 'password'}
+        type={ this.showPassword ? 'text' : 'password'}
         name='password'
         autocomplete='on'
         autofocus
@@ -57,9 +56,9 @@ export default class UserInput extends Vue {
       />
 
       <AppIcon
-        class={ ['icon icon-eye', { hide: !this.viewPassword }] }
+        class={ ['icon icon-eye', { hide: !this.showPassword }] }
         name='eye'
-        onClick={ this.toggleShowPassword }
+        onClick={ AppModule.toggleShowPassword }
       />
 
       <button

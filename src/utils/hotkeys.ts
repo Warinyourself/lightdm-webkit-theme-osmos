@@ -43,6 +43,13 @@ export const hotkeys = [
     }
   },
   {
+    keys: [modKey, 'i'],
+    title: `${prefixTitle}show-password`,
+    callback: () => {
+      AppModule.toggleShowPassword()
+    }
+  },
+  {
     keys: [modKey, 'P'],
     title: `${prefixTitle}poweroff`,
     callback: systemActionsObject.shutdown
