@@ -3,7 +3,7 @@ import AppSelector, { AppSelectorProps as SProps } from '@/components/app/AppSel
 import { generateDesktopIcons, languageMap } from '@/utils/helper'
 import { AppModule } from '@/store/app'
 import { PageModule } from '@/store/page'
-import { osList } from '@/models/app'
+import { osList } from '@/utils/constant'
 import { LoginPosition } from '@/models/page'
 
 @Component

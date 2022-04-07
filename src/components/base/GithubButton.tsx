@@ -12,7 +12,7 @@ export default class GithubButton extends Vue {
     return <AppButton
       fab
       href="https://github.com/Warinyourself"
-      class="github-link"
+      class="github-link active-block"
       target="_blank"
     >
       <AppIcon name="github"/>
