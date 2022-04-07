@@ -10,17 +10,16 @@ import router from '../router'
 import store from '@/store/index'
 
 import {
-  AppInputTheme,
-  AppInputThemeGeneral,
-  AppInputThemeSlider,
-  AppInputThemeValue,
-  AppSettings,
   AppTheme,
-  AppThemes,
-  defaultTheme
+  AppSettings,
+  AppInputTheme,
+  AppInputThemeValue,
+  AppInputThemeGeneral
 } from '@/models/app'
+
 import { appWindow, LightdmSession, LightdmUsers } from '@/models/lightdm'
-import { generateRandomColor, generateRandomSliderValue, isDifferentRoute, parseQueryValue, randomize, randomizeSettingsTheme } from '@/utils/helper'
+import { isDifferentRoute, parseQueryValue, randomize, randomizeSettingsTheme } from '@/utils/helper'
+import { AppThemes, defaultTheme } from '@/utils/constant'
 
 export interface AppState extends AppSettings {
   themes: AppTheme[];
@@ -33,7 +32,7 @@ export interface AppState extends AppSettings {
 
 @Module({ dynamic: true, store, name: 'app' })
 class App extends VuexModule implements AppState {
-  version = '2.0.0'
+  version = '2.0.1'
   currentTheme = ''
   currentOs = 'arch-linux'
   desktop = appWindow?.lightdm?.sessions[0].key || 'i3'
@@ -260,7 +259,6 @@ class App extends VuexModule implements AppState {
 
       if (hasCachedTheme) {
         const randomSettings = isActiveTheme && generateRandomThemes
-        console.log({ indexTheme, index, randomSettings })
 
         if (randomSettings) {
           themeName = theme.name

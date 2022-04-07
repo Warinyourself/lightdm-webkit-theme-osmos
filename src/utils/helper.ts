@@ -1,4 +1,4 @@
-import { AppInputThemeGeneral, AppInputThemeSlider, AppInputThemeValue, AppTheme } from '@/models/app'
+import { AppInputButton, AppInputThemeGeneral, AppInputThemeSlider, AppInputThemeValue, AppTheme } from '@/models/app'
 import { appWindow } from '@/models/lightdm'
 import { AppModule } from '@/store/app'
 import { PageModule } from '@/store/page'
@@ -179,3 +179,47 @@ export function randomizeSettingsTheme(theme: AppTheme) {
     return input
   })
 }
+
+export function setActiveColor(color: AppInputThemeValue) {
+  document.documentElement.style.setProperty('--color-active', color + '')
+}
+
+export const randomButton: AppInputButton = {
+  name: 'button',
+  value: 'button',
+  label: 'input.random',
+  type: 'button',
+  icon: 'random',
+  callback() {
+    AppModule.randomizeSettingsTheme()
+  }
+}
+
+export function buildInputSlider({
+  name = 'animation-speed',
+  value = 5,
+  min = 1,
+  max = 10,
+  step = 0.01,
+  icon = 'time',
+  changeOnUpdate = true
+} = {}): AppInputThemeSlider {
+  return {
+    name,
+    label: `input.${name}`,
+    value,
+    icon,
+    type: 'slider',
+    options: { changeOnUpdate, max, step, min }
+  }
+}
+
+export const pxratio = () => buildInputSlider({ name: 'pxratio', icon: 'pxratio', min: 0.01, max: 1, value: 0.8 })
+export const hueSlider = () => buildInputSlider({ name: 'hue', min: 1, max: 360, step: 1, value: 0 })
+export const brightnessSlider = () => buildInputSlider({ name: 'brightness', min: 0, max: 1, step: 0.01, value: 1 })
+export const buildInvertCheckbox = (): AppInputThemeGeneral => ({
+  name: 'invert',
+  label: 'input.invert',
+  type: 'checkbox',
+  value: false
+})

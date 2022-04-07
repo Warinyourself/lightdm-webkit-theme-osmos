@@ -18,7 +18,6 @@ export default class MainApp extends Vue {
   @Debounce(100)
   @Watch('getMainSettings', { deep: true })
   handleSettingsThemes() {
-    console.log('Update Settings')
     AppModule.syncSettingsWithCache()
   }
 

@@ -5,6 +5,28 @@ let render: GL
 
 @Component
 export default class FlowTheme extends Vue {
+  get hue() {
+    return AppModule.getThemeInput('hue')?.value as number || 0
+  }
+
+  get brightness() {
+    return AppModule.getThemeInput('brightness')?.value as number || 0
+  }
+
+  get invert() {
+    return AppModule.getThemeInput('invert')?.value as boolean || false
+  }
+
+  get filter() {
+    return `hue-rotate(${this.hue}deg) invert(${Number(this.invert)}) brightness(${this.brightness})`
+  }
+
+  get styleCanvas() {
+    return {
+      filter: this.filter
+    }
+  }
+
   get animationSpeed() {
     return AppModule.getThemeInput('animation-speed')?.value as number || 45
   }
@@ -54,7 +76,7 @@ export default class FlowTheme extends Vue {
 
   render() {
     return <div>
-      <canvas ref='canvas' />
+      <canvas ref='canvas' style={ this.styleCanvas }/>
       <script id="shader-fs" type="x-shader/x-fragment"> { require('./fragment.glsl') } </script>
       <script id="shader-vs" type="x-shader/x-vertex"> { require('./vertex.glsl') } </script>
     </div>
