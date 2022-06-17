@@ -26,7 +26,6 @@ sudo sed -i 's/^webkit_theme\s*=\s*\(.*\)/webkit_theme = osmos/g' /etc/lightdm/l
 <br />
 
 ## Control brightness and battery:
-<!-- ### Integrated [nody-greeter API](https://github.com/JezerM/nody-greeter) to control brightness and battery -->
 ![image](https://user-images.githubusercontent.com/83131232/206694253-865022cd-5406-45f2-9bf1-6307816adcf7.png)
 
 If you want to control brightness and battery - install [node-greeter](https://github.com/JezerM/nody-greeter#installation).
