@@ -35,6 +35,9 @@ export default class BackgroundImage extends Vue {
   render(h: CreateElement) {
     const body = h(components[this.theme.component ?? 'random'])
 
-    return <div class='background-image' key={ this.theme.name }> { body } </div>
+    return <div class='background-image' key={ this.theme.name }>
+      <div class="mask-background"></div>
+      { body }
+    </div>
   }
 }

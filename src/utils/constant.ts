@@ -9,6 +9,8 @@ import {
   buildInvertCheckbox
 } from './helper'
 
+const background = '#22233D'
+
 export const defaultTheme: AppTheme = {
   name: 'Random',
   component: 'random',
@@ -35,7 +37,7 @@ export const AppThemes: AppTheme[] = [
     component: 'sphere',
     color: {
       active: '#04ded4',
-      background: 'black'
+      background
     },
     settings: [
       pxratio(),
@@ -52,7 +54,7 @@ export const AppThemes: AppTheme[] = [
     component: 'planet',
     color: {
       active: '#04ded4',
-      background: 'black'
+      background
     },
     settings: [
       pxratio(),
@@ -78,7 +80,7 @@ export const AppThemes: AppTheme[] = [
     component: 'destruction',
     color: {
       active: '#04ded4',
-      background: 'black'
+      background: '#13122E'
     },
     settings: [
       pxratio(),
@@ -93,7 +95,7 @@ export const AppThemes: AppTheme[] = [
     component: 'rings',
     color: {
       active: '#04ded4',
-      background: 'black'
+      background
     },
     settings: [
       pxratio(),
@@ -108,7 +110,7 @@ export const AppThemes: AppTheme[] = [
     component: 'tenderness',
     color: {
       active: '#04ded4',
-      background: 'black'
+      background
     },
     settings: [
       pxratio(),
@@ -121,7 +123,7 @@ export const AppThemes: AppTheme[] = [
     component: 'plasma',
     color: {
       active: '#04ded4',
-      background: 'black'
+      background
     },
     settings: [
       pxratio(),
@@ -135,7 +137,7 @@ export const AppThemes: AppTheme[] = [
     component: 'flow',
     color: {
       active: '#04ded4',
-      background: 'black'
+      background
     },
     settings: [
       pxratio(),

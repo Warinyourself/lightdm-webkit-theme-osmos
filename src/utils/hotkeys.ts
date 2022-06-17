@@ -13,6 +13,17 @@ export const hotkeys = [
     }
   },
   {
+    keys: [modKey, 'f'],
+    title: `${prefixTitle}full-screen`,
+    callback: () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen()
+      } else {
+        document.exitFullscreen && document.exitFullscreen()
+      }
+    }
+  },
+  {
     keys: [modKey, 'c'],
     title: `${prefixTitle}open-custom`,
     callback: () => {
