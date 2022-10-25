@@ -34,7 +34,7 @@ export default class DestructionTheme extends Vue {
         renderOptions: {
           externalTimeUse: true
         },
-        renderHook: function() {
+        renderHook() {
           const gl = this as unknown as GL
 
           if (!gl.programInfo.uniforms.position) {

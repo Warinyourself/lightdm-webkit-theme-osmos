@@ -1,0 +1,14 @@
+.waves--top
+  position absolute
+  top 0
+  left 0
+  transform-origin 50% 100%
+  transform: translate(-50%, -100%) rotate(calc(180deg - var(--angle)))
+
+.waves--bottom
+  position absolute
+  bottom 0
+  right 0
+  transform-origin 50% 100%
+  transform translateX(50%) rotate(calc(-90deg + (90deg - var(--angle))))
+

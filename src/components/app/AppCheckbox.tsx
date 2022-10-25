@@ -8,22 +8,18 @@ export default class AppCheckbox extends Vue {
   @Prop({ default: false }) value!: boolean
   @Prop({ default: '' }) label!: string
 
-  get isActive() {
-    return this.value
-  }
-
-  get classes() {
+  get classes(): Record<string, boolean> {
     return {
       checkbox: true,
       'checkbox--active': this.value
     }
   }
 
-  get idCheckbox() {
+  get idCheckbox(): string {
     return `input-${(this as any)._uid}`
   }
 
-  changeState() {
+  changeState(): void {
     this.$emit('input', !this.value)
   }
 
@@ -41,9 +37,9 @@ export default class AppCheckbox extends Vue {
           onInput={ this.changeState }
         />
       </div>
-      <p for={ this.idCheckbox } class="input-label">
+      <label for={ this.idCheckbox } class="input-label">
         { this.label }
-      </p>
+      </label>
     </label>
   }
 }

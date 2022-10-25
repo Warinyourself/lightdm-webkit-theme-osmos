@@ -31,6 +31,14 @@ export const defaultTheme: AppTheme = {
 }
 
 export const AppThemes: AppTheme[] = [
+  {
+    name: 'Agida',
+    component: 'agida',
+    color: {
+      active: '#04ded4',
+      background: '#19102e'
+    }
+  },
   defaultTheme,
   {
     name: 'Sphere',
