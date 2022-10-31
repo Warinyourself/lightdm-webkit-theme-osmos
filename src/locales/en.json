@@ -2,6 +2,7 @@
   "input": {
     "time": "Time",
     "color": "Select color",
+    "bottom-color": "Bottom color",
     "color-active": "Select active color",
     "color-second": "Select second color",
     "slider-amount": "Choice slider amount",

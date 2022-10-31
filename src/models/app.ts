@@ -25,7 +25,7 @@ export interface AppThemeSnapshot {
   values: Record<string, AppInputThemeValue>;
 }
 
-export type AppInputTheme = AppInputThemeGeneral | AppInputThemeSlider | AppInputThemeSlider | AppInputButton
+export type AppInputTheme = AppInputThemeGeneral | AppInputThemeSlider | AppInputButton
 export type AppInputThemeType = 'color' | 'slider' | 'checkbox' | 'palette' | 'button'
 export type AppInputThemeValue = string | boolean | string[] | number
 

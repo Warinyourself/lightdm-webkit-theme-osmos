@@ -3,8 +3,9 @@ import { CreateElement } from 'vue/types/umd'
 
 import { AppModule } from '@/store/app'
 import { PageModule } from '@/store/page'
+import { AppTheme } from '@/models/app'
 
-const components: { [k: string]: any } = {}
+const components: { [k: string]: Vue } = {}
 
 const requireComponent = require.context(
   '@/components/themes', true, /\.(vue|tsx)$/
@@ -24,18 +25,18 @@ requireComponent.keys().forEach(fileName => {
 
 @Component({ components })
 export default class BackgroundImage extends Vue {
-  get theme() {
+  get theme(): AppTheme {
     return AppModule.activeTheme
   }
 
-  get isOpenLogin() {
+  get isOpenLogin(): boolean {
     return PageModule.isOpenBlock('login')
   }
 
-  render(h: CreateElement) {
+  render(h: CreateElement): JSX.Element {
     const body = h(components[this.theme.component ?? 'random'])
 
-    return <div class='background-image' key={ this.theme.name }>
+    return <div class='background-image'>
       <div class="mask-background"></div>
       { body }
     </div>

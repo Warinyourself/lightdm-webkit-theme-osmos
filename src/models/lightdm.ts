@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/camelcase */
+/* eslint-disable camelcase */
 export interface ExpandedWindow {
   lightdm: Lightdm;
   authentication_complete(): void;

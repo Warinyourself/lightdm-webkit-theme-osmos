@@ -51,7 +51,7 @@ export default class GL {
   time = 0
   startTime = Date.now()
 
-  renderHook: null | Function = null
+  renderHook: null | (() => void) = null
   renderOptions: GLRenderOptions = {}
 
   constructor(

@@ -139,7 +139,7 @@ export const systemActionsObject = systemActions.reduce((acc, action) => {
   }
 }, {} as Record<systemActionsType, () => void>)
 
-export function preventDefault(event: Event, callback?: Function) {
+export function preventDefault(event: Event, callback?: () => void): void {
   event.preventDefault()
   callback && callback()
 }
@@ -152,7 +152,7 @@ export function focusInputPassword() {
   }
 }
 
-export function stopPropagation(event: Event, callback?: Function) {
+export function stopPropagation(event: Event, callback?: () => void): void {
   event.stopPropagation()
   callback && callback()
 }
@@ -211,6 +211,20 @@ export function buildInputSlider({
     icon,
     type: 'slider',
     options: { changeOnUpdate, max, step, min }
+  }
+}
+
+export function buildInputColor({
+  name = 'active-color',
+  value = '#00CC99',
+  ...options
+} = {}): AppInputThemeGeneral {
+  return {
+    name,
+    value,
+    label: `input.${name}`,
+    type: 'color',
+    ...options
   }
 }
 

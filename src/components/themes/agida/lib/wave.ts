@@ -170,8 +170,6 @@ export class Wavery {
       return this.generateKeyframe(percent, isBound ? path.d : path.animatedPath[index - 1])
     })
 
-    console.log({ animationList })
-
     return `.path-${index}{
       animation:pathAnim-${index} ${this.animation.time}ms;
       animation-timing-function: ${this.animation.timingFunction};

@@ -1,11 +1,11 @@
-/* eslint-disable @typescript-eslint/camelcase */
+/* eslint-disable camelcase */
 import { appWindow } from '@/models/lightdm'
 
 const DEBUG_PASSWORD = 'password'
 
 const lightdmDebug = appWindow.lightdm === undefined
 let password: string
-let completeCallback: undefined | Function
+let completeCallback: undefined | (() => void)
 
 if (lightdmDebug) {
   appWindow.lightdm = {

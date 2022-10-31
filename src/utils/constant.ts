@@ -1,4 +1,4 @@
-import { AppTheme } from '@/models/app'
+import { AppTheme, AppInputThemeGeneral } from '@/models/app'
 import {
   pxratio,
   hueSlider,
@@ -6,7 +6,8 @@ import {
   setActiveColor,
   brightnessSlider,
   buildInputSlider,
-  buildInvertCheckbox
+  buildInvertCheckbox,
+  buildInputColor
 } from './helper'
 
 const background = '#22233D'
@@ -30,6 +31,14 @@ export const defaultTheme: AppTheme = {
   ]
 }
 
+const colorInput: AppInputThemeGeneral = {
+  name: 'top-color',
+  type: 'color',
+  label: 'input.color-active',
+  value: '#00CC99',
+  options: { class: 'w-50' }
+}
+
 export const AppThemes: AppTheme[] = [
   {
     name: 'Agida',
@@ -37,7 +46,22 @@ export const AppThemes: AppTheme[] = [
     color: {
       active: '#04ded4',
       background: '#19102e'
-    }
+    },
+    settings: [
+      colorInput,
+      {
+        name: 'bottom-color',
+        type: 'color',
+        label: 'input.color-active',
+        value: '#6600FF',
+        options: { class: 'w-50' }
+      }
+      // buildInputColor({
+      //   name: 'bottom-color',
+      //   value: '#6600FF',
+      //   options: { class: 'w-50' }
+      // })
+    ]
   },
   defaultTheme,
   {
