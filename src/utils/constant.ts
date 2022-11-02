@@ -31,14 +31,6 @@ export const defaultTheme: AppTheme = {
   ]
 }
 
-const colorInput: AppInputThemeGeneral = {
-  name: 'top-color',
-  type: 'color',
-  label: 'input.color-active',
-  value: '#00CC99',
-  options: { class: 'w-50' }
-}
-
 export const AppThemes: AppTheme[] = [
   {
     name: 'Agida',
@@ -48,19 +40,22 @@ export const AppThemes: AppTheme[] = [
       background: '#19102e'
     },
     settings: [
-      colorInput,
       {
-        name: 'bottom-color',
-        type: 'color',
-        label: 'input.color-active',
-        value: '#6600FF',
-        options: { class: 'w-50' }
+        name: 'palette',
+        type: 'palette',
+        label: 'input.slider-amount',
+        value: 0,
+        values: [
+          ['#00CC99', '#6600FF'],
+          ['#B9E0FF', '#9F73AB'],
+          ['#CBCB68', '#3E9C8F'],
+          ['#51eaea', '#D62E93'],
+          ['#AC3ABB', '#511e78'],
+          ['#B5D115', '#FB044F'],
+          ['#fc5185', '#3fc1c9'],
+          ['#f5f5f5', '#364f6b']
+        ]
       }
-      // buildInputColor({
-      //   name: 'bottom-color',
-      //   value: '#6600FF',
-      //   options: { class: 'w-50' }
-      // })
     ]
   },
   defaultTheme,

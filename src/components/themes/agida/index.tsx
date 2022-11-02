@@ -3,6 +3,7 @@ import { AppModule } from '@/store/app'
 import { Wavery } from './lib/wave'
 import { Debounce } from '@/utils/helper'
 import { changeHsl, hexToRgb, rgbToHsl } from '@/utils/color'
+import { AppInputThemeGeneral } from '@/models/app'
 
 export const OPACITY_ARR = [0.265, 0.4, 0.53, 1]
 export const topColors = ['#03C79C', '#00A5B2', '#0080A5', '#005A8D']
@@ -22,7 +23,7 @@ export default class AgidaTheme extends Vue {
     variance: 1,
     animation: {
       steps: 2,
-      time: 4000
+      time: 40000
     }
   }
 
@@ -31,12 +32,20 @@ export default class AgidaTheme extends Vue {
     height: window.innerHeight
   }
 
+  get palette(): string[] {
+    const input = AppModule.getThemeInput('palette') as AppInputThemeGeneral
+    const index = input?.value as number || 0
+    const values = input?.values || ['#00CC99', '#6600FF']
+
+    return values[index] as string[]
+  }
+
   get topColor(): string {
-    return AppModule.getThemeInput('top-color')?.value as string || '#00CC99'
+    return this.palette[0]
   }
 
   get bottomColor(): string {
-    return AppModule.getThemeInput('bottom-color')?.value as string || '#6600FF'
+    return this.palette[1]
   }
 
   get animationSpeed(): number {
@@ -54,9 +63,9 @@ export default class AgidaTheme extends Vue {
 
   get bottomColors(): string[] {
     const initHSL = rgbToHsl(hexToRgb(this.bottomColor))
-    const second = changeHsl(initHSL, 10, -3, 5)
-    const third = changeHsl(initHSL, 25, -3, 10)
-    const fourth = changeHsl(initHSL, 33, -3, 20)
+    const second = changeHsl(initHSL, 5, -3, -5)
+    const third = changeHsl(initHSL, 10, -3, -10)
+    const fourth = changeHsl(initHSL, 15, -3, -20)
 
     return [initHSL, second, third, fourth]
   }
@@ -155,7 +164,7 @@ export default class AgidaTheme extends Vue {
   }
 
   get activeFragment() {
-    return this.knifeSVG
+    return this.agidaSVG
   }
 
   get width(): number {
