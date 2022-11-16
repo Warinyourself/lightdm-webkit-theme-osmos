@@ -4,9 +4,6 @@ import App from './App'
 import router from './router'
 import store from './store'
 import '@/plugins/components'
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
 import VueI18n from 'vue-i18n'
 
 import './style/index.styl'

@@ -1,10 +1,10 @@
 import { AppInputButton, AppInputThemeGeneral, AppInputThemeSlider, AppInputThemeValue, AppTheme } from '@/models/app'
-import { appWindow } from '@/models/lightdm'
 import { AppModule } from '@/store/app'
 import { PageModule } from '@/store/page'
 import { debounce, DebounceSettings } from 'lodash'
 import { RawLocation } from 'vue-router'
 import router from '../router'
+import { LightdmHandler } from '@/utils/lightdm'
 
 const isFinalBuild = process.env.VUE_APP_VIEW === 'build'
 export const modKey = 'ctrl'
@@ -122,7 +122,7 @@ export function buildSystemDialog(callbackName: systemActionsType) {
     actions: [
       {
         title: 'text.yes',
-        callback: appWindow.lightdm[callbackName]
+        callback: LightdmHandler[callbackName]
       },
       {
         title: 'text.no',

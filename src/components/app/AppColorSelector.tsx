@@ -1,7 +1,4 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
 import { Chrome } from 'vue-color'
 
 @Component({

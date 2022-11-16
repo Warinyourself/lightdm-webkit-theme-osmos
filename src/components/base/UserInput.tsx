@@ -14,23 +14,23 @@ export default class UserInput extends Vue {
     return AppModule.currentUser
   }
 
-  get passwordValue() {
+  get passwordValue(): string {
     return AppModule.password
   }
 
-  get showPassword() {
+  get showPassword(): boolean {
     return AppModule.showPassword
   }
 
-  login() {
+  login(): void {
     AppModule.login()
   }
 
-  handleKeyup(event: InputEvent) {
+  handleKeyup(event: KeyboardEvent): void {
     AppModule.SET_STATE_APP({ key: 'password', value: (event.target as HTMLInputElement)?.value || '' })
   }
 
-  openSettings(event: Event) {
+  openSettings(event: Event): void {
     event.preventDefault()
     event.stopPropagation()
 
@@ -49,7 +49,7 @@ export default class UserInput extends Vue {
         autofocus
         ref='password'
         class='mousetrap'
-        placeholder={ this.$t('text.password') }
+        placeholder={ this.$t('text.password').toString() }
         onKeyup={this.handleKeyup}
         value={this.passwordValue}
         readonly={this.logging}

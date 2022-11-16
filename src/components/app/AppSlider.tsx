@@ -1,9 +1,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
 import noUiSlider from 'nouislider'
 import { Debounce } from '@/utils/helper'
+
 @Component
 export default class AppSlider extends Vue {
   @Prop({ type: [Number], default: '' }) value!: number | string

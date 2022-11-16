@@ -22,9 +22,7 @@ interface AppButtonPropsInterface {
 }
 
 @Component({
-  components: {
-    AppIcon
-  }
+  components: { AppIcon }
 })
 export default class AppButton extends Vue implements AppButtonPropsInterface {
   @Prop({ type: String }) label!: string

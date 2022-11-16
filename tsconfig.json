@@ -16,7 +16,7 @@
       "webpack-env",
       "node",
     ],
-    "typeRoots": ["./node_modules/@types", "./types/application"],
+    "typeRoots": ["./node_modules/@types", "./types/application", "nody-greeter-types"],
     "paths": {
       "@/*": [
         "./src/*"

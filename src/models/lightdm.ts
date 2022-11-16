@@ -1,16 +1,4 @@
-/* eslint-disable camelcase */
-export interface ExpandedWindow {
-  lightdm: Lightdm;
-  authentication_complete(): void;
-  lightdmLogin(
-    username: string,
-    password: string,
-    callback: () => void,
-  ): void;
-  lightdmStart(desktop: string): void;
-  show_prompt(text: string, type?: any): void;
-  show_message(text: string, type: any): void;
-}
+import { Greeter, Signal } from 'nody-greeter-types'
 
 export interface Lightdm {
   can_suspend: boolean;
@@ -24,6 +12,7 @@ export interface Lightdm {
   users: LightdmUsers[];
   languages: LightdmLanguage[];
   language: string;
+  has_guest_account: boolean;
   start_authentication(username: string): void;
   authenticate(username: string): void;
   cancel_authentication(): void;
@@ -52,4 +41,15 @@ export interface LightdmSession {
   comment?: string;
 }
 
-export const appWindow = (window as unknown) as Window & ExpandedWindow
+declare global {
+  interface Window {
+    authentication_complete(): void;
+    lightdmLogin(
+      username: string,
+      password: string,
+      callback: () => void,
+    ): void;
+    show_prompt(text: string, type?: string): void;
+    show_message(text: string, type: any): void;
+  }
+}

@@ -17,9 +17,11 @@ import {
   AppInputThemeGeneral
 } from '@/models/app'
 
-import { appWindow, LightdmSession, LightdmUsers } from '@/models/lightdm'
+import { LightdmSession, LightdmUsers } from '@/models/lightdm'
 import { isDifferentRoute, parseQueryValue, randomize, randomizeSettingsTheme } from '@/utils/helper'
 import { AppThemes, defaultTheme } from '@/utils/constant'
+import { version } from '@/../package.json'
+import { LightdmHandler } from '@/utils/lightdm'
 
 export interface AppState extends AppSettings {
   themes: AppTheme[];
@@ -32,16 +34,16 @@ export interface AppState extends AppSettings {
 
 @Module({ dynamic: true, store, name: 'app' })
 class App extends VuexModule implements AppState {
-  version = '2.0.1'
+  version = version
   currentTheme = ''
   currentOs = 'arch-linux'
-  desktop = appWindow?.lightdm?.sessions[0].key || 'i3'
-  username = appWindow?.lightdm?.users[0].username || 'User name'
+  desktop = LightdmHandler.defaultSession
+  username = LightdmHandler?.username
   password = ''
   defaultColor = '#6BBBED'
 
-  users = appWindow?.lightdm?.users || []
-  desktops = appWindow?.lightdm?.sessions || []
+  users = LightdmHandler?.users
+  desktops = LightdmHandler?.sessions
   showPassword = false
   generateRandomThemes = false
   themes = AppThemes
@@ -51,6 +53,10 @@ class App extends VuexModule implements AppState {
     'no-transition': false,
     'show-framerate': false,
     'only-ui': false
+  }
+
+  get isAdvancedGreeted() {
+    return LightdmHandler.isNode
   }
 
   // TODO: replace this on localStorageSettings
@@ -183,9 +189,7 @@ class App extends VuexModule implements AppState {
 
   @Action
   login() {
-    appWindow.lightdmLogin(this.username, this.password, () => {
-      appWindow.lightdmStart(this.currentDesktop?.key || appWindow?.lightdm?.sessions[0].key || 'i3')
-    })
+    LightdmHandler.login(this.username, this.password, this.currentDesktop?.key)
   }
 
   @Action
@@ -317,14 +321,14 @@ class App extends VuexModule implements AppState {
         this.syncBodyClassWithStore({ settings, query })
       }
 
-      const isExistDE = appWindow?.lightdm?.sessions.find(({ key }) => key === settings.desktop)
+      const isExistDE = window.lightdm?.sessions.find(({ key }) => key === settings.desktop)
       if (isExistDE === undefined) {
-        settings.desktop = appWindow?.lightdm?.sessions[0].key || 'openbox'
+        settings.desktop = window.lightdm?.sessions[0].key || 'openbox'
       }
 
-      const isExistUser = appWindow?.lightdm?.users.find(({ username }) => username === settings.username)
+      const isExistUser = window.lightdm?.users.find(({ username }) => username === settings.username)
       if (isExistUser === undefined) {
-        settings.username = appWindow?.lightdm?.users[0].username || 'Warinyourself'
+        settings.username = window.lightdm?.users[0].username || 'Warinyourself'
       }
 
       this.SET_STATE_APP({ key: 'currentOs', value: settings.currentOs || 'arch-linux' })
