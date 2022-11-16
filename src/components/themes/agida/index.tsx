@@ -232,7 +232,7 @@ export default class AgidaTheme extends Vue {
             key={index}
             d={path.d}
             stroke={path.strokeColor}
-            strokeWidth={path.strokeWidth}
+            stroke-width={path.strokeWidth}
             fill={colorsArray[index]}
             class={`path-${index}`}
             transform={path.transform}

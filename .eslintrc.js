@@ -8,6 +8,9 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    camelcase: 'off',
+    indent: 'off',
+    'multiline-ternary': 'off',
     'space-before-function-paren': [2, 'never'],
     'vue/array-bracket-spacing': 'error',
     'vue/arrow-spacing': 'error',
@@ -22,11 +25,10 @@ module.exports = {
     'vue/object-curly-spacing': 'error',
     'no-useless-constructor': 'off',
     '@typescript-eslint/no-this-alias': 'off',
-    '@typescript-eslint/no-useless-constructor': 'error',
+    '@typescript-eslint/no-useless-constructor': 'error'
   },
 
   parserOptions: {
-    parser: '@typescript-eslint/parser',
     ecmaVersion: 2020
   },
 

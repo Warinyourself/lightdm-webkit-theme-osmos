@@ -1,11 +1,5 @@
 type ctxType = WebGLRenderingContext
 
-interface GlOption {
-  renderHook: () => void;
-  renderOptions?: GLRenderOptions;
-  windowListener?: WindowListenerCallback[];
-}
-
 interface GLRenderOptions {
   observeMouse?: boolean;
   externalTimeUse?: boolean;
@@ -15,6 +9,12 @@ interface WindowListenerCallback {
   event: string;
   listener: (event: Event | MouseEvent) => void;
   options?: boolean | AddEventListenerOptions;
+}
+
+interface GlOption {
+  renderHook: () => void;
+  renderOptions?: GLRenderOptions;
+  windowListener?: WindowListenerCallback[];
 }
 
 export default class GL {

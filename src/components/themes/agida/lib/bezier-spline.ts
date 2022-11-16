@@ -58,5 +58,5 @@ export function computeControlPoints(K: number[]) {
 
   p2[n - 1] = 0.5 * (K[n] + p1[n - 1])
 
-  return { p1: p1, p2: p2 }
+  return { p1, p2 }
 }

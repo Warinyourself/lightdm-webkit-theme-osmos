@@ -1,6 +1,11 @@
 import { computeControlPoints } from './bezier-spline'
 const svgns = 'http://www.w3.org/2000/svg'
 
+export interface WaveConfigAnimationInterface {
+  time?: number;
+  steps?: number;
+}
+
 export interface WaveConfigInterface {
   height: number;
   width: number;
@@ -12,11 +17,6 @@ export interface WaveConfigInterface {
   strokeColor?: string;
   transform?: string;
   animation?: boolean | WaveConfigAnimationInterface;
-}
-
-export interface WaveConfigAnimationInterface {
-  time?: number;
-  steps?: number;
 }
 
 interface Point {
