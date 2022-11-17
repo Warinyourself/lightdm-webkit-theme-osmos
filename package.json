@@ -5,8 +5,10 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build:github": "VUE_APP_VIEW=github vue-cli-service build",
     "lint": "vue-cli-service lint",
     "dev": "vue-cli-service serve --open",
+    "dev:github": "VUE_APP_VIEW=github vue-cli-service serve --open",
     "prepare": "husky install"
   },
   "dependencies": {

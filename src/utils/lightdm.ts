@@ -109,7 +109,7 @@ if (lightdmDebug) {
   } as any
 }
 
-const isNode = 'batteryData' in window && window.lightdm
+const isNode = 'batteryData' in (window.lightdm || {})
 
 class LightdmWebkit {
   protected _inputErrorTimer!: null | NodeJS.Timeout
