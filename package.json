@@ -1,15 +1,19 @@
 {
   "name": "osmos",
   "version": "2.0.2",
-  "private": true,
+  "description": "Lightdm greeter theme based on GLSL",
+  "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "build:github": "VUE_APP_VIEW=github vue-cli-service build",
     "lint": "vue-cli-service lint",
     "dev": "vue-cli-service serve --open",
-    "dev:github": "VUE_APP_VIEW=github vue-cli-service serve --open",
-    "prepare": "husky install"
+    "dev:github": "VUE_APP_VIEW=github vue-cli-service serve --open"
+  },
+  "author": {
+    "name": "Warinyourself",
+    "email": "warinyourself@gmail.com"
   },
   "dependencies": {
     "core-js": "^3.6.5",
@@ -58,8 +62,8 @@
     "husky": "^4.2.5",
     "lint-staged": "^10.2.2",
     "prettier": "2.7.1",
-    "stylus": "^0.54.8",
-    "stylus-loader": "^3.0.2",
+    "stylus": "0.59.0",
+    "stylus-loader": "3.0.2",
     "typescript": "4.8.4",
     "vue-class-component": "7.2.6",
     "vue-property-decorator": "9.1.2",
