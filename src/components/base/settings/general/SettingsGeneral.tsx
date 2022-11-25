@@ -34,6 +34,10 @@ export default class SettingsGeneral extends Vue {
     if (hasQyery) { this.$router.replace({}) }
   }
 
+  changeTheme() {
+    throw Error('Change theme')
+  }
+
   render() {
     return <div class='user-settings-general'>
       <SettingsCheckboxes />
@@ -43,8 +47,11 @@ export default class SettingsGeneral extends Vue {
       <SettingsHotkeys />
 
       <div class="help-block">
-        <AppButton onClick={ this.resetSettings } block>
+        <AppButton onClick={ this.resetSettings } block class="mb-2">
           { this.$t('settings.reset-settings') }
+        </AppButton>
+        <AppButton onClick={ this.changeTheme } block>
+          { this.$t('settings.change-theme') }
         </AppButton>
       </div>
     </div>

@@ -4,30 +4,14 @@ import { AppModule } from '@/store/app'
 import AppIcon from '@/components/app/AppIcon.vue'
 import { LightdmUsers } from '@/models/lightdm'
 import { PageModule } from '@/store/page'
-import { DateTimeFormatOptions } from 'vue-i18n'
+import timer from '@/utils/time'
 
 @Component({
   components: { AppIcon }
 })
 export default class UserAvatar extends Vue {
-  updater = new Date().getTime()
-
   get currentTime() {
-    const options: DateTimeFormatOptions = {
-      month: 'short',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: false
-    }
-
-    if (this.isOpenSettings) {
-      options.month = 'long'
-      options.day = 'numeric'
-      options.weekday = 'short'
-    }
-
-    return new Intl.DateTimeFormat(this.locale, options).format(new Date())
+    return this.isOpenSettings ? timer.longTime : timer.shortTime
   }
 
   get isOpenSettings() {
@@ -46,12 +30,6 @@ export default class UserAvatar extends Vue {
     return AppModule.users
   }
 
-  mounted() {
-    this.updater = new Date().getTime()
-
-    setInterval(() => { this.updater = new Date().getTime() }, 1000)
-  }
-
   buildUserAvatar(image: string | undefined) {
     const defaultAvatar = <AppIcon name='user'/>
     const userAvatar = <div
@@ -64,7 +42,7 @@ export default class UserAvatar extends Vue {
 
   buildUser(user: LightdmUsers) {
     return <div class='user-choice' key={ user.username }>
-      <p class='time' key={ this.updater }> { this.currentTime } </p>
+      <p class='time'> { this.currentTime } </p>
       { this.buildUserAvatar(user?.image) }
       <div class='user-name'> { user?.display_name } </div>
     </div>

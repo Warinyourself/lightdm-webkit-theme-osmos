@@ -4,6 +4,7 @@ import { AppModule } from '@/store/app'
 import { PageModule } from './store/page'
 import { Debounce, focusInputPassword } from './utils/helper'
 import { hotkeys } from '@/utils/hotkeys'
+import { initTimer } from './utils/time'
 
 @Component
 export default class MainApp extends Vue {
@@ -24,6 +25,7 @@ export default class MainApp extends Vue {
   created() {
     AppModule.setUpSettings()
     this.initKeybinds()
+    initTimer()
   }
 
   initKeybinds() {

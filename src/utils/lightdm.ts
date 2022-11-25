@@ -1,19 +1,68 @@
-import { Lightdm } from '@/models/lightdm'
-import { Greeter } from 'nody-greeter-types'
+import { AppState } from '@/store/app'
+
+/**
+ * INFO: To avoid recoursive requires modules (lightdm and AppModule)
+ * @returns AppState
+ */
+async function getAppModule(): Promise<AppState> {
+  const module = await import('@/store/app') as any
+  return module.AppModule
+}
 
 const DEBUG_PASSWORD = 'password'
 const lightdmDebug = window.lightdm === undefined
-const localLight = window.lightdm as unknown as Lightdm
+
+function setIsAuthenticated(value: boolean) {
+  (window.lightdm as any).is_authenticated = value
+}
 
 if (lightdmDebug) {
   window.lightdm = {
     is_authenticated: false,
     authentication_user: undefined,
     default_session: 'plasma-shell',
+    can_access_battery: true,
+    can_access_brightness: true,
     can_suspend: true,
     can_restart: true,
     can_hibernate: true,
     can_shutdown: true,
+
+    battery_data: {
+      level: Math.ceil(Math.random() * 99 + 1),
+      ac_status: true
+    },
+    brightness: Math.ceil(Math.random() * 99 + 1),
+
+    battery_update: {
+      _callbacks: [],
+      _emit: () => {
+        window.lightdm?.battery_update._callbacks.forEach((cb) => cb())
+      },
+      connect: (callback: () => void) => {
+        window.lightdm?.battery_update._callbacks.push(callback)
+      }
+    },
+    authentication_complete: {
+      _callbacks: [],
+      _emit: () => {
+        console.log(window.lightdm?.authentication_complete._callbacks)
+        window.lightdm?.authentication_complete._callbacks.forEach((cb) => cb())
+      },
+      connect: (callback: () => void) => {
+        window.lightdm?.authentication_complete._callbacks.push(callback)
+      }
+    },
+    brightness_update: {
+      _callbacks: [],
+      _emit: () => {
+        window.lightdm?.brightness_update._callbacks.forEach((cb) => cb())
+      },
+      connect: (callback: () => void) => {
+        window.lightdm?.brightness_update._callbacks.push(callback)
+      }
+    },
+
     sessions: [
       {
         name: 'i3wm',
@@ -61,38 +110,47 @@ if (lightdmDebug) {
     ],
     languages: [
       {
-        name: 'American English',
-        code: 'en_US.utf8'
-      },
-      {
         name: 'Русский',
         code: 'ru_RU.utf8'
+      },
+      {
+        name: 'American English',
+        code: 'en_US.utf8'
       }
     ],
-    language: 'American English',
+    language: { code: 'en_US', name: 'American English' },
+
     start_authentication: (username: string) => {
       console.log(`Starting authenticating here: '${username}'`)
       const inputNode = document.getElementById('password') as HTMLInputElement
 
-      localLight.respond(inputNode?.value || '')
+      window.lightdm?.respond(inputNode?.value || '')
     },
     authenticate: (username: string) => {
+      const inputNode = document.getElementById('password') as HTMLInputElement
       console.log(`Starting authenticating user: '${username}'`)
+
+      if (window.lightdm) {
+        (window.lightdm as any).authentication_user = username
+      }
+
+      window.lightdm?.respond(inputNode?.value || '')
     },
     cancel_authentication: () => {
       console.log('Auth cancelled')
+    },
+    start_session(session: string) {
+      alert(`Start session: ${session}`)
     },
     respond: (password: string) => {
       console.log(`Password provided : '${password}'`)
 
       if (password === DEBUG_PASSWORD) {
-        localLight.is_authenticated = true
+        setIsAuthenticated(true)
+      } else {
+        setIsAuthenticated(false)
       }
-
-      window.authentication_complete()
-    },
-    login(user: string, session: string) {
-      alert(`Logged with '${user}' (Session: '${session}') !`)
+      window.lightdm?.authentication_complete._emit()
     },
     shutdown() {
       alert('(DEBUG: System is shutting down)')
@@ -109,21 +167,17 @@ if (lightdmDebug) {
   } as any
 }
 
-const isNode = 'batteryData' in (window.lightdm || {})
+const isSupportFullApi = 'battery_data' in (window.lightdm || {})
 
 class LightdmWebkit {
   protected _inputErrorTimer!: null | NodeJS.Timeout
-
-  // get session() {
-  //   return ''
-  // }
 
   get defaultSession() {
     return this.sessions[0]?.key || window.lightdm?.default_session || 'i3'
   }
 
-  get isNode() {
-    return isNode
+  get isSupportFullApi() {
+    return isSupportFullApi
   }
 
   get sessions() {
@@ -195,96 +249,50 @@ class LightdmWebkit {
   }
 }
 
-class LightdmPython extends LightdmWebkit {
-  private _password = ''
-  private _completeCallback!: () => void
-
-  constructor() {
-    super()
-    this.init()
-  }
-
-  get light() {
-    return window.lightdm as unknown as Lightdm
-  }
-
-  public login(username: string, password: string, session?: string): void {
-    this.lightdmLogin(username, password, () => this.lightdmStart(session || this.defaultSession))
-  }
-
-  private lightdmStart(session: string): void {
-    this.light.login(this.light.authentication_user || '', session)
-  }
-
-  private lightdmLogin(username: string, password: string, callback: () => void) {
-    this._completeCallback = callback
-    this._password = password
-
-    this.light.start_authentication(username)
-  }
-
-  private init() {
-    window.authentication_complete = () => {
-      if (window.lightdm?.is_authenticated && this._completeCallback) {
-        this._completeCallback()
-      } else {
-        this.light.cancel_authentication()
-        this._setInputError()
-      }
-    }
-
-    window.show_message = (text) => {
-      alert(text)
-    }
-
-    window.show_prompt = (text) => {
-      if (text === 'Password: ') {
-        if (window.lightdm) {
-          window.lightdm.respond(this._password)
-        }
-      }
-    }
-  }
-}
-
 class LightdmNode extends LightdmWebkit {
-  private _username!: string
-  private _password!: string
-  private _session!: undefined | string
+  public _username!: string
+  public _password!: string
+  public _session!: string
 
   constructor() {
     super()
     this.init()
-  }
-
-  get light() {
-    return window.lightdm as Greeter
   }
 
   public login(username: string, password: string, session?: string): void {
     this._username = username
     this._password = password
-    this._session = session
+    this._session = session || this.defaultSession
 
-    this.light.authenticate(null)
+    window.lightdm?.authenticate(username)
   }
 
   public setAuthenticationDone(): void {
-    this.light.authentication_complete.connect(() => {
-      if (this.light.is_authenticated) {
-        this.light.start_session(this._session || this.light.default_session)
+    window.lightdm?.authentication_complete?.connect(() => {
+      if (window.lightdm?.is_authenticated) {
+        window.lightdm?.start_session(this._session || window.lightdm?.default_session)
       } else {
         this._authenticationFailed()
       }
     })
+
+    window.lightdm_cancel_login = () => {
+      window.lightdm?.cancel_authentication()
+    }
   }
 
-  public _authenticationFailed(): void {
-    this.light.cancel_authentication()
+  private _authenticationFailed(): void {
+    this._setInputError()
+    window.lightdm?.cancel_authentication()
   }
 
   public setSignalHandler(): void {
-    this.light.show_prompt.connect((_message, type) => {
+    window.lightdm?.show_message?.connect(function(text, type) {
+      console.log({ text, type })
+    })
+
+    window.lightdm?.show_prompt?.connect((_message, type) => {
+      console.log({ _message, type })
       if (!window.lightdm) return
       if (type === 0) {
         window.lightdm.respond(this._username)
@@ -292,6 +300,26 @@ class LightdmNode extends LightdmWebkit {
         window.lightdm.respond(this._password)
       }
     })
+
+    if (window.lightdm?.can_access_brightness) {
+      this.updateBrightData()
+      window.lightdm?.brightness_update.connect(this.updateBrightData)
+    }
+
+    if (window.lightdm?.can_access_battery) {
+      this.updateBatteryData()
+      window.lightdm?.battery_update.connect(this.updateBatteryData)
+    }
+  }
+
+  public async updateBatteryData(): Promise<void> {
+    const module = await getAppModule()
+    module.SET_STATE_APP({ key: 'battery', value: window.lightdm?.battery_data })
+  }
+
+  public async updateBrightData(): Promise<void> {
+    const module = await getAppModule()
+    module.SET_STATE_APP({ key: 'brightness', value: window.lightdm?.brightness })
   }
 
   public init(): void {
@@ -300,4 +328,26 @@ class LightdmNode extends LightdmWebkit {
   }
 }
 
-export const LightdmHandler = isNode ? new LightdmNode() : new LightdmPython()
+export const LightdmHandler = new LightdmNode()
+
+window.lightdm_cancel_login = () => {
+  window.lightdm?.cancel_authentication()
+}
+
+window.lightdm_start = (desktop: string) => {
+  window.lightdm?.start_session(desktop)
+}
+
+window.show_prompt = (text, type) => {
+  if (text === 'Password: ' && LightdmHandler._password !== undefined) {
+    window.lightdm?.respond(LightdmHandler._password)
+  }
+}
+
+window.authentication_complete = () => {
+  if (window.lightdm?.is_authenticated) {
+    window.lightdm_start(LightdmHandler._session)
+  } else if (document.head.dataset.wintype === 'primary') {
+    window.lightdm?.cancel_authentication()
+  }
+}

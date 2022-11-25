@@ -25,8 +25,8 @@ export interface AppThemeSnapshot {
   values: Record<string, AppInputThemeValue>;
 }
 
-export type AppInputTheme = AppInputThemeGeneral | AppInputThemeSlider | AppInputButton
-export type AppInputThemeType = 'color' | 'slider' | 'checkbox' | 'palette' | 'button'
+export type AppInputTheme = AppInputThemeGeneral | AppInputThemeSlider | AppInputButton | AppInputThemePalette | AppInputThemeSelector
+export type AppInputThemeType = 'color' | 'slider' | 'checkbox' | 'palette' | 'button' | 'selector'
 export type AppInputThemeValue = string | boolean | string[] | number
 
 export interface AppInputThemeGeneral {
@@ -34,7 +34,6 @@ export interface AppInputThemeGeneral {
   value: AppInputThemeValue;
   label: string;
   type: AppInputThemeType;
-  values?: string[][];
   options?: AppInputThemeOptions;
   callback?: (value: AppInputThemeValue) => void;
 }
@@ -43,6 +42,16 @@ export interface AppInputThemeSlider extends AppInputThemeGeneral {
   type: 'slider';
   icon: string;
   options: AppInputThemeOptionsSlider;
+}
+
+export interface AppInputThemeSelector extends AppInputThemeGeneral {
+  type: 'selector';
+  values: Readonly<string[]>;
+}
+
+export interface AppInputThemePalette extends AppInputThemeGeneral {
+  type: 'palette';
+  values: string[][];
 }
 
 export interface AppInputButton {

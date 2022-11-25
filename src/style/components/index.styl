@@ -1,3 +1,4 @@
+@import './bar.styl'
 @import './menu.styl'
 @import './login.styl'
 @import './dialog.styl'
@@ -20,12 +21,12 @@
   justify-content center
 
 .frame-rate-block
-  top 0
-  right 0
+  top calc(var(--gap) + var(--height-bar))
+  right var(--gap)
   color white
   font-size 1.1rem
-  padding 6px 12px
+  padding calc(var(--gap) / 2) var(--gap)
   z-index 10
   position absolute
   background var(--background-block)
-  border-radius 0 0 0 10px
+  border-radius var(--gap)

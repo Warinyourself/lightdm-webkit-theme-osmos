@@ -1,4 +1,4 @@
-import { AppInputButton, AppInputThemeGeneral, AppInputThemeSlider, AppInputThemeValue, AppTheme } from '@/models/app'
+import { AppInputButton, AppInputThemeGeneral, AppInputThemePalette, AppInputThemeSlider, AppInputThemeValue, AppTheme } from '@/models/app'
 import { AppModule } from '@/store/app'
 import { PageModule } from '@/store/page'
 import { debounce, DebounceSettings } from 'lodash'
@@ -6,7 +6,6 @@ import { RawLocation } from 'vue-router'
 import router from '../router'
 import { LightdmHandler } from '@/utils/lightdm'
 
-const isFinalBuild = process.env.VUE_APP_VIEW === 'build'
 export const modKey = 'ctrl'
 export const languageMap: Record<string, string> = {
   ru: 'Русский',
@@ -162,18 +161,18 @@ export function hasSomeParentClass(element: HTMLElement, tag: string): boolean {
 }
 
 export function randomizeSettingsTheme(theme: AppTheme) {
-  const generateValueObject: Record<string, (input: AppInputThemeSlider) => AppInputThemeValue> = {
+  const generateValueObject: Record<string, (input: any) => any> = {
     slider: (input: AppInputThemeSlider) => generateRandomSliderValue(input),
     checkbox: () => Math.random() > 0.5,
     color: () => generateRandomColor(),
-    palette: (input: AppInputThemeGeneral) => Math.floor(randomize(0, (input.values?.length || 2) - 1))
+    palette: (input: AppInputThemePalette) => Math.floor(randomize(0, (input.values?.length || 2) - 1))
   }
 
   return theme.settings?.map(input => {
     const changeValueFunction = generateValueObject[input.type]
 
     if (changeValueFunction) {
-      input.value = changeValueFunction(input as AppInputThemeSlider)
+      input.value = changeValueFunction(input)
     }
 
     return input

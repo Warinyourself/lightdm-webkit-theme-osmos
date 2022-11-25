@@ -12,6 +12,8 @@ module.exports = {
     indent: 'off',
     'multiline-ternary': 'off',
     'space-before-function-paren': [2, 'never'],
+    'no-use-before-define': 'off',
+    '@typescript-eslint/no-use-before-define': 'warn',
     'vue/array-bracket-spacing': 'error',
     'vue/arrow-spacing': 'error',
     'vue/block-spacing': 'error',

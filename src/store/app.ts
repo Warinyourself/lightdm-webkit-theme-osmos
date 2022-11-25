@@ -22,14 +22,18 @@ import { isDifferentRoute, parseQueryValue, randomize, randomizeSettingsTheme } 
 import { AppThemes, defaultTheme } from '@/utils/constant'
 import { version } from '@/../package.json'
 import { LightdmHandler } from '@/utils/lightdm'
+import { LightDMBattery } from 'nody-greeter-types'
 
 export interface AppState extends AppSettings {
   themes: AppTheme[];
   getMainSettings: AppSettings;
   activeTheme: AppTheme;
+  battery?: LightDMBattery;
+  brightness?: number;
   username: string;
   desktops: LightdmSession[];
   users: LightdmUsers[];
+  SET_STATE_APP: <S extends this, K extends keyof this>({ key, value }: { key: K; value: S[K] }) => void
 }
 
 @Module({ dynamic: true, store, name: 'app' })
@@ -38,9 +42,11 @@ class App extends VuexModule implements AppState {
   currentTheme = ''
   currentOs = 'arch-linux'
   desktop = LightdmHandler.defaultSession
-  username = LightdmHandler?.username
+  username = LightdmHandler.username
   password = ''
   defaultColor = '#6BBBED'
+  battery?: LightDMBattery = undefined
+  brightness = 0
 
   users = LightdmHandler?.users
   desktops = LightdmHandler?.sessions
@@ -55,8 +61,16 @@ class App extends VuexModule implements AppState {
     'only-ui': false
   }
 
-  get isAdvancedGreeted() {
-    return LightdmHandler.isNode
+  get isCharging() {
+    return this.battery?.status === 'Charging'
+  }
+
+  get batteryLevel() {
+    return this.battery?.level || 0
+  }
+
+  get isSupportFullApi() {
+    return LightdmHandler.isSupportFullApi
   }
 
   // TODO: replace this on localStorageSettings

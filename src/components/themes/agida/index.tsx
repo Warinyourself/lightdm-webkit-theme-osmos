@@ -3,7 +3,8 @@ import { AppModule } from '@/store/app'
 import { Wavery } from './lib/wave'
 import { Debounce } from '@/utils/helper'
 import { changeHsl, hexToRgb, rgbToHsl } from '@/utils/color'
-import { AppInputThemeGeneral } from '@/models/app'
+import { AppInputThemePalette } from '@/models/app'
+import { AgidaTypes } from '@/utils/constant'
 
 export const OPACITY_ARR = [0.265, 0.4, 0.53, 1]
 export const topColors = ['#03C79C', '#00A5B2', '#0080A5', '#005A8D']
@@ -20,11 +21,7 @@ export default class AgidaTheme extends Vue {
     width: 1200,
     segmentCount: 5,
     layerCount: 4,
-    variance: 1,
-    animation: {
-      steps: 2,
-      time: 40000
-    }
+    variance: 1
   }
 
   screen = {
@@ -33,7 +30,7 @@ export default class AgidaTheme extends Vue {
   }
 
   get palette(): string[] {
-    const input = AppModule.getThemeInput('palette') as AppInputThemeGeneral
+    const input = AppModule.getThemeInput('palette') as AppInputThemePalette
     const index = input?.value as number || 0
     const values = input?.values || ['#00CC99', '#6600FF']
 
@@ -50,6 +47,10 @@ export default class AgidaTheme extends Vue {
 
   get animationSpeed(): number {
     return AppModule.getThemeInput('animation-speed')?.value as number || 40
+  }
+
+  get type(): AgidaTypes {
+    return AppModule.getThemeInput('type')?.value as AgidaTypes || 'agida'
   }
 
   get topColors(): string[] {
@@ -71,13 +72,13 @@ export default class AgidaTheme extends Vue {
   }
 
   get bottomActiveColor(): string {
-    return this.bottomColor // this.bottomColors[3]
+    return this.bottomColor
   }
 
   get knifeSVG(): JSX.Element {
-    return <g>
-      <path d="M1233.68 556.289L490.85 201.979L400.013 392.424C1142.84 746.735 1233.68 556.289 1233.68 556.289Z" fill="url(#paint0_linear_602_754)"/>
-      <path d="M432.556 293.998L479.117 196.382L74.764 3.5156C59.8095 -3.61734 41.904 2.72332 34.7711 17.6778L3.55143 83.1312C-3.58151 98.0857 2.75915 115.991 17.7137 123.124L52.0107 139.483C65.6195 145.974 81.9138 140.204 88.4048 126.595C88.4048 126.595 102.294 97.911 145.302 118.425C188.31 138.938 173.495 170.432 173.495 170.432C173.495 170.432 188.648 139.1 231.655 159.613C274.663 180.127 259.849 211.621 259.849 211.621C259.849 211.621 274.692 180.141 318.009 200.802C361.326 221.463 346.203 252.809 346.203 252.809C346.203 252.809 361.355 221.477 404.363 241.991C447.371 262.504 432.556 293.998 432.556 293.998Z" fill="url(#paint1_linear_602_754)"/>
+    return <g style="transform: scale(0.7) translate(-27%, -7%);transform-origin: center">
+      <path d="M1233.68 556.289L490.85 201.979L400.013 392.424C1142.84 746.735 1233.68 556.289 1233.68 556.289Z" fill="white"/>
+      <path d="M432.556 293.998L479.117 196.382L74.764 3.5156C59.8095 -3.61734 41.904 2.72332 34.7711 17.6778L3.55143 83.1312C-3.58151 98.0857 2.75915 115.991 17.7137 123.124L52.0107 139.483C65.6195 145.974 81.9138 140.204 88.4048 126.595C88.4048 126.595 102.294 97.911 145.302 118.425C188.31 138.938 173.495 170.432 173.495 170.432C173.495 170.432 188.648 139.1 231.655 159.613C274.663 180.127 259.849 211.621 259.849 211.621C259.849 211.621 274.692 180.141 318.009 200.802C361.326 221.463 346.203 252.809 346.203 252.809C346.203 252.809 361.355 221.477 404.363 241.991C447.371 262.504 432.556 293.998 432.556 293.998Z" fill="white"/>
     </g>
   }
 
@@ -157,14 +158,20 @@ export default class AgidaTheme extends Vue {
   }
 
   get yinYangSVG(): JSX.Element {
-    return <g>
+    return <g style="transform: translate(30px, 30px);">
       <path fill-rule="evenodd" clip-rule="evenodd" d="M289.088 578.175C448.746 578.175 578.175 448.746 578.175 289.088C578.175 129.429 448.746 0 289.088 0C129.429 0 0 129.429 0 289.088C0 448.746 129.429 578.175 289.088 578.175ZM289.087 570.763C214.383 570.763 142.737 541.086 89.9132 488.262C37.0889 435.437 7.41248 363.792 7.41248 289.087C7.41248 214.383 37.0889 142.737 89.9132 89.9132C142.737 37.0889 214.383 7.41248 289.087 7.41248C326.44 7.41248 362.262 22.2507 388.675 48.6628C415.087 75.075 429.925 110.898 429.925 148.25C429.925 185.602 415.087 221.425 388.675 247.837C362.262 274.249 326.44 289.087 289.087 289.087C251.735 289.087 215.912 303.926 189.5 330.338C163.088 356.75 148.25 392.573 148.25 429.925C148.25 467.277 163.088 503.1 189.5 529.512C215.912 555.924 251.735 570.763 289.087 570.763ZM326.15 429.925C326.15 450.394 309.557 466.988 289.088 466.988C268.618 466.988 252.025 450.394 252.025 429.925C252.025 409.456 268.618 392.863 289.088 392.863C309.557 392.863 326.15 409.456 326.15 429.925Z" fill="white"/>
       <path d="M289.088 185.312C309.557 185.312 326.15 168.719 326.15 148.25C326.15 127.781 309.557 111.188 289.088 111.188C268.618 111.188 252.025 127.781 252.025 148.25C252.025 168.719 268.618 185.312 289.088 185.312Z" fill="white"/>
     </g>
   }
 
   get activeFragment() {
-    return this.agidaSVG
+    const objectMap: Record<AgidaTypes, JSX.Element> = {
+      agida: this.agidaSVG,
+      knife: this.knifeSVG,
+      'yin yang': this.yinYangSVG
+    }
+
+    return objectMap[this.type] || this.agidaSVG
   }
 
   get width(): number {
@@ -207,7 +214,6 @@ export default class AgidaTheme extends Vue {
   generateWave(type: 'bottom' | 'top') {
     const wavery = new Wavery(this.wave)
     const waveSvg = wavery.generateSvg()
-    console.log('GENERATE WAVE')
 
     const { height, width, xmlns, paths } = waveSvg.svg
     const isTop = type === 'top'

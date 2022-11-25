@@ -1,7 +1,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 import { AppModule } from '@/store/app'
-import { AppInputButton, AppInputColor, AppInputThemeGeneral, AppInputThemeSlider, AppTheme } from '@/models/app'
+import { AppInputButton, AppInputColor, AppInputThemeGeneral, AppInputThemePalette, AppInputThemeSelector, AppInputThemeSlider, AppTheme } from '@/models/app'
 
 import AppSlider from '@/components/app/AppSlider'
 import AppButton from '@/components/app/AppButton'
@@ -53,6 +53,16 @@ export default class SettingsCustom extends Vue {
     return <AppSlider {...{ props, on: { input: handler } } } />
   }
 
+  buildSelector(input: AppInputThemeSelector) {
+    const { label, value, values } = input
+    const props = { label, value, items: values }
+    const handler = (value: number) => {
+      AppModule.changeSettingsThemeInput({ key: input.name, value })
+    }
+
+    return <AppSelector {...{ props, on: { input: handler } } } />
+  }
+
   buildColor(input: AppInputThemeGeneral) {
     const { label, value, options } = input
     const props = { label, value }
@@ -81,7 +91,7 @@ export default class SettingsCustom extends Vue {
     return <AppCheckbox {...{ props, on: { input: handler } } }/>
   }
 
-  buildPalette(input: AppInputThemeGeneral) {
+  buildPalette(input: AppInputThemePalette) {
     const { label, value, values } = input
     const props = { label, value, values }
     const handler = (value: boolean) => {
@@ -109,7 +119,8 @@ export default class SettingsCustom extends Vue {
       slider: this.buildSlider,
       checkbox: this.buildCheckbox,
       palette: this.buildPalette,
-      button: this.buildButton
+      button: this.buildButton,
+      selector: this.buildSelector
     }
 
     return <div class='user-settings-custom'>

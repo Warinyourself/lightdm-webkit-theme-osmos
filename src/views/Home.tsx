@@ -4,6 +4,7 @@ import { LoginPosition } from '@/models/page'
 import { AppModule } from '@/store/app'
 import { PageModule } from '@/store/page'
 
+import AppBar from '@/components/app/AppBar'
 import AppMenu from '@/components/app/AppMenu'
 import AppDialog from '@/components/app/AppDialog'
 import SettingsComponent from '@/components/base/SettingsComponent'
@@ -66,6 +67,10 @@ export default class HomePage extends Vue {
     return !this.isViewThemeOnly && this.isOpenLogin
   }
 
+  get isSupportFullApi() {
+    return AppModule.isSupportFullApi
+  }
+
   created() {
     // Set language
     const language = localStorage.getItem('language') || 'en'
@@ -112,6 +117,7 @@ export default class HomePage extends Vue {
 
       { !this.isViewThemeOnly && <ShutdownButton /> }
       { this.showGithubButton && <GithubButton /> }
+      { this.isSupportFullApi && <AppBar /> }
 
       <AppDialog />
       <AppMenu />

@@ -86,14 +86,16 @@ export default class AppMenu extends Vue {
     event.preventDefault()
   }
 
-  buildElementItem(item: AppMenuItem, index: number) {
+  buildElementItem(item: AppMenuItem | string, index: number) {
+    const isSting = typeof item === 'string'
+    const { text, icon } = isSting ? { text: item, icon: null } : item
     return <li
       class='menu-list-item'
       key={index}
       onClick={() => { this.handleCallback(item) }}
     >
-      { item.text }
-      { item.icon && <AppIcon class='menu-icon' name={item.icon} /> }
+      { text }
+      { icon && <AppIcon class='menu-icon' name={icon} /> }
     </li>
   }
 

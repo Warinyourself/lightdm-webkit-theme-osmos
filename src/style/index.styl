@@ -12,8 +12,9 @@
   --color-blue #04ded4
   --color-unfocus rgba(255, 255, 255, .5)
   --color-focus white
-  --login-height: 14vmin
   --background-block: rgba(0,0,0,0.45)
+  --gap: 12px
+  --height-bar: 36px
   font-size 16px
 
 ::-webkit-scrollbar
@@ -37,3 +38,19 @@
       animation-iteration-count 1 !important
       transition-duration 0.01ms !important
       scroll-behavior auto !important
+
+
+// @media screen and (-moz-min-device-pixel-ratio: 2), 
+//        screen and (-o-min-device-pixel-ratio: 2/1), 
+//        screen and (-webkit-min-device-pixel-ratio: 2), 
+//        screen and (min-device-pixel-ratio: 2)
+//   body
+//     zoom 2
+
+// @media screen and (-webkit-min-device-pixel-ratio: 2)
+//   body
+//     zoom 2
+
+@media screen and (min-width: 3000px) and (min-height: 1200px)
+  body
+    zoom 2

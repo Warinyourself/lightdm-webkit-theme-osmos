@@ -19,12 +19,13 @@ export default class AppSelector extends Vue implements AppSelectorProps {
 
   selectedValue: null | AppMenuItem | string = null
 
-  get fullItem() {
+  get fullSelectedItem() {
     const selected = this.value !== null ? this.value : this.selectedValue
+    const finalSelectedValue = typeof selected === 'object' ? selected?.value : selected
 
-    return this.items.find(({ value }) => {
-      const finalValue = typeof selected === 'object' ? selected?.value : selected
-      return value === finalValue
+    return this.items.find((item) => {
+      const finalValue = typeof item === 'object' ? item?.value : item
+      return finalValue === finalSelectedValue
     })
   }
 
@@ -37,7 +38,7 @@ export default class AppSelector extends Vue implements AppSelectorProps {
   }
 
   get currentValueLabel() {
-    const selected = this.fullItem ?? this.selectedValue
+    const selected = this.fullSelectedItem ?? this.selectedValue
     return typeof selected === 'object' ? selected?.text : selected
   }
 
@@ -65,10 +66,10 @@ export default class AppSelector extends Vue implements AppSelectorProps {
   }
 
   render() {
-    const selectorIcon = this.fullItem?.icon ? <AppIcon {...{
+    const selectorIcon = this.fullSelectedItem?.icon ? <AppIcon {...{
       class: 'menu-icon selector-icon',
       props: {
-        name: this.fullItem.icon
+        name: this.fullSelectedItem.icon
       }
     }}/> : null
 

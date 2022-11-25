@@ -1,5 +1,6 @@
 #!/bin/bash
 
-dm-tool add-nested-seat --screen 1366x768
+lightdm-webkit2-greeter
+# dm-tool add-nested-seat --screen 1366x768
 
-# nody-greeter --debug
+# yarn build && sudo sh ./install.sh && nody-greeter --debug 

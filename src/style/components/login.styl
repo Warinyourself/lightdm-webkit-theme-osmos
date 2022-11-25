@@ -19,7 +19,7 @@
   &.login-view--center
     transform translate(calc(100vw / 2 - 50%), calc(100vh / 2 - 50%))
   &.login-view--top
-    transform translate(calc(100vw / 2 - 50%), 12px)
+    transform translate(calc(100vw / 2 - 50%), calc(var(--gap) + var(--height-bar)))
   &.login-view--right
     transform translate(calc(100vw - 100% - 12px), calc(100vh / 2 - 50%))
   &.login-view--bottom
@@ -58,12 +58,10 @@
       width 60px
       height 60px
       margin 0
-    .time
-      position absolute
-      transform translate(74px, 32px)
     .user-name
       margin 8px 12px
-
+      display flex
+      align-items center
 
 .user-choice
   width 100%
@@ -72,6 +70,10 @@
     height 50px
 
 .time
+  position absolute
+  top 0
+  left 50%
+  transform translateX(-50%)
   text-align center
   color var(--color-unfocus)
   font-size 0.95rem
@@ -82,7 +84,7 @@
   height 100px
   display block
   transition .3s
-  margin auto
+  margin 24px auto 0
   background-repeat no-repeat
   background-size cover
   background-position center

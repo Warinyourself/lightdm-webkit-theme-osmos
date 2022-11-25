@@ -31,6 +31,9 @@ export const defaultTheme: AppTheme = {
   ]
 }
 
+const AGIDA_TYPES = ['agida', 'knife', 'yin yang'] as const
+export type AgidaTypes = typeof AGIDA_TYPES[number]
+
 export const AppThemes: AppTheme[] = [
   {
     name: 'Agida',
@@ -55,6 +58,13 @@ export const AppThemes: AppTheme[] = [
           ['#fc5185', '#3fc1c9'],
           ['#f5f5f5', '#364f6b']
         ]
+      },
+      {
+        name: 'type',
+        label: 'type',
+        type: 'selector',
+        value: 'agida',
+        values: AGIDA_TYPES
       }
     ]
   },

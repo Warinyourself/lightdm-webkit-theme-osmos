@@ -1,4 +1,4 @@
-import { AppInputThemeGeneral, AppTheme } from '@/models/app'
+import { AppInputThemePalette, AppTheme } from '@/models/app'
 import { AppModule } from '@/store/app'
 import { Component, Vue } from 'vue-property-decorator'
 import { CreateElement } from 'vue/types/umd'
@@ -10,7 +10,7 @@ export default class InfinityTheme extends Vue {
   }
 
   get palette() {
-    const input = AppModule.getThemeInput('palette') as AppInputThemeGeneral
+    const input = AppModule.getThemeInput('palette') as AppInputThemePalette
     const index = input?.value as number || 0
     const values = input?.values || []
 

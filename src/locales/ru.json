@@ -19,7 +19,8 @@
     "invert": "Инвертировать",
     "brightness": "Яркость",
     "random": "Случайно",
-    "symmetry": "Симметрия"
+    "symmetry": "Симметрия",
+    "thickness": "Толщина"
   },
   "text": {
     "password": "пароль",
@@ -71,6 +72,7 @@
     "choice-themes": "Выбор темы",
     "customize-theme": "Настройка темы",
     "reset-settings": "Сбросить настройки",
+    "change-theme": "Сменить тему",
     "login-position": {
       "title": "Положение",
       "about": "Выбрать положение логина",
