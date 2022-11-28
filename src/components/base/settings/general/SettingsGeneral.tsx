@@ -32,6 +32,7 @@ export default class SettingsGeneral extends Vue {
 
     const hasQyery = Object.keys(this.$route.query).length
     if (hasQyery) { this.$router.replace({}) }
+    window.location.reload()
   }
 
   changeTheme() {

@@ -3,17 +3,18 @@ import { Component, Vue } from 'vue-property-decorator'
 import AppIcon from './AppIcon.vue'
 import timer from '@/utils/time'
 import BatteryIcon from '../base/BatteryIcon'
+import BrightIcon from '../base/BrightIcon'
 
 @Component({
-  components: { AppIcon, BatteryIcon }
+  components: { AppIcon, BatteryIcon, BrightIcon }
 })
-export default class AppSelector extends Vue {
-  get batteryLevel() {
-    return AppModule.batteryLevel
+export default class AppBar extends Vue {
+  get showBattery() {
+    return AppModule.battery
   }
 
-  get brightLevel() {
-    return AppModule.brightness
+  get showBright() {
+    return !!AppModule.brightness
   }
 
   get currentTime() {
@@ -24,11 +25,8 @@ export default class AppSelector extends Vue {
     return <div class="app-bar">
       <div class="app-bar__time"> { timer.longTime } </div>
       <div class="app-bar__info">
-        <BatteryIcon />
-        <div class="app-bar__bright">
-          <AppIcon name="brightness" class="brightness-icon"/>
-          { this.brightLevel }
-        </div>
+        { this.showBattery && <BatteryIcon /> }
+        { this.showBright && <BrightIcon /> }
       </div>
     </div>
   }

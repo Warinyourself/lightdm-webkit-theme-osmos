@@ -28,7 +28,7 @@ export interface AppState extends AppSettings {
   themes: AppTheme[];
   getMainSettings: AppSettings;
   activeTheme: AppTheme;
-  battery?: LightDMBattery;
+  battery: LightDMBattery | null;
   brightness?: number;
   username: string;
   desktops: LightdmSession[];
@@ -45,7 +45,7 @@ class App extends VuexModule implements AppState {
   username = LightdmHandler.username
   password = ''
   defaultColor = '#6BBBED'
-  battery?: LightDMBattery = undefined
+  battery: LightDMBattery = null
   brightness = 0
 
   users = LightdmHandler?.users

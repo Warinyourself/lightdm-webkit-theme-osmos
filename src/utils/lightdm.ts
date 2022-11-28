@@ -167,7 +167,7 @@ if (lightdmDebug) {
   } as any
 }
 
-const isSupportFullApi = 'battery_data' in (window.lightdm || {})
+const isSupportFullApi = 'battery_data' in (window.lightdm || {}) || 'brightness' in (window.lightdm || {})
 
 class LightdmWebkit {
   protected _inputErrorTimer!: null | NodeJS.Timeout

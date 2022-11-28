@@ -18,6 +18,10 @@ export default class UserAvatar extends Vue {
     return PageModule.isOpenBlock('settings')
   }
 
+  get isSupportFullApi() {
+    return AppModule.isSupportFullApi
+  }
+
   get locale() {
     return PageModule.locale
   }
@@ -32,17 +36,14 @@ export default class UserAvatar extends Vue {
 
   buildUserAvatar(image: string | undefined) {
     const defaultAvatar = <AppIcon name='user'/>
-    const userAvatar = <div
-      class='user-avatar'
-      style={ { 'background-image': `url("${image}")` } }
-    />
+    const userAvatar = <img class='user-avatar' src={image} />
 
     return image ? userAvatar : defaultAvatar
   }
 
   buildUser(user: LightdmUsers) {
     return <div class='user-choice' key={ user.username }>
-      <p class='time'> { this.currentTime } </p>
+      <p class='time'> { this.isSupportFullApi ? '' : this.currentTime } </p>
       { this.buildUserAvatar(user?.image) }
       <div class='user-name'> { user?.display_name } </div>
     </div>

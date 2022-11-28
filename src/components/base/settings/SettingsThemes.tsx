@@ -30,10 +30,10 @@ export default class SettingsThemes extends Vue {
         this.themes.map(theme => {
           const isActiveTheme = theme.name === this.activeTheme.name
 
-          return <div
+          return <img
             class={`user-settings-theme ${isActiveTheme ? 'active' : ''}`}
             onClick={() => AppModule.changeTheme(theme.name)}
-            style={`background: url(${this.setImage(theme.name.toLowerCase())}) no-repeat center/cover`}
+            src={this.setImage(theme.name.toLowerCase())}
           />
         })
       }
