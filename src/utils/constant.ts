@@ -1,13 +1,12 @@
-import { AppTheme, AppInputThemeGeneral } from '@/models/app'
+import { AppTheme } from '@/models/app'
 import {
   pxratio,
   hueSlider,
   randomButton,
-  setActiveColor,
   brightnessSlider,
   buildInputSlider,
   buildInvertCheckbox,
-  buildInputColor
+  setCSSVariable
 } from './helper'
 
 const background = '#22233D'
@@ -226,7 +225,7 @@ export const AppThemes: AppTheme[] = [
         options: {
           class: 'w-50'
         },
-        callback: setActiveColor
+        callback: (value) => setCSSVariable('--color-active', value + '')
       }
     ],
     color: {

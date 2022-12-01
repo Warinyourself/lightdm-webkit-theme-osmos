@@ -1,10 +1,10 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import Mousetrap from 'mousetrap'
 import { AppModule } from '@/store/app'
-import { PageModule } from './store/page'
-import { Debounce, focusInputPassword } from './utils/helper'
+import { PageModule } from '@/store/page'
+import { Debounce, focusInputPassword, setCSSVariable } from '@/utils/helper'
 import { hotkeys } from '@/utils/hotkeys'
-import { initTimer } from './utils/time'
+import { initTimer } from '@/utils/time'
 
 @Component
 export default class MainApp extends Vue {
@@ -20,6 +20,13 @@ export default class MainApp extends Vue {
   @Watch('getMainSettings', { deep: true })
   handleSettingsThemes() {
     AppModule.syncSettingsWithCache()
+  }
+
+  setZoomVariable() {
+    const defaultRatio = 2 // depends on screen resolution
+    const ratio = window.devicePixelRatio
+    const zoom = ratio < defaultRatio ? defaultRatio - ratio + 1 : ratio / defaultRatio
+    setCSSVariable('--zoom', (zoom) + '')
   }
 
   created() {

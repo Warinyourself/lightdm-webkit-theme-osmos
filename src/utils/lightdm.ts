@@ -314,7 +314,7 @@ class LightdmNode extends LightdmWebkit {
 
   public async updateBatteryData(): Promise<void> {
     const module = await getAppModule()
-    module.SET_STATE_APP({ key: 'battery', value: window.lightdm?.battery_data })
+    module.SET_STATE_APP({ key: 'battery', value: window.lightdm?.battery_data || null })
   }
 
   public async updateBrightData(): Promise<void> {

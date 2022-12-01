@@ -5,6 +5,10 @@
 
 .login-view
   --login-width 330px
+  --resolution calc(2 * var(--zoom))
+  --half-width calc(100vw / var(--resolution))
+  --half-height calc(100vh / var(--resolution))
+
   padding 12px
   position absolute 
   border-radius 20px
@@ -17,15 +21,15 @@
   height 230px
   z-index 10
   &.login-view--center
-    transform translate(calc(100vw / 2 - 50%), calc(100vh / 2 - 50%))
+    transform translate(calc(var(--half-width) - 50%), calc(var(--half-height) - 50%))
   &.login-view--top
-    transform translate(calc(100vw / 2 - 50%), calc(var(--gap) + var(--height-bar)))
+    transform translate(calc(var(--half-width) - 50%), calc(var(--gap) + var(--height-bar)))
   &.login-view--right
-    transform translate(calc(100vw - 100% - 12px), calc(100vh / 2 - 50%))
+    transform translate(calc(100vw - 100% - 12px), calc(var(--half-height) - 50%))
   &.login-view--bottom
-    transform translate(calc(100vw / 2 - 50%), calc(100vh - 100% - 12px))
+    transform translate(calc(var(--half-width) - 50%), calc(100vh - 100% - 12px))
   &.login-view--left
-    transform translate(12px, calc(100vh / 2 - 50%))
+    transform translate(12px, calc(var(--half-height) - 50%))
 
   .slash
     stroke-dasharray 29
@@ -47,9 +51,9 @@
 
 .login-content-settings
   .login-view
-    transform translate(calc(100vw / 2 - 50%), calc(100vh / 2 - 50%))
-    height 50vmin
-    width 80vmin
+    transform translate(calc(var(--half-width) - 50%), calc(var(--half-height) - 50%))
+    height calc(50vmin / var(--zoom))
+    width calc(80vmin / var(--zoom))
   .user-choice
     margin-bottom 8px
     display flex

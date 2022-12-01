@@ -179,8 +179,8 @@ export function randomizeSettingsTheme(theme: AppTheme) {
   })
 }
 
-export function setActiveColor(color: AppInputThemeValue) {
-  document.documentElement.style.setProperty('--color-active', color + '')
+export function setCSSVariable(property: string, value: string) {
+  document.documentElement.style.setProperty(property, value)
 }
 
 export const randomButton: AppInputButton = {

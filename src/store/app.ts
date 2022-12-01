@@ -18,7 +18,7 @@ import {
 } from '@/models/app'
 
 import { LightdmSession, LightdmUsers } from '@/models/lightdm'
-import { isDifferentRoute, parseQueryValue, randomize, randomizeSettingsTheme } from '@/utils/helper'
+import { isDifferentRoute, parseQueryValue, randomize, randomizeSettingsTheme, setCSSVariable } from '@/utils/helper'
 import { AppThemes, defaultTheme } from '@/utils/constant'
 import { version } from '@/../package.json'
 import { LightdmHandler } from '@/utils/lightdm'
@@ -45,7 +45,7 @@ class App extends VuexModule implements AppState {
   username = LightdmHandler.username
   password = ''
   defaultColor = '#6BBBED'
-  battery: LightDMBattery = null
+  battery: LightDMBattery | null = null
   brightness = 0
 
   users = LightdmHandler?.users
@@ -238,8 +238,8 @@ class App extends VuexModule implements AppState {
       }
     }
 
-    document.documentElement.style.setProperty('--color-active', activeColor)
-    document.documentElement.style.setProperty('--color-bg', color.background)
+    setCSSVariable('--color-active', activeColor)
+    setCSSVariable('--color-bg', color.background)
   }
 
   @Action
