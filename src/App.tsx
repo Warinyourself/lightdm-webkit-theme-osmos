@@ -26,7 +26,7 @@ export default class MainApp extends Vue {
    * INFO: For High-DPI screens settings
    */
   initZoom() {
-    setCSSVariable('--zoom', AppModule.zoom + '')
+    setCSSVariable('--zoom', AppModule.zoom + '' || '1')
   }
 
   created() {

@@ -87,8 +87,7 @@ export default class SettingsSelectors extends Vue {
 
   @Debounce(100)
   updateZoom(value: AppInputThemeValue) {
-    setCSSVariable('--zoom', value + '')
-    console.log({ value })
+    setCSSVariable('--zoom', value + '' || '1')
     AppModule.SET_STATE_APP({ key: 'zoom', value: parseFloat(value + '') })
   }
 

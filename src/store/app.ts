@@ -350,7 +350,7 @@ class App extends VuexModule implements AppState {
       this.SET_STATE_APP({ key: 'currentOs', value: settings.currentOs || 'arch-linux' })
       this.SET_STATE_APP({ key: 'desktop', value: settings.desktop })
       this.SET_STATE_APP({ key: 'username', value: settings.username })
-      this.SET_STATE_APP({ key: 'zoom', value: settings.zoom })
+      this.SET_STATE_APP({ key: 'zoom', value: settings.zoom || 1 })
     } catch (error) {
       this.setUpSettings()
     }

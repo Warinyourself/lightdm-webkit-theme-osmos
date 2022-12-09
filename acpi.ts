@@ -54,7 +54,6 @@ class ACPIController {
     acpi.stdout.addListener('data', (d: Buffer) => {
       const data = d.toString().trim()
       this.callbacks.forEach((cb) => {
-        console.log({ data })
         if (cb !== undefined) cb(data)
       })
     })
