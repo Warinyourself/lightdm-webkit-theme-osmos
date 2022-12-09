@@ -1,4 +1,5 @@
 export interface AppSettings {
+  zoom: number;
   currentTheme: string;
   currentOs: string;
   username: string;
@@ -40,7 +41,7 @@ export interface AppInputThemeGeneral {
 
 export interface AppInputThemeSlider extends AppInputThemeGeneral {
   type: 'slider';
-  icon: string;
+  icon?: string;
   options: AppInputThemeOptionsSlider;
 }
 

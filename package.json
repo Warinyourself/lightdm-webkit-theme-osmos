@@ -29,6 +29,7 @@
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0"
   },
+  "license": "GPL-3.0",
   "devDependencies": {
     "@babel/helper-module-imports": "^7.16.0",
     "@types/lodash": "^4.14.178",

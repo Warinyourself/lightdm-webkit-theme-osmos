@@ -22,17 +22,18 @@ export default class MainApp extends Vue {
     AppModule.syncSettingsWithCache()
   }
 
-  setZoomVariable() {
-    const defaultRatio = 2 // depends on screen resolution
-    const ratio = window.devicePixelRatio
-    const zoom = ratio < defaultRatio ? defaultRatio - ratio + 1 : ratio / defaultRatio
-    setCSSVariable('--zoom', (zoom) + '')
+  /**
+   * INFO: For High-DPI screens settings
+   */
+  initZoom() {
+    setCSSVariable('--zoom', AppModule.zoom + '')
   }
 
   created() {
     AppModule.setUpSettings()
     this.initKeybinds()
     initTimer()
+    this.initZoom()
   }
 
   initKeybinds() {

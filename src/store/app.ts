@@ -47,6 +47,7 @@ class App extends VuexModule implements AppState {
   defaultColor = '#6BBBED'
   battery: LightDMBattery | null = null
   brightness = 0
+  zoom = 1
 
   users = LightdmHandler?.users
   desktops = LightdmHandler?.sessions
@@ -73,9 +74,9 @@ class App extends VuexModule implements AppState {
     return LightdmHandler.isSupportFullApi
   }
 
-  // TODO: replace this on localStorageSettings
   get getMainSettings(): AppSettings {
     const {
+      zoom,
       themes,
       desktop,
       username,
@@ -87,6 +88,7 @@ class App extends VuexModule implements AppState {
     } = this
 
     return {
+      zoom,
       themes,
       desktop,
       username,
@@ -348,6 +350,7 @@ class App extends VuexModule implements AppState {
       this.SET_STATE_APP({ key: 'currentOs', value: settings.currentOs || 'arch-linux' })
       this.SET_STATE_APP({ key: 'desktop', value: settings.desktop })
       this.SET_STATE_APP({ key: 'username', value: settings.username })
+      this.SET_STATE_APP({ key: 'zoom', value: settings.zoom })
     } catch (error) {
       this.setUpSettings()
     }

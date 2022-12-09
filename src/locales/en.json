@@ -14,6 +14,7 @@
     "amount": "Amount",
     "hue": "Hue",
     "zoom": "Zoom",
+    "zoom-interface": "Zoom interface",
     "pxratio": "Resolution",
     "animation-speed": "Animation speed",
     "invert": "Invert",
