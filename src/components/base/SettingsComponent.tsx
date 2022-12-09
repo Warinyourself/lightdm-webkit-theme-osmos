@@ -77,7 +77,7 @@ export default class SettingsComponent extends Vue {
 
   render() {
     return <div class="block-settings login-content-settings">
-      <div class="login-view">
+      <div class="login-view active-interface">
         <AppIcon onClick={ this.openLogin } name='collapse' class='system-icon' />
 
         { !this.isViewThemeOnly && <UserAvatar /> }

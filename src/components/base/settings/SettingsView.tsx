@@ -39,9 +39,7 @@ export default class SettingsView extends Vue {
     const activeTab = <div key={this.mainTabIndex}> { mapTabs[this.mainTabIndex] } </div>
 
     return <div class='user-settings'>
-      <keep-alive>
-        { activeTab }
-      </keep-alive>
+      { activeTab }
     </div>
   }
 }

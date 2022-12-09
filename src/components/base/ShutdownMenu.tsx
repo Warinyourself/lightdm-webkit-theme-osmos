@@ -29,7 +29,7 @@ export default class ShutdownMenu extends Vue {
   }
 
   render() {
-    return <div class="shutdown-menu">
+    return <div class="shutdown-menu active-interface">
       { this.actions.map((action) => {
         return <div class="shutdown-item" onClick={ action.callback }>
           <AppIcon name={ action.icon } />

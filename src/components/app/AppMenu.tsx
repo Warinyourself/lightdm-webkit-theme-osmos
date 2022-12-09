@@ -7,7 +7,6 @@ import { AppMenuItem, AppMenuPosition } from '@/models/page'
   components: { AppIcon }
 })
 export default class AppMenu extends Vue {
-  isActive = false
   innerPositioned: AppMenuPosition = { left: 0, top: 0, width: 199 }
 
   get position() {
@@ -15,8 +14,11 @@ export default class AppMenu extends Vue {
   }
 
   get menu() {
-    const menu = PageModule.menu
-    return menu
+    return PageModule.menu
+  }
+
+  get isShow() {
+    return this.menu.view
   }
 
   @Watch('menu.view')
@@ -37,7 +39,7 @@ export default class AppMenu extends Vue {
     return this.$refs.menu as Element
   }
 
-  async handleCallback(item: AppMenuItem | string) {
+  async handleCallback(event: MouseEvent, item: AppMenuItem | string) {
     if (this.menu.handler) {
       await this.menu.handler(item)
     }
@@ -45,12 +47,21 @@ export default class AppMenu extends Vue {
     this.closeMenu()
   }
 
+  handleClickOutside(event: MouseEvent) {
+    if (!this.isShow) return false
+
+    const clickOnMenu = this.$el.contains(event.target as Node)
+    !clickOnMenu && this.closeMenu()
+  }
+
   mounted() {
     window.addEventListener('resize', this.handleResize, { passive: true })
+    window.addEventListener('click', this.handleClickOutside)
   }
 
   beforeDestroy() {
     window.removeEventListener('resize', this.handleResize)
+    window.removeEventListener('click', this.handleClickOutside)
   }
 
   handleResize() {
@@ -81,18 +92,13 @@ export default class AppMenu extends Vue {
     PageModule.ASSIGN_MENU({ view: false })
   }
 
-  stopPreventEvent(event: Event) {
-    event.stopPropagation()
-    event.preventDefault()
-  }
-
   buildElementItem(item: AppMenuItem | string, index: number) {
     const isSting = typeof item === 'string'
     const { text, icon } = isSting ? { text: item, icon: null } : item
     return <li
       class='menu-list-item'
       key={index}
-      onClick={() => { this.handleCallback(item) }}
+      onClick={(event) => { this.handleCallback(event, item) }}
     >
       { text }
       { icon && <AppIcon class='menu-icon' name={icon} /> }

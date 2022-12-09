@@ -22,7 +22,7 @@ export default class AppBar extends Vue {
   }
 
   render() {
-    return <div class="app-bar">
+    return <div class="app-bar active-interface">
       <div class="app-bar__time"> { timer.longTime } </div>
       <div class="app-bar__info">
         { this.showBattery && <BatteryIcon /> }

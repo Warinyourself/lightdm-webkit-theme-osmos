@@ -73,7 +73,7 @@ export default class LoginComponent extends Vue {
 
   render() {
     return <div class={ `block-${this.activeBlock?.id}` }>
-      <div class={ `login-view login-view--${PageModule.loginPosition}` }>
+      <div class={ `active-interface login-view login-view--${PageModule.loginPosition}` }>
         <AppIcon name={ this.currentDesktopIcon } onClick={ this.openSettingsTab } class='desktop-icon'/>
         <AppIcon name={ AppModule.currentOs } onClick={ this.openSettingsTab } class='system-icon'/>
         <UserAvatar />

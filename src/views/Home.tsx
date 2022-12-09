@@ -67,6 +67,10 @@ export default class HomePage extends Vue {
     return !this.isViewThemeOnly && this.isOpenLogin
   }
 
+  get showMenu() {
+    return PageModule.menu.view
+  }
+
   get isSupportFullApi() {
     return AppModule.isSupportFullApi
   }
@@ -88,18 +92,24 @@ export default class HomePage extends Vue {
     document.addEventListener('mousedown', this.handleClick)
   }
 
+  closeMenu() {
+    PageModule.ASSIGN_MENU({ view: false })
+  }
+
   handleClick(event: MouseEvent) {
     if (!this.activeBlock) {
       return PageModule.openFirstBlock()
+    } else if (this.showMenu) {
+      return false
     }
 
     const target = event.target as HTMLElement
     const activeBlocks = document.querySelectorAll(`.block-${this.activeBlock.id}`)
     const isClickOnAciveBlock = Array.from(activeBlocks).some(node => node.contains(target))
-    const isClickOnIgnoreBlock = hasSomeParentClass(target, '.active-block')
+    const ignoreClick = hasSomeParentClass(target, '.active-block')
 
-    if (isClickOnIgnoreBlock) {
-      return undefined
+    if (ignoreClick) {
+      return false
     } else if (!isClickOnAciveBlock) {
       PageModule.closeBlock()
     }
