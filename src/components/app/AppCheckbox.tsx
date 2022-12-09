@@ -37,9 +37,9 @@ export default class AppCheckbox extends Vue {
           onInput={ this.changeState }
         />
       </div>
-      <label for={ this.idCheckbox } class="input-label">
+      <p class="input-label">
         { this.label }
-      </label>
+      </p>
     </label>
   }
 }

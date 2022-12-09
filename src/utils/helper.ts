@@ -33,7 +33,6 @@ export function Debounce(time = 500, options?: DebounceSettings): MethodDecorato
       const callback = map.get(_uid)
 
       if (callback) {
-        // eslint-disable-next-line n/no-callback-literal
         return callback(...args)
       }
 
