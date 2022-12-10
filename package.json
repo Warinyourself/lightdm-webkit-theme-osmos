@@ -1,7 +1,7 @@
 {
   "name": "osmos",
-  "version": "2.0.2",
-  "description": "Lightdm greeter theme based on GLSL",
+  "version": "2.0.3",
+  "description": "Lightdm greeter theme based on GLSL.",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
