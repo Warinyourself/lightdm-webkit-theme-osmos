@@ -2,6 +2,7 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { PageModule } from '@/store/page'
 import AppIcon from '@/components/app/AppIcon.vue'
 import { AppMenuItem, AppMenuPosition } from '@/models/page'
+import { AppModule } from '@/store/app'
 
 @Component({
   components: { AppIcon }
@@ -70,6 +71,7 @@ export default class AppMenu extends Vue {
 
   calculatePosition() {
     const node = this.menu.node
+    const { zoom } = AppModule
 
     if (!node || !this.menu.view) return
 
@@ -77,12 +79,15 @@ export default class AppMenu extends Vue {
     const allHeight = window.innerHeight
 
     const positionY = bottom > top ? 'bottom' : 'top'
-    const position: AppMenuPosition = { left, width }
+    const position: AppMenuPosition = {
+      left: left * zoom, 
+      width: width * zoom
+    }
 
     if (positionY === 'bottom') {
-      position.top = top + height
+      position.top = (top + height) * zoom
     } else {
-      position.bottom = allHeight - bottom + height
+      position.bottom = (allHeight - bottom + height) * zoom
     }
 
     this.innerPositioned = position
