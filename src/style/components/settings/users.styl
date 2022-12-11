@@ -16,14 +16,16 @@
     border-color var(--color-active)
 
 .settings-user-name
+  width 100%
   margin-top 8px
+  text-align center
   text-overflow ellipsis
   white-space nowrap
   overflow hidden
 
 .settings-user-image
   border-radius 50%
-  width 102px
-  height 102px
+  width calc(102px / var(--zoom))
+  height calc(102px / var(--zoom))
   background-size cover
   background-position center
