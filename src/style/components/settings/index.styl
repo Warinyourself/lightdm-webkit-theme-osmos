@@ -8,11 +8,10 @@
 .user-settings-themes
   display grid
   grid-template-columns repeat(3, 1fr)
-  grid-template-rows repeat(auto-fit, 150px)
   gap 8px
 
 .user-settings-theme
-  height 150px
+  height calc(80vmin / var(--zoom) / 5)
   display block
   width 100%
   object-fit cover

@@ -36,6 +36,23 @@ export default class SettingsSelectors extends Vue {
     }
   }
 
+  get isSupportFullApi() {
+    return AppModule.isSupportFullApi
+  }
+
+  get zoomSlider() {
+    return this.buildSlider({
+      label: this.$t('input.zoom-interface').toString(),
+      value: AppModule.zoom,
+      options: {
+        min: 0.5,
+        max: 2,
+        step: 0.1
+      },
+      callback: this.updateZoom
+    })
+  }
+
   changeLanguage(value: string) {
     this.$i18n.locale = value
     localStorage.setItem('language', value)
@@ -72,19 +89,6 @@ export default class SettingsSelectors extends Vue {
     return <AppSlider {...{ props, on: { input: callback } } } />
   }
 
-  get zoomSlider() {
-    return this.buildSlider({
-      label: this.$t('input.zoom-interface').toString(),
-      value: AppModule.zoom,
-      options: {
-        min: 0.5,
-        max: 2,
-        step: 0.1
-      },
-      callback: this.updateZoom
-    })
-  }
-
   @Debounce(100)
   updateZoom(value: AppInputThemeValue) {
     setCSSVariable('--zoom', value + '' || '1')
@@ -98,7 +102,7 @@ export default class SettingsSelectors extends Vue {
       { this.buildSelector('login-position.about', this.menuPositionItems, this.menuPositionValue, this.changeLoginPosition) }
       { !this.isViewThemeOnly && this.buildSelector('choice-desktop', generateDesktopIcons(), AppModule.currentDesktop?.key, this.changeDesktop) }
       { !this.isViewThemeOnly && this.buildSelector('choice-os', osList, AppModule.currentOs, this.changeOs) }
-      { !this.isViewThemeOnly && this.zoomSlider }
+      { !this.isViewThemeOnly && this.isSupportFullApi && this.zoomSlider }
     </div>
   }
 }
