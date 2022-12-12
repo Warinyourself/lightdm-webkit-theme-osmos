@@ -75,6 +75,18 @@ export default class HomePage extends Vue {
     return AppModule.isSupportFullApi
   }
 
+  get hasActiveBlock() {
+    return !!PageModule.activeBlock
+  }
+
+  get showAppBar() {
+    return !AppModule.viewThemeOnly && this.isSupportFullApi && this.hasActiveBlock
+  }
+
+  get showShutdownButton() {
+    return !this.isViewThemeOnly && this.hasActiveBlock
+  }
+
   created() {
     // Set language
     const language = localStorage.getItem('language') || 'en'
@@ -123,11 +135,10 @@ export default class HomePage extends Vue {
       <transition-group class="login-transition" name='fade' tag="div">
         { this.showLogin && <LoginComponent key='LoginComponent' /> }
         { this.isOpenSettings && <SettingsComponent key='SettingsComponent' /> }
+        { this.showShutdownButton && <ShutdownButton key='ShutdownButton' /> }
+        { this.showGithubButton && <GithubButton key='GithubButton' /> }
+        { this.showAppBar && <AppBar key='AppBar' /> }
       </transition-group>
-
-      { !this.isViewThemeOnly && <ShutdownButton /> }
-      { this.showGithubButton && <GithubButton /> }
-      { this.isSupportFullApi && <AppBar /> }
 
       <AppDialog />
       <AppMenu />

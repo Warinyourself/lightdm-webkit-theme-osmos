@@ -8,20 +8,12 @@ import { systemActionsObject } from '@/utils/helper'
   components: { AppIcon, ShutdownMenu }
 })
 export default class ShutdownBlock extends Vue {
-  get isShow() {
-    return !!PageModule.activeBlock
-  }
-
   render() {
-    const button = <div class="shutdown-block active-block">
+    return <div class="shutdown-block active-block">
       <ShutdownMenu />
       <div class="shutdown-button active-interface" onClick={ systemActionsObject.shutdown }>
         <AppIcon name="shutdown" />
       </div>
     </div>
-
-    return <transition name='fade'>
-      { this.isShow ? button : null }
-    </transition>
   }
 }
