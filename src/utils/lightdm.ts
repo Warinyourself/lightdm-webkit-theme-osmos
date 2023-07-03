@@ -35,31 +35,18 @@ if (lightdmDebug) {
     brightness: Math.ceil(Math.random() * 99 + 1),
 
     battery_update: {
-      _callbacks: [],
-      _emit: () => {
-        window.lightdm?.battery_update._callbacks.forEach((cb) => cb())
-      },
       connect: (callback: () => void) => {
-        window.lightdm?.battery_update._callbacks.push(callback)
+        console.log('battery update')
       }
     },
     authentication_complete: {
-      _callbacks: [],
-      _emit: () => {
-        console.log(window.lightdm?.authentication_complete._callbacks)
-        window.lightdm?.authentication_complete._callbacks.forEach((cb) => cb())
-      },
       connect: (callback: () => void) => {
-        window.lightdm?.authentication_complete._callbacks.push(callback)
+        console.log('authentication complete')
       }
     },
     brightness_update: {
-      _callbacks: [],
-      _emit: () => {
-        window.lightdm?.brightness_update._callbacks.forEach((cb) => cb())
-      },
       connect: (callback: () => void) => {
-        window.lightdm?.brightness_update._callbacks.push(callback)
+        console.log('brightness update')
       }
     },
 
@@ -150,7 +137,6 @@ if (lightdmDebug) {
       } else {
         setIsAuthenticated(false)
       }
-      window.lightdm?.authentication_complete._emit()
     },
     shutdown() {
       alert('(DEBUG: System is shutting down)')

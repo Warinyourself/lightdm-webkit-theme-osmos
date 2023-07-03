@@ -30,43 +30,7 @@ export const defaultTheme: AppTheme = {
   ]
 }
 
-const AGIDA_TYPES = ['agida', 'knife', 'yin yang'] as const
-export type AgidaTypes = typeof AGIDA_TYPES[number]
-
 export const AppThemes: AppTheme[] = [
-  {
-    name: 'Agida',
-    component: 'agida',
-    color: {
-      active: '#04ded4',
-      background: '#19102e'
-    },
-    settings: [
-      {
-        name: 'palette',
-        type: 'palette',
-        label: 'input.slider-amount',
-        value: 0,
-        values: [
-          ['#00CC99', '#6600FF'],
-          ['#B9E0FF', '#9F73AB'],
-          ['#CBCB68', '#3E9C8F'],
-          ['#51eaea', '#D62E93'],
-          ['#AC3ABB', '#511e78'],
-          ['#B5D115', '#FB044F'],
-          ['#fc5185', '#3fc1c9'],
-          ['#f5f5f5', '#364f6b']
-        ]
-      },
-      {
-        name: 'type',
-        label: 'type',
-        type: 'selector',
-        value: 'agida',
-        values: AGIDA_TYPES
-      }
-    ]
-  },
   defaultTheme,
   {
     name: 'Sphere',
