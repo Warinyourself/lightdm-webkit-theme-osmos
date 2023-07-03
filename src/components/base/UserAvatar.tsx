@@ -1,57 +1,36 @@
-import { Component, Vue } from 'vue-property-decorator'
-
-import { AppModule } from '@/store/app'
 import AppIcon from '@/components/app/AppIcon.vue'
-import { LightdmUsers } from '@/models/lightdm'
-import { PageModule } from '@/store/page'
+import { defineComponent, computed } from 'vue'
+import { useAppStore } from '@/store/app'
+import { usePageStore } from '@/store/page'
 import timer from '@/utils/time'
+import type { LightdmUsers } from '@/models/lightdm'
 
-@Component({
-  components: { AppIcon }
+export default defineComponent({
+  name: 'UserAvatar',
+  setup() {
+    const appStore = useAppStore()
+    const pageStore = usePageStore()
+
+    const isOpenSettings = computed(() => pageStore.isOpenBlock('settings'))
+    const currentTime = computed(() => isOpenSettings.value ? timer.longTime : timer.shortTime)
+
+    const buildUserAvatar = (image: string | undefined) =>
+      image
+        ? <img class="user-avatar" src={image} />
+        : <AppIcon name="user" />
+
+    const buildUser = (user: LightdmUsers) => (
+      <div class="user-choice" key={user.username}>
+        <p class="time">{appStore.isSupportFullApi ? '' : currentTime.value}</p>
+        {buildUserAvatar(user?.image)}
+        <div class="user-name">{user?.display_name}</div>
+      </div>
+    )
+
+    return () => (
+      <transition-group tag="div" name="fade-bottom" class="transition-group">
+        {appStore.users.filter(({ username }) => username === appStore.currentUser?.username).map(buildUser)}
+      </transition-group>
+    )
+  }
 })
-export default class UserAvatar extends Vue {
-  get currentTime() {
-    return this.isOpenSettings ? timer.longTime : timer.shortTime
-  }
-
-  get isOpenSettings() {
-    return PageModule.isOpenBlock('settings')
-  }
-
-  get isSupportFullApi() {
-    return AppModule.isSupportFullApi
-  }
-
-  get locale() {
-    return PageModule.locale
-  }
-
-  get user() {
-    return AppModule.currentUser
-  }
-
-  get users() {
-    return AppModule.users
-  }
-
-  buildUserAvatar(image: string | undefined) {
-    const defaultAvatar = <AppIcon name='user'/>
-    const userAvatar = <img class='user-avatar' src={image} />
-
-    return image ? userAvatar : defaultAvatar
-  }
-
-  buildUser(user: LightdmUsers) {
-    return <div class='user-choice' key={ user.username }>
-      <p class='time'> { this.isSupportFullApi ? '' : this.currentTime } </p>
-      { this.buildUserAvatar(user?.image) }
-      <div class='user-name'> { user?.display_name } </div>
-    </div>
-  }
-
-  render() {
-    return <transition-group tag="div" name="fade-bottom" class="transition-group">
-      { this.users.filter(({ username }) => username === this.user?.username).map(this.buildUser) }
-    </transition-group>
-  }
-}

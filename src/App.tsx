@@ -1,75 +1,64 @@
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { defineComponent, watch } from 'vue'
+import { debounce } from 'lodash'
 import Mousetrap from 'mousetrap'
-import { AppModule } from '@/store/app'
-import { PageModule } from '@/store/page'
-import { Debounce, focusInputPassword, setCSSVariable } from '@/utils/helper'
+import { useAppStore } from '@/store/app'
+import { usePageStore } from '@/store/page'
+import { focusInputPassword, setCSSVariable } from '@/utils/helper'
 import { hotkeys } from '@/utils/hotkeys'
 import { initTimer } from '@/utils/time'
 
-@Component
-export default class MainApp extends Vue {
-  get bodyClass() {
-    return AppModule.bodyClass
-  }
+export default defineComponent({
+  name: 'MainApp',
 
-  get getMainSettings() {
-    return AppModule.getMainSettings
-  }
+  setup() {
+    const appStore = useAppStore()
+    const pageStore = usePageStore()
 
-  @Debounce(100)
-  @Watch('getMainSettings', { deep: true })
-  handleSettingsThemes() {
-    AppModule.syncSettingsWithCache()
-  }
+    const initZoom = () => {
+      setCSSVariable('--zoom', appStore.zoom + '' || '1')
+    }
 
-  /**
-   * INFO: For High-DPI screens settings
-   */
-  initZoom() {
-    setCSSVariable('--zoom', AppModule.zoom + '' || '1')
-  }
+    const initKeybinds = () => {
+      hotkeys.forEach(({ keys, callback }) => Mousetrap.bind(keys.join('+'), callback))
 
-  created() {
-    AppModule.setUpSettings()
-    this.initKeybinds()
+      Mousetrap.bind('escape', () => {
+        const isFocusPassword = document.querySelector('#password:focus') as HTMLInputElement
+        if (pageStore.dialog) {
+          pageStore.closeDialog()
+        } else if (pageStore.menu.view) {
+          pageStore.assignMenu({ view: false })
+        } else if (isFocusPassword) {
+          isFocusPassword.blur()
+        } else if (pageStore.activeBlock) {
+          pageStore.closeBlock()
+        }
+      })
+
+      Mousetrap.bind('enter', () => {
+        const isFocusPassword = document.querySelector('#password:focus')
+        if (isFocusPassword) {
+          appStore.login()
+        } else {
+          focusInputPassword()
+        }
+      })
+    }
+
+    appStore.setUpSettings()
+    initKeybinds()
     initTimer()
-    this.initZoom()
-  }
+    initZoom()
 
-  initKeybinds() {
-    hotkeys.forEach(({ keys, callback }) => Mousetrap.bind(keys.join('+'), callback))
+    watch(
+      () => appStore.getMainSettings,
+      debounce(() => appStore.syncSettingsWithCache(), 100),
+      { deep: true }
+    )
 
-    Mousetrap.bind('escape', () => {
-      const isFocusPassword = document.querySelector('#password:focus') as HTMLInputElement
-      const isShowModal = !!PageModule.dialog
-
-      if (isShowModal) {
-        PageModule.closeDialog()
-      } else if (PageModule.menu.view) {
-        PageModule.ASSIGN_MENU({ view: false })
-      } else if (isFocusPassword) {
-        isFocusPassword.blur()
-      } else if (PageModule.activeBlock) {
-        PageModule.closeBlock()
-      }
-    })
-
-    Mousetrap.bind('enter', () => {
-      const isFocusPassword = document.querySelector('#password:focus')
-
-      if (isFocusPassword) {
-        AppModule.login()
-      } else {
-        focusInputPassword()
-      }
-    })
-  }
-
-  render() {
-    return (
-      <div id="app" class={ this.bodyClass }>
+    return () => (
+      <div id="app" class={appStore.bodyClass}>
         <router-view />
       </div>
     )
   }
-}
+})

@@ -1,15 +1,24 @@
-import { Component, Vue } from 'vue-property-decorator'
+import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue'
 import Parallax from 'parallax-js'
 
-@Component
-export default class OsmosTheme extends Vue {
-  parallax: null | Parallax = null
+export default defineComponent({
+  name: 'OsmosTheme',
+  setup() {
+    const sceneRef = ref<HTMLElement | null>(null)
+    let parallax: Parallax | null = null
 
-  render() {
-    return (
+    onMounted(() => {
+      if (sceneRef.value) parallax = new Parallax(sceneRef.value)
+    })
+
+    onBeforeUnmount(() => {
+      parallax?.destroy()
+    })
+
+    return () => (
       <div
         class="osmos"
-        ref="scene"
+        ref={sceneRef}
         data-hover-only="true"
         data-friction-x="0.1"
         data-friction-y="0.1"
@@ -17,35 +26,27 @@ export default class OsmosTheme extends Vue {
         data-scalar-y="15"
       >
         <li class="prllx-block" data-depth="0.0">
-          <div class="stars"></div>
+          <div class="stars" />
         </li>
         <li class="prllx-block" data-depth="0.0">
-          <div class="sun"></div>
+          <div class="sun" />
         </li>
         <li class="prllx-block" data-depth="0.1">
           <div class="clouds">
-            <div></div>
-            <div></div>
-            <div></div>
+            <div /><div /><div />
           </div>
           <div class="clouds-reflex">
-            <div></div>
-            <div></div>
-            <div></div>
+            <div /><div /><div />
           </div>
         </li>
         <li class="prllx-block" data-depth="0.0">
           <div class="sea">
             <div class="rocks">
               <div class="rocks_left">
-                <div></div>
-                <div></div>
-                <div></div>
+                <div /><div /><div />
               </div>
               <div class="rocks_right">
-                <div></div>
-                <div></div>
-                <div></div>
+                <div /><div /><div />
               </div>
             </div>
           </div>
@@ -53,13 +54,4 @@ export default class OsmosTheme extends Vue {
       </div>
     )
   }
-
-  mounted() {
-    const scene = this.$refs.scene as HTMLElement
-    if (scene) { this.parallax = new Parallax(scene) }
-  }
-
-  beforeDestroy() {
-    if (this.parallax) this.parallax.destroy()
-  }
-}
+})

@@ -1,45 +1,30 @@
-import { Component, Vue } from 'vue-property-decorator'
+import { defineComponent, computed } from 'vue'
+import { useAppStore } from '@/store/app'
+import { usePageStore } from '@/store/page'
+import SettingsThemes from './SettingsThemes'
+import SettingsCustom from './SettingsCustom'
+import SettingsGeneral from './general/SettingsGeneral'
 
-import { AppModule } from '@/store/app'
-import AppIcon from '@/components/app/AppIcon.vue'
-import SettingsThemes from '@/components/base/settings/SettingsThemes'
-import SettingsCustom from '@/components/base/settings/SettingsCustom'
-import SettingsGeneral from '@/components/base/settings/general/SettingsGeneral'
-import { PageModule } from '@/store/page'
+export default defineComponent({
+  name: 'SettingsView',
+  setup() {
+    const appStore = useAppStore()
+    const pageStore = usePageStore()
+    const mainTabIndex = computed(() => pageStore.mainTabIndex)
 
-@Component({
-  components: {
-    AppIcon,
-    SettingsThemes,
-    SettingsCustom,
-    SettingsGeneral
+    return () => {
+      const mapTabs = [<SettingsThemes />, <SettingsGeneral />]
+      const hasThemeSettings = appStore.activeTheme?.settings?.length
+
+      if (hasThemeSettings) {
+        mapTabs.splice(1, 0, <SettingsCustom />)
+      }
+
+      return (
+        <div class="user-settings">
+          <div key={mainTabIndex.value}>{mapTabs[mainTabIndex.value]}</div>
+        </div>
+      )
+    }
   }
 })
-export default class SettingsView extends Vue {
-  get mainTabIndex() {
-    return PageModule.mainTabIndex
-  }
-
-  get user() {
-    return AppModule.currentUser
-  }
-
-  get users() {
-    return AppModule.users
-  }
-
-  render() {
-    const mapTabs = [<SettingsThemes />, <SettingsGeneral />]
-    const hasThemeSettings = AppModule.activeTheme?.settings?.length
-
-    if (hasThemeSettings) {
-      mapTabs.splice(1, 0, <SettingsCustom />)
-    }
-
-    const activeTab = <div key={this.mainTabIndex}> { mapTabs[this.mainTabIndex] } </div>
-
-    return <div class='user-settings'>
-      { activeTab }
-    </div>
-  }
-}

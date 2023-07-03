@@ -1,33 +1,23 @@
-import { AppModule } from '@/store/app'
-import { Component, Vue } from 'vue-property-decorator'
-import AppIcon from './AppIcon.vue'
+import { defineComponent } from 'vue'
+import { useAppStore } from '@/store/app'
 import timer from '@/utils/time'
-import BatteryIcon from '../base/BatteryIcon'
-import BrightIcon from '../base/BrightIcon'
+import BatteryIcon from '@/components/base/BatteryIcon'
+import BrightIcon from '@/components/base/BrightIcon'
 
-@Component({
-  components: { AppIcon, BatteryIcon, BrightIcon }
-})
-export default class AppBar extends Vue {
-  get showBattery() {
-    return AppModule.battery
-  }
+export default defineComponent({
+  name: 'AppBar',
 
-  get showBright() {
-    return !!AppModule.brightness
-  }
+  setup() {
+    const appStore = useAppStore()
 
-  get currentTime() {
-    return timer.longTime
-  }
-
-  render() {
-    return <div class="app-bar active-interface">
-      <div class="app-bar__time"> { timer.longTime } </div>
-      <div class="app-bar__info">
-        { this.showBattery && <BatteryIcon /> }
-        { this.showBright && <BrightIcon /> }
+    return () => (
+      <div class="app-bar active-interface">
+        <div class="app-bar__time">{timer.longTime}</div>
+        <div class="app-bar__info">
+          {appStore.battery && <BatteryIcon />}
+          {!!appStore.brightness && <BrightIcon />}
+        </div>
       </div>
-    </div>
+    )
   }
-}
+})

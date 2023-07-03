@@ -1,68 +1,56 @@
-import { Component, Vue } from 'vue-property-decorator'
+import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import GL from '@/utils/gl'
-import { AppModule } from '@/store/app'
+import { useAppStore } from '@/store/app'
+import fragmentShader from './fragment.glsl'
+import vertexShader from './vertex.glsl'
+
 let render: GL
 
-@Component
-export default class RingsTheme extends Vue {
-  get animationSpeed() {
-    return AppModule.getThemeInput('animation-speed')?.value as number || 45
-  }
+export default defineComponent({
+  name: 'RingsTheme',
+  setup() {
+    const appStore = useAppStore()
+    const canvasRef = ref<HTMLCanvasElement | null>(null)
 
-  get hue() {
-    return AppModule.getThemeInput('hue')?.value as number || 0
-  }
+    const hue = computed(() => appStore.getThemeInput('hue')?.value as number || 0)
+    const animationSpeed = computed(() => appStore.getThemeInput('animation-speed')?.value as number || 45)
+    const zoom = computed(() => appStore.getThemeInput('zoom')?.value as number || 32)
+    const pxratio = computed(() => appStore.getThemeInput('pxratio')?.value as number || 0.8)
 
-  get zoom() {
-    return AppModule.getThemeInput('zoom')?.value as number || 32
-  }
-
-  get pxratio() {
-    return AppModule.getThemeInput('pxratio')?.value as number || 0.8
-  }
-
-  mounted() {
-    const vm = this
-
-    render = new GL(
-      this.$refs.canvas as HTMLCanvasElement,
-      document.querySelector('script#shader-vs')?.textContent || '',
-      document.querySelector('script#shader-fs')?.textContent || '',
-      window.innerWidth,
-      window.innerHeight,
-      {
-        renderOptions: {
-          externalTimeUse: true
-        },
-        renderHook() {
-          const gl = this as unknown as GL
-
-          if (!gl.programInfo.uniforms.hue) {
-            gl.programInfo.uniforms.hue = gl.ctx.getUniformLocation(gl.program as WebGLProgram, 'hue')
-            gl.programInfo.uniforms.zoom = gl.ctx.getUniformLocation(gl.program as WebGLProgram, 'zoom')
+    onMounted(() => {
+      render = new GL(
+        canvasRef.value!,
+        vertexShader,
+        fragmentShader,
+        window.innerWidth,
+        window.innerHeight,
+        {
+          renderOptions: { externalTimeUse: true },
+          renderHook() {
+            const gl = this as unknown as GL
+            if (!gl.programInfo.uniforms.hue) {
+              gl.programInfo.uniforms.hue = gl.ctx.getUniformLocation(gl.program as WebGLProgram, 'hue')
+              gl.programInfo.uniforms.zoom = gl.ctx.getUniformLocation(gl.program as WebGLProgram, 'zoom')
+            }
+            gl.time += animationSpeed.value / 500
+            gl.pxratio = pxratio.value
+            gl.ctx.uniform1f(gl.programInfo.uniforms.time, gl.time)
+            gl.ctx.uniform1f(gl.programInfo.uniforms.hue, hue.value)
+            gl.ctx.uniform1f(gl.programInfo.uniforms.zoom, zoom.value)
           }
-
-          gl.time += vm.animationSpeed / 500
-          gl.pxratio = vm.pxratio
-          gl.ctx.uniform1f(gl.programInfo.uniforms.time, gl.time)
-          gl.ctx.uniform1f(gl.programInfo.uniforms.hue, vm.hue)
-          gl.ctx.uniform1f(gl.programInfo.uniforms.zoom, vm.zoom)
         }
-      }
+      )
+      render.running = true
+    })
+
+    onBeforeUnmount(() => {
+      render.running = false
+    })
+
+    return () => (
+      <div>
+        <canvas ref={canvasRef} />
+      </div>
     )
-
-    render.running = true
   }
-
-  beforeDestroy() {
-    render.running = false
-  }
-
-  render() {
-    return <div>
-      <canvas ref='canvas' />
-      <script id="shader-fs" type="x-shader/x-fragment"> { require('./fragment.glsl') } </script>
-      <script id="shader-vs" type="x-shader/x-vertex"> { require('./vertex.glsl') } </script>
-    </div>
-  }
-}
+})

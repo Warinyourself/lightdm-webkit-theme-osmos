@@ -1,46 +1,39 @@
-import { Component, Vue } from 'vue-property-decorator'
+import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useAppStore } from '@/store/app'
 import AppCheckbox from '@/components/app/AppCheckbox'
-import { AppModule } from '@/store/app'
 
-@Component({
-  components: {
-    AppCheckbox
+export default defineComponent({
+  name: 'SettingsCheckboxes',
+  setup() {
+    const appStore = useAppStore()
+    const { t } = useI18n()
+
+    const buildCheckbox = (name: string) => (
+      <AppCheckbox
+        label={t(`settings.${name}`)}
+        modelValue={appStore.bodyClass[name]}
+        onUpdate:modelValue={(value: boolean) => {
+          appStore.changeBodyClass({ key: name, value })
+          appStore.syncStoreWithQuery()
+        }}
+      />
+    )
+
+    return () => (
+      <div class="grid-two">
+        <h2 class="title">{t('settings.performance')}</h2>
+        {buildCheckbox('blur')}
+        {buildCheckbox('show-framerate')}
+        {buildCheckbox('no-transition')}
+        {buildCheckbox('only-ui')}
+        <AppCheckbox
+          inline={true}
+          label={t('settings.generate-random-theme')}
+          modelValue={appStore.generateRandomThemes}
+          onUpdate:modelValue={(value: boolean) => { appStore.generateRandomThemes = value }}
+        />
+      </div>
+    )
   }
 })
-export default class SettingsCheckboxes extends Vue {
-  get bodyClass() {
-    return AppModule.bodyClass
-  }
-
-  buildCheckbox(name: string) {
-    return <AppCheckbox
-      label={ this.$t(`settings.${name}`) }
-      value={ this.bodyClass[name] }
-      onInput={ (value: boolean) => {
-        AppModule.CHANGE_BODY_CLASS({ key: name, value })
-        AppModule.syncStoreWithQuery()
-      }}
-    />
-  }
-
-  generateRandomTheme(value: boolean) {
-    AppModule.SET_STATE_APP({ key: 'generateRandomThemes', value })
-  }
-
-  render() {
-    return <div class="grid-two">
-      <h2 class="title"> { this.$t('settings.performance') } </h2>
-      { this.buildCheckbox('blur') }
-      { this.buildCheckbox('show-framerate') }
-      { this.buildCheckbox('no-transition') }
-      { this.buildCheckbox('only-ui') }
-
-      <AppCheckbox
-        inline={ true }
-        label={ this.$t('settings.generate-random-theme') }
-        value={ AppModule.generateRandomThemes }
-        onInput={ this.generateRandomTheme }
-      />
-    </div>
-  }
-}

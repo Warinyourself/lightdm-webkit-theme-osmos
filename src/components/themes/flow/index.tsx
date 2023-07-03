@@ -1,84 +1,60 @@
-import { Component, Vue } from 'vue-property-decorator'
+import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import GL from '@/utils/gl'
-import { AppModule } from '@/store/app'
+import { useAppStore } from '@/store/app'
+import fragmentShader from './fragment.glsl'
+import vertexShader from './vertex.glsl'
+
 let render: GL
 
-@Component
-export default class FlowTheme extends Vue {
-  get hue() {
-    return AppModule.getThemeInput('hue')?.value as number || 0
-  }
+export default defineComponent({
+  name: 'FlowTheme',
+  setup() {
+    const appStore = useAppStore()
+    const canvasRef = ref<HTMLCanvasElement | null>(null)
 
-  get brightness() {
-    return AppModule.getThemeInput('brightness')?.value as number || 0
-  }
+    const hue = computed(() => appStore.getThemeInput('hue')?.value as number || 0)
+    const brightness = computed(() => appStore.getThemeInput('brightness')?.value as number || 0)
+    const invert = computed(() => appStore.getThemeInput('invert')?.value as boolean || false)
+    const animationSpeed = computed(() => appStore.getThemeInput('animation-speed')?.value as number || 45)
+    const size = computed(() => appStore.getThemeInput('size')?.value as number || 0.2)
+    const pxratio = computed(() => appStore.getThemeInput('pxratio')?.value as number || 0.8)
 
-  get invert() {
-    return AppModule.getThemeInput('invert')?.value as boolean || false
-  }
+    const styleCanvas = computed(() => ({
+      filter: `hue-rotate(${hue.value}deg) invert(${Number(invert.value)}) brightness(${brightness.value})`
+    }))
 
-  get filter() {
-    return `hue-rotate(${this.hue}deg) invert(${Number(this.invert)}) brightness(${this.brightness})`
-  }
-
-  get styleCanvas() {
-    return {
-      filter: this.filter
-    }
-  }
-
-  get animationSpeed() {
-    return AppModule.getThemeInput('animation-speed')?.value as number || 45
-  }
-
-  get size() {
-    return AppModule.getThemeInput('size')?.value as number || 0.2
-  }
-
-  get pxratio() {
-    return AppModule.getThemeInput('pxratio')?.value as number || 0.8
-  }
-
-  mounted() {
-    const vm = this
-
-    render = new GL(
-      this.$refs.canvas as HTMLCanvasElement,
-      document.querySelector('script#shader-vs')?.textContent || '',
-      document.querySelector('script#shader-fs')?.textContent || '',
-      window.innerWidth,
-      window.innerHeight,
-      {
-        renderOptions: {
-          externalTimeUse: true
-        },
-        renderHook() {
-          const gl = this as unknown as GL
-
-          if (!gl.programInfo.uniforms.size) {
-            gl.programInfo.uniforms.size = gl.ctx.getUniformLocation(gl.program as WebGLProgram, 'size')
+    onMounted(() => {
+      render = new GL(
+        canvasRef.value!,
+        vertexShader,
+        fragmentShader,
+        window.innerWidth,
+        window.innerHeight,
+        {
+          renderOptions: { externalTimeUse: true },
+          renderHook() {
+            const gl = this as unknown as GL
+            if (!gl.programInfo.uniforms.size) {
+              gl.programInfo.uniforms.size = gl.ctx.getUniformLocation(gl.program as WebGLProgram, 'size')
+            }
+            gl.pxratio = pxratio.value
+            gl.time += animationSpeed.value / 500
+            gl.ctx.uniform1f(gl.programInfo.uniforms.time, gl.time)
+            gl.ctx.uniform1f(gl.programInfo.uniforms.size, size.value)
           }
-
-          gl.pxratio = vm.pxratio
-          gl.time += vm.animationSpeed / 500
-          gl.ctx.uniform1f(gl.programInfo.uniforms.time, gl.time)
-          gl.ctx.uniform1f(gl.programInfo.uniforms.size, vm.size)
         }
-      }
+      )
+      render.running = true
+    })
+
+    onBeforeUnmount(() => {
+      render.running = false
+    })
+
+    return () => (
+      <div>
+        <canvas ref={canvasRef} style={styleCanvas.value} />
+      </div>
     )
-
-    render.running = true
   }
-
-  beforeDestroy() {
-    render.running = false
-  }
-
-  render() {
-    return <div>
-      <canvas ref='canvas' style={ this.styleCanvas }/>
-      <script id="shader-fs" type="x-shader/x-fragment"> { require('./fragment.glsl') } </script>
-      <script id="shader-vs" type="x-shader/x-vertex"> { require('./vertex.glsl') } </script>
-    </div>
-  }
-}
+})

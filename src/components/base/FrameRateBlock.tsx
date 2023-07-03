@@ -1,46 +1,40 @@
-import { AppModule } from '@/store/app'
-import { Component, Vue } from 'vue-property-decorator'
+import { defineComponent, ref, computed, onMounted } from 'vue'
+import { useAppStore } from '@/store/app'
 
 let elapsedTime = 0
 let frameCount = 0
 let lastTime = new Date().getTime()
 
-@Component
-export default class FrameRateBlock extends Vue {
-  FPS = 0
+export default defineComponent({
+  name: 'FrameRateBlock',
+  setup() {
+    const appStore = useAppStore()
+    const FPS = ref(0)
+    const isShow = computed(() => appStore.showFrameRate)
 
-  get isShow() {
-    return AppModule.showFrameRate
-  }
+    const drawScene = () => {
+      const now = new Date().getTime()
+      frameCount++
+      elapsedTime += now - lastTime
+      lastTime = now
 
-  mounted() {
-    this.FPS = 0
-    this.drawScene()
-    lastTime = new Date().getTime()
-  }
+      if (elapsedTime >= 1000) {
+        FPS.value = frameCount
+        frameCount = 0
+        elapsedTime -= 1000
+      }
 
-  drawScene() {
-    const now = new Date().getTime()
-
-    frameCount++
-    elapsedTime += (now - lastTime)
-
-    lastTime = now
-
-    if (elapsedTime >= 1000) {
-      const fps = frameCount
-      frameCount = 0
-      elapsedTime -= 1000
-
-      this.FPS = fps
+      if (isShow.value) {
+        requestAnimationFrame(drawScene)
+      }
     }
 
-    if (this.isShow) {
-      requestAnimationFrame(this.drawScene)
-    }
-  }
+    onMounted(() => {
+      FPS.value = 0
+      drawScene()
+      lastTime = new Date().getTime()
+    })
 
-  render() {
-    return <div class="frame-rate-block"> FPS: { this.FPS } </div>
+    return () => <div class="frame-rate-block">FPS: {FPS.value}</div>
   }
-}
+})

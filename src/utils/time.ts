@@ -1,15 +1,14 @@
-import { PageModule } from '@/store/page'
-import Vue from 'vue'
-import { DateTimeFormatOptions } from 'vue-i18n'
+import { reactive } from 'vue'
+import { usePageStore } from '@/store/page'
 
-const timeRef = Vue.observable({
+const timeRef = reactive({
   time: new Date(),
   shortTime: '',
   longTime: ''
 })
 
 const formatTime = (type: 'long' | 'short' = 'short') => {
-  const options: DateTimeFormatOptions = {
+  const options: Intl.DateTimeFormatOptions = {
     month: 'short',
     day: 'numeric',
     hour: 'numeric',
@@ -22,20 +21,18 @@ const formatTime = (type: 'long' | 'short' = 'short') => {
     options.weekday = 'long'
   }
 
-  return new Intl.DateTimeFormat(PageModule.locale, options).format(new Date())
-}
-
-export const initTimer = () => {
-  setInterval(updateTime, 1000)
+  return new Intl.DateTimeFormat(usePageStore().locale, options).format(new Date())
 }
 
 const updateTime = () => {
   timeRef.time = new Date()
-
   timeRef.shortTime = formatTime('short')
   timeRef.longTime = formatTime('long')
 }
 
-updateTime()
+export const initTimer = () => {
+  updateTime()
+  setInterval(updateTime, 1000)
+}
 
 export default timeRef

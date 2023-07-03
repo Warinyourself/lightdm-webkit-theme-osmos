@@ -1,67 +1,53 @@
-import { Component, Vue } from 'vue-property-decorator'
+import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import GL from '@/utils/gl'
-import { AppModule } from '@/store/app'
+import { useAppStore } from '@/store/app'
+import fragmentShader from './fragment.glsl'
+import vertexShader from './vertex.glsl'
+
 let render: GL
 
-@Component
-export default class PlasmaTheme extends Vue {
-  get hue() {
-    return AppModule.getThemeInput('hue')?.value as number || 0
-  }
+export default defineComponent({
+  name: 'PlasmaTheme',
+  setup() {
+    const appStore = useAppStore()
+    const canvasRef = ref<HTMLCanvasElement | null>(null)
 
-  get filter() {
-    return `hue-rotate(${this.hue}deg)`
-  }
+    const hue = computed(() => appStore.getThemeInput('hue')?.value as number || 0)
+    const animationSpeed = computed(() => appStore.getThemeInput('animation-speed')?.value as number || 45)
+    const pxratio = computed(() => appStore.getThemeInput('pxratio')?.value as number || 0.8)
 
-  get styleCanvas() {
-    return {
-      filter: this.filter
-    }
-  }
+    const styleCanvas = computed(() => ({
+      filter: `hue-rotate(${hue.value}deg)`
+    }))
 
-  get animationSpeed() {
-    return AppModule.getThemeInput('animation-speed')?.value as number || 45
-  }
-
-  get pxratio() {
-    return AppModule.getThemeInput('pxratio')?.value as number || 0.8
-  }
-
-  mounted() {
-    const vm = this
-
-    render = new GL(
-      this.$refs.canvas as HTMLCanvasElement,
-      document.querySelector('script#shader-vs')?.textContent || '',
-      document.querySelector('script#shader-fs')?.textContent || '',
-      window.innerWidth,
-      window.innerHeight,
-      {
-        renderOptions: {
-          externalTimeUse: true
-        },
-        renderHook() {
-          const gl = this as unknown as GL
-
-          gl.pxratio = vm.pxratio
-          gl.time += vm.animationSpeed / 500
-          gl.ctx.uniform1f(gl.programInfo.uniforms.time, gl.time)
+    onMounted(() => {
+      render = new GL(
+        canvasRef.value!,
+        vertexShader,
+        fragmentShader,
+        window.innerWidth,
+        window.innerHeight,
+        {
+          renderOptions: { externalTimeUse: true },
+          renderHook() {
+            const gl = this as unknown as GL
+            gl.pxratio = pxratio.value
+            gl.time += animationSpeed.value / 500
+            gl.ctx.uniform1f(gl.programInfo.uniforms.time, gl.time)
+          }
         }
-      }
+      )
+      render.running = true
+    })
+
+    onBeforeUnmount(() => {
+      render.running = false
+    })
+
+    return () => (
+      <div>
+        <canvas ref={canvasRef} style={styleCanvas.value} />
+      </div>
     )
-
-    render.running = true
   }
-
-  beforeDestroy() {
-    render.running = false
-  }
-
-  render() {
-    return <div>
-      <canvas ref='canvas' style={ this.styleCanvas }/>
-      <script id="shader-fs" type="x-shader/x-fragment"> { require('./fragment.glsl') } </script>
-      <script id="shader-vs" type="x-shader/x-vertex"> { require('./vertex.glsl') } </script>
-    </div>
-  }
-}
+})

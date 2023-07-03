@@ -1,19 +1,13 @@
-import { AppState } from '@/store/app'
-
-/**
- * INFO: To avoid recoursive requires modules (lightdm and AppModule)
- * @returns AppState
- */
-async function getAppModule(): Promise<AppState> {
-  const module = await import('@/store/app') as any
-  return module.AppModule
+async function getAppStore() {
+  const { useAppStore } = await import('@/store/app')
+  return useAppStore()
 }
 
 const DEBUG_PASSWORD = 'password'
 const lightdmDebug = window.lightdm === undefined
 
 function setIsAuthenticated(value: boolean) {
-  (window.lightdm as any).is_authenticated = value
+  ;(window.lightdm as any).is_authenticated = value
 }
 
 if (lightdmDebug) {
@@ -34,68 +28,19 @@ if (lightdmDebug) {
     },
     brightness: Math.ceil(Math.random() * 99 + 1),
 
-    battery_update: {
-      _callbacks: [],
-      _emit: () => {
-        window.lightdm?.battery_update._callbacks.forEach((cb) => cb())
-      },
-      connect: (callback: () => void) => {
-        window.lightdm?.battery_update._callbacks.push(callback)
-      }
-    },
-    authentication_complete: {
-      _callbacks: [],
-      _emit: () => {
-        console.log(window.lightdm?.authentication_complete._callbacks)
-        window.lightdm?.authentication_complete._callbacks.forEach((cb) => cb())
-      },
-      connect: (callback: () => void) => {
-        window.lightdm?.authentication_complete._callbacks.push(callback)
-      }
-    },
-    brightness_update: {
-      _callbacks: [],
-      _emit: () => {
-        window.lightdm?.brightness_update._callbacks.forEach((cb) => cb())
-      },
-      connect: (callback: () => void) => {
-        window.lightdm?.brightness_update._callbacks.push(callback)
-      }
-    },
+    battery_update: { connect: (callback: () => void) => { console.log('battery update') } },
+    authentication_complete: { connect: (callback: () => void) => { console.log('authentication complete') } },
+    brightness_update: { connect: (callback: () => void) => { console.log('brightness update') } },
 
     sessions: [
-      {
-        name: 'i3wm',
-        key: 'i3'
-      },
-      {
-        name: 'KDE 5',
-        key: 'plasma-shell'
-      },
-      {
-        name: 'Kodi',
-        key: 'kodi'
-      },
-      {
-        name: 'Gnome 3',
-        key: 'gnome-shell'
-      },
-      {
-        name: 'XFCE 4',
-        key: 'xfce'
-      },
-      {
-        name: 'Openbox',
-        key: 'openbox'
-      },
-      {
-        name: 'Cinnamon',
-        key: 'cinnamon'
-      },
-      {
-        name: 'xmonad',
-        key: 'xmonad'
-      }
+      { name: 'i3wm', key: 'i3' },
+      { name: 'KDE 5', key: 'plasma-shell' },
+      { name: 'Kodi', key: 'kodi' },
+      { name: 'Gnome 3', key: 'gnome-shell' },
+      { name: 'XFCE 4', key: 'xfce' },
+      { name: 'Openbox', key: 'openbox' },
+      { name: 'Cinnamon', key: 'cinnamon' },
+      { name: 'xmonad', key: 'xmonad' }
     ],
     users: [
       {
@@ -103,144 +48,71 @@ if (lightdmDebug) {
         username: 'Warinyourself',
         image: 'https://avatars.githubusercontent.com/u/83131232?s=200&u=26fbedfe561a2b37225c78c10b1c5d67d6fe1832&v=4'
       },
-      {
-        display_name: 'Bob',
-        username: 'Bob'
-      }
+      { display_name: 'Bob', username: 'Bob' }
     ],
     languages: [
-      {
-        name: 'Русский',
-        code: 'ru_RU.utf8'
-      },
-      {
-        name: 'American English',
-        code: 'en_US.utf8'
-      }
+      { name: 'Русский', code: 'ru_RU.utf8' },
+      { name: 'American English', code: 'en_US.utf8' }
     ],
     language: { code: 'en_US', name: 'American English' },
 
     start_authentication: (username: string) => {
-      console.log(`Starting authenticating here: '${username}'`)
       const inputNode = document.getElementById('password') as HTMLInputElement
-
       window.lightdm?.respond(inputNode?.value || '')
     },
     authenticate: (username: string) => {
       const inputNode = document.getElementById('password') as HTMLInputElement
-      console.log(`Starting authenticating user: '${username}'`)
-
-      if (window.lightdm) {
-        (window.lightdm as any).authentication_user = username
-      }
-
+      if (window.lightdm) (window.lightdm as any).authentication_user = username
       window.lightdm?.respond(inputNode?.value || '')
     },
-    cancel_authentication: () => {
-      console.log('Auth cancelled')
-    },
-    start_session(session: string) {
-      alert(`Start session: ${session}`)
-    },
+    cancel_authentication: () => { console.log('Auth cancelled') },
+    start_session(session: string) { alert(`Start session: ${session}`) },
     respond: (password: string) => {
-      console.log(`Password provided : '${password}'`)
-
       if (password === DEBUG_PASSWORD) {
         setIsAuthenticated(true)
       } else {
         setIsAuthenticated(false)
       }
-      window.lightdm?.authentication_complete._emit()
     },
-    shutdown() {
-      alert('(DEBUG: System is shutting down)')
-    },
-    hibernate() {
-      alert('(DEBUG: System is shutting down)')
-    },
-    suspend: () => {
-      alert('(DEBUG: System is suspending)')
-    },
-    restart: () => {
-      alert('(DEBUG: System is rebooting)')
-    }
+    shutdown() { alert('(DEBUG: System is shutting down)') },
+    hibernate() { alert('(DEBUG: System is hibernating)') },
+    suspend: () => { alert('(DEBUG: System is suspending)') },
+    restart: () => { alert('(DEBUG: System is rebooting)') }
   } as any
 }
 
-const isSupportFullApi = 'battery_data' in (window.lightdm || {}) || 'brightness' in (window.lightdm || {})
+const isSupportFullApi =
+  'battery_data' in (window.lightdm || {}) || 'brightness' in (window.lightdm || {})
 
 class LightdmWebkit {
-  protected _inputErrorTimer!: null | NodeJS.Timeout
+  protected _inputErrorTimer!: null | ReturnType<typeof setTimeout>
 
   get defaultSession() {
     return this.sessions[0]?.key || window.lightdm?.default_session || 'i3'
   }
 
-  get isSupportFullApi() {
-    return isSupportFullApi
-  }
+  get isSupportFullApi() { return isSupportFullApi }
+  get sessions() { return window.lightdm?.sessions || [] }
+  get hasGuestAccount() { return window.lightdm?.has_guest_account }
+  get users() { return window.lightdm?.users || [] }
+  get username() { return this.users[0]?.username || 'Username' }
+  get languages() { return window.lightdm?.languages }
+  get canRestart() { return window.lightdm?.can_restart }
+  get canShutdown() { return window.lightdm?.can_shutdown }
+  get canSuspend() { return window.lightdm?.can_suspend }
+  get canHibernate() { return window.lightdm?.can_hibernate }
 
-  get sessions() {
-    return window.lightdm?.sessions || []
-  }
-
-  get hasGuestAccount() {
-    return window.lightdm?.has_guest_account
-  }
-
-  get users() {
-    return window.lightdm?.users || []
-  }
-
-  get username() {
-    return this.users[0]?.username || 'Username'
-  }
-
-  get languages() {
-    return window.lightdm?.languages
-  }
-
-  get canRestart() {
-    return window.lightdm?.can_restart
-  }
-
-  get canShutdown() {
-    return window.lightdm?.can_shutdown
-  }
-
-  get canSuspend() {
-    return window.lightdm?.can_suspend
-  }
-
-  get canHibernate() {
-    return window.lightdm?.can_hibernate
-  }
-
-  shutdown() {
-    return window.lightdm?.shutdown()
-  }
-
-  hibernate() {
-    return window.lightdm?.hibernate()
-  }
-
-  suspend() {
-    return window.lightdm?.suspend()
-  }
-
-  restart() {
-    return window.lightdm?.restart()
-  }
+  shutdown() { return window.lightdm?.shutdown() }
+  hibernate() { return window.lightdm?.hibernate() }
+  suspend() { return window.lightdm?.suspend() }
+  restart() { return window.lightdm?.restart() }
 
   protected _setInputError() {
     const inputNode = document.getElementById('password')
     if (!inputNode) return
 
     inputNode.classList.add('password-input--error')
-
-    if (this._inputErrorTimer) {
-      clearTimeout(this._inputErrorTimer)
-    }
+    if (this._inputErrorTimer) clearTimeout(this._inputErrorTimer)
 
     this._inputErrorTimer = setTimeout(() => {
       inputNode.classList.remove('password-input--error')
@@ -263,7 +135,6 @@ class LightdmNode extends LightdmWebkit {
     this._username = username
     this._password = password
     this._session = session || this.defaultSession
-
     window.lightdm?.authenticate(username)
   }
 
@@ -287,12 +158,11 @@ class LightdmNode extends LightdmWebkit {
   }
 
   public setSignalHandler(): void {
-    window.lightdm?.show_message?.connect(function(text, type) {
+    window.lightdm?.show_message?.connect(function (text, type) {
       console.log({ text, type })
     })
 
     window.lightdm?.show_prompt?.connect((_message, type) => {
-      console.log({ _message, type })
       if (!window.lightdm) return
       if (type === 0) {
         window.lightdm.respond(this._username)
@@ -313,13 +183,13 @@ class LightdmNode extends LightdmWebkit {
   }
 
   public async updateBatteryData(): Promise<void> {
-    const module = await getAppModule()
-    module.SET_STATE_APP({ key: 'battery', value: window.lightdm?.battery_data || null })
+    const store = await getAppStore()
+    store.battery = window.lightdm?.battery_data || null
   }
 
   public async updateBrightData(): Promise<void> {
-    const module = await getAppModule()
-    module.SET_STATE_APP({ key: 'brightness', value: window.lightdm?.brightness })
+    const store = await getAppStore()
+    store.brightness = window.lightdm?.brightness || 0
   }
 
   public init(): void {

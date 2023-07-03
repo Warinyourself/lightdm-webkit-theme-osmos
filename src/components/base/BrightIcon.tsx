@@ -1,19 +1,16 @@
-import { AppModule } from '@/store/app'
-import { Component, Vue } from 'vue-property-decorator'
 import AppIcon from '@/components/app/AppIcon.vue'
+import { defineComponent } from 'vue'
+import { useAppStore } from '@/store/app'
 
-@Component({
-  components: { AppIcon }
+export default defineComponent({
+  name: 'BrightIcon',
+  setup() {
+    const appStore = useAppStore()
+    return () => (
+      <div class="app-bar__bright">
+        <AppIcon name="brightness" class="brightness-icon" />
+        {appStore.brightness}
+      </div>
+    )
+  }
 })
-export default class BrightIcon extends Vue {
-  get brightLevel() {
-    return AppModule.brightness
-  }
-
-  render() {
-    return <div class="app-bar__bright">
-      <AppIcon name="brightness" class="brightness-icon"/>
-      { this.brightLevel }
-    </div>
-  }
-}

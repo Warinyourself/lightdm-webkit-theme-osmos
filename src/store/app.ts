@@ -1,360 +1,248 @@
-import {
-  Module,
-  VuexModule,
-  getModule,
-  Mutation,
-  Action
-} from 'vuex-module-decorators'
-import { Route } from 'vue-router'
-import router from '../router'
-import store from '@/store/index'
+import { defineStore } from 'pinia'
+import type { RouteLocationNormalized } from 'vue-router'
+import router from '@/router'
 
-import {
-  AppTheme,
-  AppSettings,
-  AppInputTheme,
-  AppInputThemeValue,
-  AppInputThemeGeneral
-} from '@/models/app'
+import type { AppTheme, AppSettings, AppInputTheme, AppInputThemeValue, AppInputThemeGeneral } from '@/models/app'
+import type { LightdmSession, LightdmUsers } from '@/models/lightdm'
+import type { LightDMBattery } from 'nody-greeter-types'
 
-import { LightdmSession, LightdmUsers } from '@/models/lightdm'
 import { isDifferentRoute, parseQueryValue, randomize, randomizeSettingsTheme, setCSSVariable } from '@/utils/helper'
 import { AppThemes, defaultTheme } from '@/utils/constant'
-import { version } from '@/../package.json'
 import { LightdmHandler } from '@/utils/lightdm'
-import { LightDMBattery } from 'nody-greeter-types'
+import { version } from '../../package.json'
 
-export interface AppState extends AppSettings {
-  themes: AppTheme[];
-  getMainSettings: AppSettings;
-  activeTheme: AppTheme;
-  battery: LightDMBattery | null;
-  brightness?: number;
-  username: string;
-  desktops: LightdmSession[];
-  users: LightdmUsers[];
-  SET_STATE_APP: <S extends this, K extends keyof this>({ key, value }: { key: K; value: S[K] }) => void
-}
+export const useAppStore = defineStore('app', {
+  state: () => ({
+    version: version as string,
+    currentTheme: '',
+    currentOs: 'arch-linux',
+    desktop: LightdmHandler.defaultSession,
+    username: LightdmHandler.username,
+    password: '',
+    defaultColor: '#6BBBED',
+    battery: null as LightDMBattery | null,
+    brightness: 0,
+    zoom: 1,
+    users: LightdmHandler.users as LightdmUsers[],
+    desktops: LightdmHandler.sessions as LightdmSession[],
+    showPassword: false,
+    generateRandomThemes: false,
+    themes: AppThemes as AppTheme[],
+    bodyClass: {
+      blur: false,
+      'no-transition': false,
+      'show-framerate': false,
+      'only-ui': false
+    } as Record<string, boolean>
+  }),
 
-@Module({ dynamic: true, store, name: 'app' })
-class App extends VuexModule implements AppState {
-  version = version
-  currentTheme = ''
-  currentOs = 'arch-linux'
-  desktop = LightdmHandler.defaultSession
-  username = LightdmHandler.username
-  password = ''
-  defaultColor = '#6BBBED'
-  battery: LightDMBattery | null = null
-  brightness = 0
-  zoom = 1
+  getters: {
+    isCharging: (state) => state.battery?.status === 'Charging',
+    batteryLevel: (state) => state.battery?.level || 0,
+    isSupportFullApi: () => LightdmHandler.isSupportFullApi,
+    showFrameRate: (state) => state.bodyClass['show-framerate'],
+    viewThemeOnly: (state) => state.bodyClass['only-ui'],
+    isGithubMode: () => import.meta.env.VITE_APP_VIEW === 'github',
 
-  users = LightdmHandler?.users
-  desktops = LightdmHandler?.sessions
-  showPassword = false
-  generateRandomThemes = false
-  themes = AppThemes
+    activeTheme: (state): AppTheme =>
+      state.themes.find(({ name }) => name === state.currentTheme) || defaultTheme,
 
-  bodyClass: Record<string, boolean> = {
-    blur: false,
-    'no-transition': false,
-    'show-framerate': false,
-    'only-ui': false
-  }
+    currentUser: (state) => state.users.find(({ username }) => username === state.username),
+    currentDesktop: (state) => state.desktops.find(({ key }) => key === state.desktop),
 
-  get isCharging() {
-    return this.battery?.status === 'Charging'
-  }
+    getThemeByName: (state) => (theme: string) =>
+      state.themes.find(({ name }) => name === theme),
 
-  get batteryLevel() {
-    return this.battery?.level || 0
-  }
+    getThemeInput: (state) => (name: string, theme?: AppTheme) => {
+      const active = state.themes.find((t) => t.name === state.currentTheme) || defaultTheme
+      return (theme || active).settings?.find((input) => input.name === name)
+    },
 
-  get isSupportFullApi() {
-    return LightdmHandler.isSupportFullApi
-  }
+    getMainSettings: (state): AppSettings => ({
+      zoom: state.zoom,
+      themes: state.themes,
+      desktop: state.desktop,
+      username: state.username,
+      bodyClass: state.bodyClass,
+      currentOs: state.currentOs,
+      currentTheme: state.currentTheme,
+      defaultColor: state.defaultColor,
+      generateRandomThemes: state.generateRandomThemes
+    }),
 
-  get getMainSettings(): AppSettings {
-    const {
-      zoom,
-      themes,
-      desktop,
-      username,
-      bodyClass,
-      currentOs,
-      currentTheme,
-      defaultColor,
-      generateRandomThemes
-    } = this
+    personalInfo: (state) => ({
+      username: state.username,
+      currentTheme: state.currentTheme,
+      currentOs: state.currentOs,
+      desktop: state.desktop,
+      version: state.version,
+      defaultColor: state.defaultColor
+    })
+  },
 
-    return {
-      zoom,
-      themes,
-      desktop,
-      username,
-      bodyClass,
-      currentOs,
-      currentTheme,
-      defaultColor,
-      generateRandomThemes
-    }
-  }
+  actions: {
+    randomizeSettingsTheme() {
+      const theme = this.activeTheme
+      theme.settings = randomizeSettingsTheme(theme as AppTheme)
+      this.syncStoreWithQuery()
+    },
 
-  get showFrameRate() {
-    return this.bodyClass['show-framerate']
-  }
+    async changeTheme(themeName: string, themeSettings?: AppTheme['settings']) {
+      const isExistTheme = this.getThemeByName(themeName)
+      const finalTheme = isExistTheme ? themeName : this.themes[0]!.name
 
-  get activeTheme() {
-    return this.themes.find(({ name }) => name === this.currentTheme) || defaultTheme
-  }
+      this.currentTheme = finalTheme
 
-  get currentUser() {
-    return this.users.find(({ username }) => username === this.username)
-  }
-
-  get currentDesktop() {
-    return this.desktops.find(({ key }) => key === this.desktop)
-  }
-
-  get getThemeByName() {
-    return (theme: string) => this.themes.find(({ name }) => name === theme)
-  }
-
-  get getThemeInput() {
-    return (name: string, theme?: AppTheme) => {
-      return (theme || this.activeTheme as AppTheme).settings?.find(input => input.name === name)
-    }
-  }
-
-  get viewThemeOnly() {
-    return this.bodyClass['only-ui']
-  }
-
-  get isGithubMode() {
-    return process.env.VUE_APP_VIEW === 'github'
-  }
-
-  get personalInfo() {
-    const { username, currentTheme, currentOs, desktop, version, defaultColor } = this
-
-    return { username, currentTheme, currentOs, desktop, version, defaultColor }
-  }
-
-  get localStorageSettings() {
-    const { personalInfo, bodyClass, themes } = this
-
-    return { personalInfo, bodyClass, themes }
-  }
-
-  @Mutation
-  SET_STATE_APP<S extends this, K extends keyof this>({ key, value }: { key: K; value: S[K] }) {
-    this[key] = value
-  }
-
-  @Mutation
-  SAVE_STATE_APP<S extends this, K extends keyof this>({ key, value }: { key: K; value: S[K] }) {
-    this[key] = value
-
-    const settings = JSON.parse(localStorage.getItem('settings') || '')
-    settings[key] = value
-    localStorage.setItem('settings', JSON.stringify(settings))
-  }
-
-  @Mutation
-  CHANGE_BODY_CLASS({ key, value }: { key: string; value: boolean }) {
-    this.bodyClass[key] = value
-  }
-
-  @Mutation
-  CHANGE_THEME_INPUT({ input, value }: { input: AppInputTheme; value: AppInputThemeValue }) {
-    input.value = value
-  }
-
-  @Mutation
-  CHANGE_SETTINGS_THEME({ theme, settings }: { theme: string; settings: AppTheme['settings'] }) {
-    const currentTheme = this.themes.find(({ name }) => name === theme)
-
-    if (currentTheme) {
-      currentTheme.settings = settings
-    }
-  }
-
-  @Action
-  randomizeSettingsTheme() {
-    const theme = this.activeTheme
-    theme.settings = randomizeSettingsTheme(theme)
-
-    this.syncStoreWithQuery()
-  }
-
-  @Action
-  async changeTheme(themeName: string, themeSettings?: AppTheme['settings']) {
-    const isExistTheme = this.getThemeByName(themeName)
-    const finalTheme = isExistTheme ? themeName : this.themes[0].name
-
-    this.SET_STATE_APP({ key: 'currentTheme', value: finalTheme })
-
-    const needToChangeTheme = isExistTheme && themeSettings
-    if (needToChangeTheme) {
-      this.CHANGE_SETTINGS_THEME({ theme: finalTheme, settings: themeSettings })
-    }
-
-    this.syncThemeColor()
-    this.syncStoreWithQuery()
-  }
-
-  @Action
-  login() {
-    LightdmHandler.login(this.username, this.password, this.currentDesktop?.key)
-  }
-
-  @Action
-  changeSettingsThemeInput({ key, value }: { key: string; value: AppInputThemeValue }) {
-    const inputs = (this.activeTheme as AppTheme).settings || []
-    const input = inputs?.find(input => input.name === key)
-
-    if (input) {
-      this.CHANGE_THEME_INPUT({ input, value })
-    }
-  }
-
-  @Action
-  toggleShowPassword() {
-    this.SET_STATE_APP({ key: 'showPassword', value: !this.showPassword })
-  }
-
-  @Action
-  syncSettingsWithCache() {
-    localStorage.setItem('settings', JSON.stringify(this.getMainSettings))
-  }
-
-  @Action
-  syncThemeColor() {
-    const { color } = this.activeTheme
-    let activeColor = color.active
-
-    if (this.activeTheme.settings) {
-      const activeColorInput = this.activeTheme.settings.find(({ name }) => name === 'activeColor') as AppInputThemeGeneral
-      if (activeColorInput) {
-        activeColor = activeColorInput.value + ''
+      if (isExistTheme && themeSettings) {
+        this.changeSettingsTheme({ theme: finalTheme, settings: themeSettings })
       }
-    }
 
-    setCSSVariable('--color-active', activeColor)
-    setCSSVariable('--color-bg', color.background)
-  }
+      this.syncThemeColor()
+      this.syncStoreWithQuery()
+    },
 
-  @Action
-  syncStoreWithQuery() {
-    const { app: { $route, $router } } = router
+    login() {
+      LightdmHandler.login(this.username, this.password, this.currentDesktop?.key)
+    },
 
-    const inputQuery = this.activeTheme.settings?.reduce<Record<string, string>>((query, input) => {
-      query[input.name] = input.value + ''
-      return query
-    }, {})
-    const bodyClassQuery = Object.entries(this.bodyClass).reduce<Record<string, string>>((query, [key, value]) => {
-      query[key] = value + ''
-      return query
-    }, {})
+    changeSettingsTheme({ theme, settings }: { theme: string; settings: AppTheme['settings'] }) {
+      const currentTheme = this.themes.find(({ name }) => name === theme)
+      if (currentTheme) currentTheme.settings = settings
+    },
 
-    const query = { ...inputQuery, ...bodyClassQuery, themeName: this.currentTheme }
-    const routeTo = { name: $route.name || '/', query }
-    const mayReplace = isDifferentRoute(routeTo)
+    changeThemeInput({ input, value }: { input: AppInputTheme; value: AppInputThemeValue }) {
+      input.value = value
+    },
 
-    if (mayReplace) {
-      $router.replace(routeTo)
-    }
-  }
+    changeSettingsThemeInput({ key, value }: { key: string; value: AppInputThemeValue }) {
+      const input = (this.activeTheme as AppTheme).settings?.find((i) => i.name === key)
+      if (input) input.value = value
+    },
 
-  @Action
-  syncThemeWithStore({ settings, query }: { settings: AppSettings; query: Route['query'] }) {
-    let themeName = query.themeName as string || settings.currentTheme
-    const { generateRandomThemes } = settings
-    const indexTheme = Math.floor(randomize(0, this.themes.length - 1))
+    toggleShowPassword() {
+      this.showPassword = !this.showPassword
+    },
 
-    const syncTheme = this.themes.reduce((themes: AppTheme[], theme, index) => {
-      const cachedTheme = settings.themes.find(({ name }) => name === theme.name)
-      const isActiveTheme = generateRandomThemes ? indexTheme === index : theme.name === themeName
-      const hasCachedTheme = cachedTheme && cachedTheme?.settings
+    changeBodyClass({ key, value }: { key: string; value: boolean }) {
+      this.bodyClass[key] = value
+      this.syncBodyClassWithStore({ settings: this.getMainSettings, query: router.currentRoute.value.query })
+    },
 
-      if (hasCachedTheme) {
-        const randomSettings = isActiveTheme && generateRandomThemes
+    saveStateApp({ key, value }: { key: string; value: string }) {
+      (this as any)[key] = value
+      localStorage.setItem(key, value)
+      this.syncStoreWithQuery()
+    },
 
-        if (randomSettings) {
-          themeName = theme.name
+    syncSettingsWithCache() {
+      localStorage.setItem('settings', JSON.stringify(this.getMainSettings))
+    },
+
+    syncThemeColor() {
+      const { color } = this.activeTheme
+      let activeColor = color.active
+
+      if (this.activeTheme.settings) {
+        const colorInput = this.activeTheme.settings.find(({ name }) => name === 'activeColor') as AppInputThemeGeneral
+        if (colorInput) activeColor = colorInput.value + ''
+      }
+
+      setCSSVariable('--color-active', activeColor)
+      setCSSVariable('--color-bg', color.background)
+    },
+
+    syncStoreWithQuery() {
+      const route = router.currentRoute.value
+
+      const inputQuery = this.activeTheme.settings?.reduce<Record<string, string>>((query, input) => {
+        query[input.name] = input.value + ''
+        return query
+      }, {})
+
+      const bodyClassQuery = Object.entries(this.bodyClass).reduce<Record<string, string>>((query, [key, value]) => {
+        query[key] = value + ''
+        return query
+      }, {})
+
+      const query = { ...inputQuery, ...bodyClassQuery, themeName: this.currentTheme }
+      const routeTo = { name: route.name || '/', query }
+
+      if (isDifferentRoute(routeTo)) {
+        router.replace(routeTo)
+      }
+    },
+
+    syncThemeWithStore({ settings, query }: { settings: AppSettings; query: RouteLocationNormalized['query'] }) {
+      let themeName = (query.themeName as string) || settings.currentTheme
+      const { generateRandomThemes } = settings
+      const indexTheme = Math.floor(randomize(0, this.themes.length - 1))
+
+      const syncTheme = this.themes.reduce((themes: AppTheme[], theme, index) => {
+        const cachedTheme = settings.themes.find(({ name }) => name === theme.name)
+        const isActiveTheme = generateRandomThemes ? indexTheme === index : theme.name === themeName
+        const hasCachedTheme = cachedTheme && cachedTheme.settings
+
+        if (hasCachedTheme) {
+          if (isActiveTheme && generateRandomThemes) {
+            themeName = theme.name
+            theme.settings = randomizeSettingsTheme(theme)
+          } else {
+            theme.settings = theme.settings?.map((input) => {
+              const cachedInput = this.getThemeInput(input.name, cachedTheme)
+              let value = cachedInput?.value ?? input.value
+
+              if (isActiveTheme) {
+                const queryInput = input.name in query ? parseQueryValue(query[input.name] as string) : null
+                value = queryInput ?? value
+              }
+
+              return { ...input, value }
+            })
+          }
         }
 
-        theme.settings = randomSettings
-          ? randomizeSettingsTheme(theme)
-          : theme.settings?.map(input => {
-            const cachedThemeInput = this.getThemeInput(input.name, cachedTheme)
-            let value = cachedThemeInput?.value ?? input.value
+        themes.push(theme)
+        if (isActiveTheme) this.currentTheme = themeName
 
-            if (isActiveTheme) {
-              const queryThemeInput = input.name in query ? parseQueryValue(query[input.name] as string) : null
-              value = queryThemeInput ?? value
-            }
+        return themes
+      }, [])
 
-            return Object.assign(input, { value })
-          })
+      this.themes = syncTheme
+    },
+
+    syncBodyClassWithStore({ settings, query }: { settings: AppSettings; query: RouteLocationNormalized['query'] }) {
+      const bodyClassKeys = Object.keys(this.bodyClass)
+      const queryBodyClass = bodyClassKeys.reduce<Record<string, boolean>>((bodyClass, key) => {
+        if (key in query) bodyClass[key] = query[key] === 'true'
+        return bodyClass
+      }, {})
+
+      this.bodyClass = { ...settings.bodyClass, ...queryBodyClass }
+    },
+
+    setUpSettings() {
+      const query = router.currentRoute.value.query
+
+      try {
+        const settings: AppSettings = JSON.parse(localStorage.getItem('settings') || '{}')
+        this.generateRandomThemes = settings.generateRandomThemes || false
+
+        if (settings.themes) this.syncThemeWithStore({ settings, query })
+        if (settings.bodyClass) this.syncBodyClassWithStore({ settings, query })
+
+        const isExistDE = window.lightdm?.sessions.find(({ key }) => key === settings.desktop)
+        if (!isExistDE) settings.desktop = window.lightdm?.sessions[0]?.key || 'openbox'
+
+        const isExistUser = window.lightdm?.users.find(({ username }) => username === settings.username)
+        if (!isExistUser) settings.username = window.lightdm?.users[0]?.username || 'Warinyourself'
+
+        this.currentOs = settings.currentOs || 'arch-linux'
+        this.desktop = settings.desktop
+        this.username = settings.username
+        this.zoom = settings.zoom || 1
+      } catch {
+        this.setUpSettings()
       }
-
-      themes.push(theme)
-
-      if (isActiveTheme) { this.SAVE_STATE_APP({ key: 'currentTheme', value: themeName }) }
-
-      return themes
-    }, [])
-
-    this.SET_STATE_APP({ key: 'themes', value: syncTheme })
-  }
-
-  @Action
-  syncBodyClassWithStore({ settings, query }: { settings: AppSettings; query: Route['query'] }) {
-    const bodyClassKeys = Object.keys(this.bodyClass)
-    const queryBodyClass = bodyClassKeys.reduce<Record<string, boolean>>((bodyClass, key) => {
-      if (key in query) { bodyClass[key] = query[key] === 'true' }
-      return bodyClass
-    }, {})
-
-    this.SET_STATE_APP({ key: 'bodyClass', value: { ...settings.bodyClass, ...queryBodyClass } })
-  }
-
-  @Action
-  setUpSettings() {
-    const { app: { $route } } = router
-    const { query } = $route
-
-    try {
-      const settings: AppSettings = JSON.parse(localStorage.getItem('settings') || '{}')
-      this.SET_STATE_APP({ key: 'generateRandomThemes', value: settings.generateRandomThemes || false })
-
-      if (settings.themes) {
-        this.syncThemeWithStore({ settings, query })
-      }
-
-      if (settings.bodyClass) {
-        this.syncBodyClassWithStore({ settings, query })
-      }
-
-      const isExistDE = window.lightdm?.sessions.find(({ key }) => key === settings.desktop)
-      if (isExistDE === undefined) {
-        settings.desktop = window.lightdm?.sessions[0].key || 'openbox'
-      }
-
-      const isExistUser = window.lightdm?.users.find(({ username }) => username === settings.username)
-      if (isExistUser === undefined) {
-        settings.username = window.lightdm?.users[0].username || 'Warinyourself'
-      }
-
-      this.SET_STATE_APP({ key: 'currentOs', value: settings.currentOs || 'arch-linux' })
-      this.SET_STATE_APP({ key: 'desktop', value: settings.desktop })
-      this.SET_STATE_APP({ key: 'username', value: settings.username })
-      this.SET_STATE_APP({ key: 'zoom', value: settings.zoom || 1 })
-    } catch (error) {
-      this.setUpSettings()
     }
   }
-}
-
-export const AppModule = getModule(App)
+})

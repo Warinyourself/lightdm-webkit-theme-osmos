@@ -1,45 +1,40 @@
-import { Component, Prop, Vue } from 'vue-property-decorator'
 import AppIcon from '@/components/app/AppIcon.vue'
+import { defineComponent, computed } from 'vue'
 
-@Component({
-  components: { AppIcon }
-})
-export default class AppCheckbox extends Vue {
-  @Prop({ default: false }) value!: boolean
-  @Prop({ default: '' }) label!: string
+export default defineComponent({
+  name: 'AppCheckbox',
 
-  get classes(): Record<string, boolean> {
-    return {
+  props: {
+    modelValue: { type: Boolean, default: false },
+    label: { type: String, default: '' },
+    inline: { type: Boolean, default: false }
+  },
+
+  emits: ['update:modelValue'],
+
+  setup(props, { emit }) {
+    const classes = computed(() => ({
       checkbox: true,
-      'checkbox--active': this.value
-    }
-  }
+      'checkbox--active': props.modelValue
+    }))
 
-  get idCheckbox(): string {
-    return `input-${(this as any)._uid}`
-  }
+    const changeState = () => emit('update:modelValue', !props.modelValue)
 
-  changeState(): void {
-    this.$emit('input', !this.value)
-  }
-
-  render() {
-    return <label class={ this.classes }>
-      <div class="checkbox-control">
-        <div class="checkbox-control-box">
-          <AppIcon name="checkbox"></AppIcon>
+    return () => (
+      <label class={classes.value}>
+        <div class="checkbox-control">
+          <div class="checkbox-control-box">
+            <AppIcon name="checkbox" />
+          </div>
+          <input
+            type="checkbox"
+            checked={props.modelValue}
+            aria-checked={props.modelValue}
+            onInput={changeState}
+          />
         </div>
-        <input
-          type="checkbox"
-          value={ this.value }
-          aria-checked={ this.value }
-          id={ this.idCheckbox }
-          onInput={ this.changeState }
-        />
-      </div>
-      <p class="input-label">
-        { this.label }
-      </p>
-    </label>
+        <p class="input-label">{props.label}</p>
+      </label>
+    )
   }
-}
+})

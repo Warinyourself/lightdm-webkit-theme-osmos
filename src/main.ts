@@ -1,10 +1,11 @@
-import Vue from 'vue'
-import '@/utils/lightdm'
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import { createI18n } from 'vue-i18n'
+
 import App from './App'
 import router from './router'
-import store from './store'
-import '@/plugins/components'
-import VueI18n from 'vue-i18n'
+import { registerComponents } from '@/plugins/components'
+import '@/utils/lightdm'
 
 import './style/index.styl'
 import 'css-doodle'
@@ -16,26 +17,25 @@ import de from '@/locales/de.json'
 import es from '@/locales/es.json'
 
 let language: string
-
 try {
-  language = (JSON.parse(localStorage.getItem('settings') || '{}')).language
+  language = (JSON.parse(localStorage.getItem('settings') || '{}')).language || 'en'
 } catch {
   language = 'en'
 }
 
-const i18n = () => new VueI18n({
-  locale: language || 'en',
+const i18n = createI18n({
+  legacy: false,
+  locale: language,
   silentTranslationWarn: true,
   messages: { ru, en, fr, de, es }
 })
 
-Vue.config.productionTip = false
+const app = createApp(App)
 
-Vue.use(VueI18n)
+app.use(createPinia())
+app.use(router)
+app.use(i18n)
 
-new Vue({
-  i18n: i18n(),
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+registerComponents(app)
+
+app.mount('#app')

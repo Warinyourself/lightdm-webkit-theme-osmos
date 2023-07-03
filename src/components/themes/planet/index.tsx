@@ -1,62 +1,53 @@
-import { Component, Vue } from 'vue-property-decorator'
+import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import GL from '@/utils/gl'
-import { AppModule } from '@/store/app'
+import { useAppStore } from '@/store/app'
+import fragmentShader from './fragment.glsl'
+import vertexShader from './vertex.glsl'
+
 let render: GL
 
-@Component
-export default class PlanetTheme extends Vue {
-  get animationSpeed() {
-    return AppModule.getThemeInput('animation-speed')?.value as number || 45
-  }
+export default defineComponent({
+  name: 'PlanetTheme',
+  setup() {
+    const appStore = useAppStore()
+    const canvasRef = ref<HTMLCanvasElement | null>(null)
 
-  get position() {
-    return AppModule.getThemeInput('position')?.value as number || 2.14
-  }
+    const animationSpeed = computed(() => appStore.getThemeInput('animation-speed')?.value as number || 45)
+    const position = computed(() => appStore.getThemeInput('position')?.value as number || 2.14)
+    const pxratio = computed(() => appStore.getThemeInput('pxratio')?.value as number || 0.8)
 
-  get pxratio() {
-    return AppModule.getThemeInput('pxratio')?.value as number || 0.8
-  }
-
-  mounted() {
-    const vm = this
-
-    render = new GL(
-      this.$refs.canvas as HTMLCanvasElement,
-      document.querySelector('script#shader-vs')?.textContent || '',
-      document.querySelector('script#shader-fs')?.textContent || '',
-      window.innerWidth,
-      window.innerHeight,
-      {
-        renderOptions: {
-          externalTimeUse: true
-        },
-        renderHook() {
-          const gl = this as unknown as GL
-
-          if (!gl.programInfo.uniforms.position) {
-            gl.programInfo.uniforms.position = gl.ctx.getUniformLocation(gl.program as WebGLProgram, 'camR')
+    onMounted(() => {
+      render = new GL(
+        canvasRef.value!,
+        vertexShader,
+        fragmentShader,
+        window.innerWidth,
+        window.innerHeight,
+        {
+          renderOptions: { externalTimeUse: true },
+          renderHook() {
+            const gl = this as unknown as GL
+            if (!gl.programInfo.uniforms.position) {
+              gl.programInfo.uniforms.position = gl.ctx.getUniformLocation(gl.program as WebGLProgram, 'camR')
+            }
+            gl.pxratio = pxratio.value
+            gl.time += animationSpeed.value / 500
+            gl.ctx.uniform1f(gl.programInfo.uniforms.time, gl.time + (gl.time * animationSpeed.value / 10))
+            gl.ctx.uniform1f(gl.programInfo.uniforms.position, position.value)
           }
-
-          gl.pxratio = vm.pxratio
-          gl.time += vm.animationSpeed / 500
-          gl.ctx.uniform1f(gl.programInfo.uniforms.time, gl.time + (gl.time * vm.animationSpeed / 10))
-          gl.ctx.uniform1f(gl.programInfo.uniforms.position, vm.position)
         }
-      }
+      )
+      render.running = true
+    })
+
+    onBeforeUnmount(() => {
+      render.running = false
+    })
+
+    return () => (
+      <div>
+        <canvas ref={canvasRef} />
+      </div>
     )
-
-    render.running = true
   }
-
-  beforeDestroy() {
-    render.running = false
-  }
-
-  render() {
-    return <div>
-      <canvas ref='canvas' />
-      <script id="shader-fs" type="x-shader/x-fragment"> { require('./fragment.glsl') } </script>
-      <script id="shader-vs" type="x-shader/x-vertex"> { require('./vertex.glsl') } </script>
-    </div>
-  }
-}
+})

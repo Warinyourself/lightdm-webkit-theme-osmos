@@ -1,5 +1,6 @@
-import Vue from 'vue'
-
+import type { App } from 'vue'
 import AppIcon from '@/components/app/AppIcon.vue'
 
-Vue.component('AppIcon', AppIcon)
+export function registerComponents(app: App) {
+  app.component('AppIcon', AppIcon)
+}

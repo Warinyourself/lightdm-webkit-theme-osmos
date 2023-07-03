@@ -1,60 +1,44 @@
-import { Component, Vue } from 'vue-property-decorator'
-
-import { AppModule } from '@/store/app'
-import AppIcon from '@/components/app/AppIcon.vue'
+import { defineComponent, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useAppStore } from '@/store/app'
+import { useRouter, useRoute } from 'vue-router'
 import AppButton from '@/components/app/AppButton'
 import SettingsUsers from './SettingsUsers'
 import SettingsHotkeys from './SettingsHotkeys'
 import SettingsSelectors from './SettingsSelectors'
 import SettingsCheckboxes from './SettingsCheckboxes'
 
-@Component({
-  components: {
-    AppIcon,
-    SettingsUsers,
-    SettingsHotkeys,
-    SettingsSelectors,
-    SettingsCheckboxes
+export default defineComponent({
+  name: 'SettingsGeneral',
+  setup() {
+    const appStore = useAppStore()
+    const { t } = useI18n()
+    const router = useRouter()
+    const route = useRoute()
+
+    const isViewThemeOnly = computed(() => appStore.viewThemeOnly)
+
+    const resetSettings = () => {
+      localStorage.clear()
+      appStore.setUpSettings()
+      if (Object.keys(route.query).length) {
+        router.replace({})
+      }
+      window.location.reload()
+    }
+
+    return () => (
+      <div class="user-settings-general">
+        <SettingsCheckboxes />
+        <SettingsSelectors />
+        {!isViewThemeOnly.value && <SettingsUsers />}
+        <SettingsHotkeys />
+        <div class="help-block">
+          <AppButton onClick={resetSettings} block class="mb-2">
+            {t('settings.reset-settings')}
+          </AppButton>
+        </div>
+      </div>
+    )
   }
 })
-export default class SettingsGeneral extends Vue {
-  get showFrameRate() {
-    return AppModule.showFrameRate
-  }
-
-  get isViewThemeOnly() {
-    return AppModule.viewThemeOnly
-  }
-
-  resetSettings() {
-    localStorage.clear()
-    AppModule.setUpSettings()
-
-    const hasQyery = Object.keys(this.$route.query).length
-    if (hasQyery) { this.$router.replace({}) }
-    window.location.reload()
-  }
-
-  changeTheme() {
-    throw Error('Change theme')
-  }
-
-  render() {
-    return <div class='user-settings-general'>
-      <SettingsCheckboxes />
-      <SettingsSelectors />
-
-      { !this.isViewThemeOnly && <SettingsUsers /> }
-      <SettingsHotkeys />
-
-      <div class="help-block">
-        <AppButton onClick={ this.resetSettings } block class="mb-2">
-          { this.$t('settings.reset-settings') }
-        </AppButton>
-        <AppButton onClick={ this.changeTheme } block>
-          { this.$t('settings.change-theme') }
-        </AppButton>
-      </div>
-    </div>
-  }
-}

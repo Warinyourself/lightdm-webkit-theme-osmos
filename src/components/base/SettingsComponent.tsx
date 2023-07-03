@@ -1,89 +1,57 @@
-import { Component, Vue } from 'vue-property-decorator'
-
-import { AppModule } from '@/store/app'
-import { PageModule } from '@/store/page'
-
 import AppIcon from '@/components/app/AppIcon.vue'
-import UserAvatar from '@/components/base/UserAvatar'
-import SettingsView from '@/components/base/settings/SettingsView'
+import { defineComponent, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useAppStore } from '@/store/app'
+import { usePageStore } from '@/store/page'
+import UserAvatar from './UserAvatar'
+import SettingsView from './settings/SettingsView'
 
-@Component({
-  components: {
-    AppIcon,
-    UserAvatar,
-    SettingsView
+export default defineComponent({
+  name: 'SettingsComponent',
+  setup() {
+    const appStore = useAppStore()
+    const pageStore = usePageStore()
+    const { t } = useI18n()
+
+    const isViewThemeOnly = computed(() => appStore.viewThemeOnly)
+    const mainTabIndex = computed(() => pageStore.mainTabIndex)
+
+    const tabs = computed(() => {
+      const list = [t('settings.choice-themes'), t('settings.general')]
+      if (appStore.activeTheme?.settings?.length !== undefined) {
+        list.splice(1, 0, t('settings.customize-theme'))
+      }
+      return list
+    })
+
+    const openLogin = (event: Event) => {
+      event.preventDefault()
+      event.stopPropagation()
+      pageStore.openBlock({ id: 'login' })
+    }
+
+    const activateTab = (index: number) => {
+      pageStore.mainTabIndex = index
+    }
+
+    const generateTab = (tab: string, index: number) => {
+      const classes = `user-settings-tab ${mainTabIndex.value === index ? 'active' : ''}`
+      return (
+        <div class={classes} onClick={() => activateTab(index)}>
+          {tab}
+        </div>
+      )
+    }
+
+    return () => (
+      <div class="block-settings login-content-settings">
+        <div class="login-view active-interface">
+          <AppIcon onClick={openLogin} name="collapse" class="system-icon" />
+          {!isViewThemeOnly.value && <UserAvatar />}
+          <div class="user-settings-tabs">{tabs.value.map(generateTab)}</div>
+          <SettingsView />
+        </div>
+      </div>
+    )
   }
 })
-export default class SettingsComponent extends Vue {
-  get theme() {
-    return AppModule.activeTheme
-  }
-
-  get classObject() {
-    return {
-      'login-menu': true
-    }
-  }
-
-  get activeBlock() {
-    return PageModule.activeBlock
-  }
-
-  get currentDesktop() {
-    return AppModule.currentDesktop
-  }
-
-  get mainTabIndex() {
-    return PageModule.mainTabIndex
-  }
-
-  get tabs() {
-    const tabs = [this.$t('settings.choice-themes').toString(), this.$t('settings.general').toString()]
-    const hasThemeSettings = AppModule.activeTheme?.settings?.length !== undefined
-
-    if (hasThemeSettings) {
-      tabs.splice(1, 0, this.$t('settings.customize-theme').toString())
-    }
-
-    return tabs
-  }
-
-  get isViewThemeOnly() {
-    return AppModule.viewThemeOnly
-  }
-
-  activateTab(index: number) {
-    PageModule.SET_STATE_PAGE({ key: 'mainTabIndex', value: index })
-  }
-
-  openLogin(event: Event) {
-    event.preventDefault()
-    event.stopPropagation()
-
-    PageModule.openBlock({ id: 'login' })
-  }
-
-  generateTab(tab: string, index: number) {
-    const classes = `user-settings-tab ${this.mainTabIndex === index ? 'active' : ''}`
-
-    return <div class={ classes } onClick={() => this.activateTab(index)}> { tab } </div>
-  }
-
-  generateTabs() {
-    return <div class='user-settings-tabs'>
-      { this.tabs.map(this.generateTab) }
-    </div>
-  }
-
-  render() {
-    return <div class="block-settings login-content-settings">
-      <div class="login-view active-interface">
-        <AppIcon onClick={ this.openLogin } name='collapse' class='system-icon' />
-
-        { !this.isViewThemeOnly && <UserAvatar /> }
-        { this.generateTabs() }
-        <SettingsView />
-      </div>
-    </div>
-  }
-}

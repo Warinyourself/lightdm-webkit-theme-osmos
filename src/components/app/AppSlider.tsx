@@ -1,68 +1,63 @@
-import { Component, Prop, Vue } from 'vue-property-decorator'
+import { defineComponent, onMounted, onUpdated, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import noUiSlider from 'nouislider'
-import { Debounce } from '@/utils/helper'
+import { debounce } from 'lodash'
 
-@Component
-export default class AppSlider extends Vue {
-  @Prop({ type: [Number], default: '' }) value!: number | string
-  @Prop({ default: '' }) label!: string
-  @Prop({ type: Number, default: 0 }) from!: number
-  @Prop({ type: Number, default: 100 }) to!: number
-  @Prop({ type: Number, default: 1 }) step!: number
-  @Prop({ type: Boolean, default: false }) changeOnUpdate!: boolean
+export default defineComponent({
+  name: 'AppSlider',
 
-  preValue = 0
+  props: {
+    modelValue: { type: Number, default: 0 },
+    label: { type: String, default: '' },
+    from: { type: Number, default: 0 },
+    to: { type: Number, default: 100 },
+    step: { type: Number, default: 1 },
+    changeOnUpdate: { type: Boolean, default: false }
+  },
 
-  @Debounce(100)
-  syncSliderValue() {
-    const slider = (this.$refs.slider as any).noUiSlider
-    const sliderValue = parseFloat(slider.get())
-    const isDifferentValues = sliderValue !== this.value
+  emits: ['update:modelValue'],
 
-    if (isDifferentValues) {
-      slider.set(this.value)
-    }
-  }
+  setup(props, { emit }) {
+    const { t } = useI18n()
+    const sliderRef = ref<HTMLElement | null>(null)
 
-  updated() {
-    this.syncSliderValue()
-  }
-
-  mounted() {
-    const slider = this.$refs.slider as any
-    const isValidValue = this.value !== 'undefined'
-
-    noUiSlider.create(slider, {
-      start: isValidValue ? this.value : this.to,
-      connect: 'lower',
-      step: this.step,
-      range: {
-        min: this.from,
-        max: this.to
+    const syncSliderValue = debounce(() => {
+      const slider = sliderRef.value as any
+      if (!slider?.noUiSlider) return
+      const sliderValue = parseFloat(slider.noUiSlider.get())
+      if (sliderValue !== props.modelValue) {
+        slider.noUiSlider.set(props.modelValue)
       }
+    }, 100)
+
+    onMounted(() => {
+      const slider = sliderRef.value as any
+      const isValidValue = props.modelValue !== undefined
+
+      noUiSlider.create(slider, {
+        start: isValidValue ? props.modelValue : props.to,
+        connect: 'lower',
+        step: props.step,
+        range: { min: props.from, max: props.to }
+      })
+
+      const eventChange = props.changeOnUpdate ? 'update' : 'set'
+      slider.noUiSlider.on(eventChange, (values: string[]) => {
+        emit('update:modelValue', parseFloat(values[0] ?? '0'))
+      })
     })
 
-    slider.noUiSlider.on('slide', (values: string[]) => {
-      this.preValue = parseFloat(values[0])
-    })
+    onUpdated(syncSliderValue)
 
-    const eventChange = this.changeOnUpdate ? 'update' : 'set'
-
-    slider.noUiSlider.on(eventChange, (values: string[]) => {
-      const value = parseFloat(values[0])
-
-      this.$emit('input', value)
-    })
-  }
-
-  render() {
-    return <div class="app-slider">
-      <div class="app-slider__content">
-        <p class="mb-2"> { this.$t(this.label) } </p>
+    return () => (
+      <div class="app-slider">
+        <div class="app-slider__content">
+          <p class="mb-2">{t(props.label)}</p>
+        </div>
+        <div class="center-x">
+          <div ref={sliderRef} class="slider-input" />
+        </div>
       </div>
-      <div class="center-x">
-        <div ref="slider" class="slider-input"></div>
-      </div>
-    </div>
+    )
   }
-}
+})

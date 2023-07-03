@@ -1,15 +1,17 @@
-import { PageModule } from '@/store/page'
-import { AppModule } from '@/store/app'
+import { usePageStore } from '@/store/page'
+import { useAppStore } from '@/store/app'
 import { systemActionsObject, modKey } from '@/utils/helper'
 
 const prefixTitle = 'settings.keyboard.'
+
 export const hotkeys = [
   {
     keys: [modKey, 't'],
     title: `${prefixTitle}open-themes`,
     callback: () => {
-      PageModule.openTab({ type: 'themes' })
-      PageModule.openBlock({ id: 'settings' })
+      const pageStore = usePageStore()
+      pageStore.openTab({ type: 'themes' })
+      pageStore.openBlock({ id: 'settings' })
     }
   },
   {
@@ -19,7 +21,7 @@ export const hotkeys = [
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen()
       } else {
-        document.exitFullscreen && document.exitFullscreen()
+        document.exitFullscreen?.()
       }
     }
   },
@@ -27,38 +29,34 @@ export const hotkeys = [
     keys: [modKey, 'c'],
     title: `${prefixTitle}open-custom`,
     callback: () => {
-      PageModule.openTab({ type: 'custom' })
-      PageModule.openBlock({ id: 'settings' })
+      const pageStore = usePageStore()
+      pageStore.openTab({ type: 'custom' })
+      pageStore.openBlock({ id: 'settings' })
     }
   },
   {
     keys: [modKey, 's'],
     title: `${prefixTitle}open-settings`,
     callback: () => {
-      PageModule.openTab({ type: 'settings' })
-      PageModule.openBlock({ id: 'settings' })
+      const pageStore = usePageStore()
+      pageStore.openTab({ type: 'settings' })
+      pageStore.openBlock({ id: 'settings' })
     }
   },
   {
     keys: [modKey, 'h'],
     title: `${prefixTitle}hide-windows`,
-    callback: () => {
-      PageModule.CLOSE_ALL_ACTIVE_BLOCK()
-    }
+    callback: () => usePageStore().closeAllBlocks()
   },
   {
     keys: [modKey, 'r'],
     title: `${prefixTitle}randomize-theme`,
-    callback: () => {
-      AppModule.randomizeSettingsTheme()
-    }
+    callback: () => useAppStore().randomizeSettingsTheme()
   },
   {
     keys: [modKey, 'i'],
     title: `${prefixTitle}show-password`,
-    callback: () => {
-      AppModule.toggleShowPassword()
-    }
+    callback: () => useAppStore().toggleShowPassword()
   },
   {
     keys: [modKey, 'P'],
@@ -77,4 +75,4 @@ export const hotkeys = [
   }
 ]
 
-export type hotkeysType = typeof hotkeys[number]
+export type hotkeysType = (typeof hotkeys)[number]

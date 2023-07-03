@@ -1,10 +1,13 @@
-import { AppInputButton, AppInputThemeGeneral, AppInputThemePalette, AppInputThemeSlider, AppInputThemeValue, AppTheme } from '@/models/app'
-import { AppModule } from '@/store/app'
-import { PageModule } from '@/store/page'
-import { debounce, DebounceSettings } from 'lodash'
-import { RawLocation } from 'vue-router'
-import router from '../router'
+import type { AppInputButton, AppInputThemeGeneral, AppInputThemePalette, AppInputThemeSlider, AppTheme } from '@/models/app'
+import { debounce, type DebounceSettings } from 'lodash'
+import type { RouteLocationRaw } from 'vue-router'
+import router from '@/router'
 import { LightdmHandler } from '@/utils/lightdm'
+
+// Stores are imported statically but only CALLED inside functions/callbacks
+// This is safe thanks to ES module live bindings (no circular dep issue at runtime)
+import { useAppStore } from '@/store/app'
+import { usePageStore } from '@/store/page'
 
 export const modKey = 'ctrl'
 export const languageMap: Record<string, string> = {
@@ -15,70 +18,44 @@ export const languageMap: Record<string, string> = {
   es: 'Español'
 }
 
-export function isDifferentRoute(to: RawLocation) {
-  const { app: { $route, $router } } = router
-  const resolve = $router.resolve(to)
-
-  return $route.fullPath !== resolve.href
+export function isDifferentRoute(to: RouteLocationRaw) {
+  const resolve = router.resolve(to)
+  return router.currentRoute.value.fullPath !== resolve.fullPath
 }
 
-export function Debounce(time = 500, options?: DebounceSettings): MethodDecorator {
-  const map = new Map<number, any>()
-
-  return function(_target, _propertyKey, descriptor: PropertyDescriptor) {
-    const method = descriptor.value
-
-    descriptor.value = function(...args: any[]) {
-      const _uid = (this as Vue & { _uid: number})._uid
-      const callback = map.get(_uid)
-
-      if (callback) {
-        return callback(...args)
-      }
-
-      const deb = debounce(method.bind(this), time, options)
-      map.set(_uid, deb)
-      return deb(...args)
-    }
-  }
+export function createDebounce<T extends (...args: any[]) => any>(fn: T, time = 500, options?: DebounceSettings) {
+  return debounce(fn, time, options) as unknown as T
 }
 
 export function parseQueryValue(value: string) {
   const isBoolean = ['false', 'true'].includes(value)
-  if (isBoolean) {
-    return value === 'true'
-  }
+  if (isBoolean) return value === 'true'
 
   const isNumber = !isNaN(parseFloat(value))
-  if (isNumber) {
-    return +value
-  }
+  if (isNumber) return +value
 
   return value
 }
 
 export function randomize(min: number, max: number) {
-  return (Math.random() * (max - min)) + min
+  return Math.random() * (max - min) + min
 }
 
 export function generateRandomSliderValue(input: AppInputThemeSlider) {
   const ignoreSliders = ['pxratio', 'brightness']
-
-  if (ignoreSliders.includes(input.name)) { return input.value }
+  if (ignoreSliders.includes(input.name)) return input.value
 
   const { min, max } = input.options
   const decimalPlaces = ((input.options.step + '').split('.')[1] || '').length
-  const newValue = +(randomize(min, max).toFixed(decimalPlaces))
-
-  return newValue
+  return +(randomize(min, max).toFixed(decimalPlaces))
 }
 
 export function generateRandomColor() {
-  return '#' + (Math.floor(Math.random() * 2 ** 24 - 1)).toString(16)
+  return '#' + Math.floor(Math.random() * 2 ** 24 - 1).toString(16)
 }
 
 export function getDesktopIcon(desktop = '') {
-  const iconMap = {
+  const iconMap: Record<string, RegExp> = {
     gnome: /gnome/,
     openbox: /openbox/,
     awesome: /awesome/,
@@ -91,68 +68,53 @@ export function getDesktopIcon(desktop = '') {
     kodi: /kodi/
   }
 
-  const [icon] = Object.entries(iconMap).find(([icon, regEx]) => {
-    return desktop.match(regEx)
-  }) || ['unknown']
-
+  const [icon] = Object.entries(iconMap).find(([, re]) => desktop.match(re)) || ['unknown']
   return icon
 }
 
 export function generateDesktopIcons() {
-  return AppModule.desktops.map((desktop) => {
-    const icon = getDesktopIcon(desktop.key)
-
-    return {
-      text: desktop.name,
-      value: desktop.key,
-      icon
-    }
-  })
+  return useAppStore().desktops.map((desktop) => ({
+    text: desktop.name,
+    value: desktop.key,
+    icon: getDesktopIcon(desktop.key)
+  }))
 }
 
 const systemActions = ['hibernate', 'restart', 'shutdown', 'suspend'] as const
-type systemActionsType = typeof systemActions[number]
+type systemActionsType = (typeof systemActions)[number]
 
 export function buildSystemDialog(callbackName: systemActionsType) {
-  return () => PageModule.openDialog({
-    title: `modals.${callbackName}.title`,
-    text: `modals.${callbackName}.text`,
-    actions: [
-      {
-        title: 'text.yes',
-        callback: LightdmHandler[callbackName]
-      },
-      {
-        title: 'text.no',
-        callback: PageModule.closeDialog
-      }
-    ]
-  })
+  return () => {
+    const pageStore = usePageStore()
+    pageStore.openDialog({
+      title: `modals.${callbackName}.title`,
+      text: `modals.${callbackName}.text`,
+      actions: [
+        { title: 'text.yes', callback: LightdmHandler[callbackName] },
+        { title: 'text.no', callback: () => pageStore.closeDialog() }
+      ]
+    })
+  }
 }
 
-export const systemActionsObject = systemActions.reduce((acc, action) => {
-  return {
-    ...acc,
-    [action]: buildSystemDialog(action)
-  }
-}, {} as Record<systemActionsType, () => void>)
+export const systemActionsObject = systemActions.reduce(
+  (acc, action) => ({ ...acc, [action]: buildSystemDialog(action) }),
+  {} as Record<systemActionsType, () => void>
+)
 
 export function preventDefault(event: Event, callback?: () => void): void {
   event.preventDefault()
-  callback && callback()
+  callback?.()
 }
 
 export function focusInputPassword() {
-  const inputPassword = document.querySelector('#password') as HTMLInputElement
-
-  if (inputPassword) {
-    inputPassword.focus()
-  }
+  const el = document.querySelector('#password') as HTMLInputElement | null
+  el?.focus()
 }
 
 export function stopPropagation(event: Event, callback?: () => void): void {
   event.stopPropagation()
-  callback && callback()
+  callback?.()
 }
 
 export function hasSomeParentClass(element: HTMLElement, tag: string): boolean {
@@ -160,20 +122,16 @@ export function hasSomeParentClass(element: HTMLElement, tag: string): boolean {
 }
 
 export function randomizeSettingsTheme(theme: AppTheme) {
-  const generateValueObject: Record<string, (input: any) => any> = {
+  const generateValue: Record<string, (input: any) => any> = {
     slider: (input: AppInputThemeSlider) => generateRandomSliderValue(input),
     checkbox: () => Math.random() > 0.5,
     color: () => generateRandomColor(),
     palette: (input: AppInputThemePalette) => Math.floor(randomize(0, (input.values?.length || 2) - 1))
   }
 
-  return theme.settings?.map(input => {
-    const changeValueFunction = generateValueObject[input.type]
-
-    if (changeValueFunction) {
-      input.value = changeValueFunction(input)
-    }
-
+  return theme.settings?.map((input) => {
+    const fn = generateValue[input.type]
+    if (fn) input.value = fn(input)
     return input
   })
 }
@@ -189,7 +147,7 @@ export const randomButton: AppInputButton = {
   type: 'button',
   icon: 'random',
   callback() {
-    AppModule.randomizeSettingsTheme()
+    useAppStore().randomizeSettingsTheme()
   }
 }
 
@@ -202,28 +160,11 @@ export function buildInputSlider({
   icon = 'time',
   changeOnUpdate = true
 } = {}): AppInputThemeSlider {
-  return {
-    name,
-    label: `input.${name}`,
-    value,
-    icon,
-    type: 'slider',
-    options: { changeOnUpdate, max, step, min }
-  }
+  return { name, label: `input.${name}`, value, icon, type: 'slider', options: { changeOnUpdate, max, step, min } }
 }
 
-export function buildInputColor({
-  name = 'active-color',
-  value = '#00CC99',
-  ...options
-} = {}): AppInputThemeGeneral {
-  return {
-    name,
-    value,
-    label: `input.${name}`,
-    type: 'color',
-    ...options
-  }
+export function buildInputColor({ name = 'active-color', value = '#00CC99', ...options } = {}): AppInputThemeGeneral {
+  return { name, value, label: `input.${name}`, type: 'color', ...options }
 }
 
 export const pxratio = () => buildInputSlider({ name: 'pxratio', icon: 'pxratio', min: 0.01, max: 1, value: 0.8 })

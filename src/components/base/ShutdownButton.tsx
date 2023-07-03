@@ -1,19 +1,18 @@
-import { Component, Vue } from 'vue-property-decorator'
-import { PageModule } from '@/store/page'
 import AppIcon from '@/components/app/AppIcon.vue'
-import ShutdownMenu from '@/components/base/ShutdownMenu'
+import { defineComponent } from 'vue'
 import { systemActionsObject } from '@/utils/helper'
+import ShutdownMenu from './ShutdownMenu'
 
-@Component({
-  components: { AppIcon, ShutdownMenu }
-})
-export default class ShutdownBlock extends Vue {
-  render() {
-    return <div class="shutdown-block active-block">
-      <ShutdownMenu />
-      <div class="shutdown-button active-interface" onClick={ systemActionsObject.shutdown }>
-        <AppIcon name="shutdown" />
+export default defineComponent({
+  name: 'ShutdownButton',
+  setup() {
+    return () => (
+      <div class="shutdown-block active-block">
+        <ShutdownMenu />
+        <div class="shutdown-button active-interface" onClick={systemActionsObject.shutdown}>
+          <AppIcon name="shutdown" />
+        </div>
       </div>
-    </div>
+    )
   }
-}
+})

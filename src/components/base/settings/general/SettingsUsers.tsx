@@ -1,31 +1,32 @@
-import { Component, Vue } from 'vue-property-decorator'
-import { AppModule } from '@/store/app'
 import AppIcon from '@/components/app/AppIcon.vue'
-import { LightdmUsers } from '@/models/lightdm'
+import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useAppStore } from '@/store/app'
+import type { LightdmUsers } from '@/models/lightdm'
 
-@Component({ components: { AppIcon } })
-export default class SettingsUsers extends Vue {
-  get users() {
-    return AppModule.users
+export default defineComponent({
+  name: 'SettingsUsers',
+  setup() {
+    const appStore = useAppStore()
+    const { t } = useI18n()
+
+    const buildUserBlock = (user: LightdmUsers) => {
+      const isActive = user.username === appStore.username
+      const activateUser = () => { appStore.username = user.username }
+
+      return (
+        <div onClick={activateUser} class={`settings-user-block ${isActive ? 'active' : ''}`}>
+          <AppIcon class="settings-user-image" name={user.image || 'user'} />
+          <p class="settings-user-name">{user.display_name}</p>
+        </div>
+      )
+    }
+
+    return () => (
+      <div>
+        <h2 class="title mb-1">{t('settings.users')}</h2>
+        <div class="users-grid">{appStore.users.map(buildUserBlock)}</div>
+      </div>
+    )
   }
-
-  buildUserBlock(user: LightdmUsers) {
-    const isActive = user.username === AppModule.username
-    const activateUser = () => AppModule.SAVE_STATE_APP({ key: 'username', value: user.username })
-
-    return <div
-      onClick={ activateUser }
-      class={`settings-user-block ${isActive ? 'active' : ''}`}
-    >
-      <AppIcon class='settings-user-image' name={ user.image || 'user' } />
-      <p class="settings-user-name"> { user.display_name } </p>
-    </div>
-  }
-
-  render() {
-    return <div>
-      <h2 class="title mb-1"> { this.$t('settings.users') } </h2>
-      <div class="users-grid"> { this.users.map(this.buildUserBlock) } </div>
-    </div>
-  }
-}
+})

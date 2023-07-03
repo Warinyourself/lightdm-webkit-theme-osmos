@@ -1,108 +1,107 @@
-import { Component, Vue } from 'vue-property-decorator'
-import AppSelector, { AppSelectorProps as SProps } from '@/components/app/AppSelector'
+import { defineComponent, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useAppStore } from '@/store/app'
+import { usePageStore } from '@/store/page'
+import { useRouter } from 'vue-router'
+import AppSelector from '@/components/app/AppSelector'
 import AppSlider from '@/components/app/AppSlider'
-import { Debounce, generateDesktopIcons, languageMap, setCSSVariable } from '@/utils/helper'
-import { AppModule } from '@/store/app'
-import { PageModule } from '@/store/page'
+import { createDebounce, generateDesktopIcons, languageMap, setCSSVariable } from '@/utils/helper'
 import { osList } from '@/utils/constant'
-import { LoginPosition } from '@/models/page'
-import { AppInputThemeSlider, AppInputThemeValue } from '@/models/app'
+import type { LoginPosition } from '@/models/page'
 
-@Component
-export default class SettingsSelectors extends Vue {
-  get isViewThemeOnly() {
-    return AppModule.viewThemeOnly
-  }
+export default defineComponent({
+  name: 'SettingsSelectors',
+  setup() {
+    const appStore = useAppStore()
+    const pageStore = usePageStore()
+    const { t, locale } = useI18n()
+    const router = useRouter()
 
-  get languageList() {
-    return PageModule.languages.map((language) => ({
-      text: languageMap[language],
-      value: language
+    const isViewThemeOnly = computed(() => appStore.viewThemeOnly)
+    const isSupportFullApi = computed(() => appStore.isSupportFullApi)
+
+    const languageList = computed(() =>
+      pageStore.languages.map((lang) => ({ text: languageMap[lang] || lang, value: lang }))
+    )
+
+    const menuPositionItems = computed(() =>
+      ['top', 'left', 'right', 'bottom', 'center'].map((word) => ({
+        value: word,
+        text: t(`settings.login-position.${word}`)
+      }))
+    )
+
+    const menuPositionValue = computed(() => ({
+      value: pageStore.loginPosition,
+      text: t(`settings.login-position.${pageStore.loginPosition}`)
     }))
-  }
 
-  get menuPositionItems() {
-    const positions = ['top', 'left', 'right', 'bottom', 'center']
-    return positions.map(word => ({
-      value: word,
-      text: this.$t(`settings.login-position.${word}`).toString()
-    }))
-  }
-
-  get menuPositionValue() {
-    return {
-      value: PageModule.loginPosition,
-      text: this.$t(`settings.login-position.${PageModule.loginPosition}`).toString()
+    const changeLanguage = (value: string) => {
+      locale.value = value
+      localStorage.setItem('language', value)
+      pageStore.language = value
     }
-  }
 
-  get isSupportFullApi() {
-    return AppModule.isSupportFullApi
-  }
+    const changeLoginPosition = (position: string) => {
+      localStorage.setItem('loginPosition', position)
+      pageStore.loginPosition = position as LoginPosition
+    }
 
-  get zoomSlider() {
-    return this.buildSlider({
-      label: this.$t('input.zoom-interface').toString(),
-      value: AppModule.zoom,
-      options: {
-        min: 0.5,
-        max: 2,
-        step: 0.1
-      },
-      callback: this.updateZoom
-    })
-  }
+    const changeDesktop = (value: string) => {
+      appStore.saveStateApp({ key: 'desktop', value })
+    }
 
-  changeLanguage(value: string) {
-    this.$i18n.locale = value
-    localStorage.setItem('language', value)
-    PageModule.SET_STATE_PAGE({ key: 'language', value })
-  }
+    const changeOs = (value: string) => {
+      appStore.saveStateApp({ key: 'currentOs', value })
+    }
 
-  changeLoginPosition(position: string) {
-    localStorage.setItem('loginPosition', position)
-    PageModule.SET_STATE_PAGE({ key: 'loginPosition', value: position as LoginPosition })
-  }
+    const updateZoom = createDebounce((value: number) => {
+      setCSSVariable('--zoom', value + '' || '1')
+      appStore.zoom = parseFloat(value + '')
+    }, 100)
 
-  changeDesktop(value: string) {
-    AppModule.SAVE_STATE_APP({ key: 'desktop', value })
+    return () => (
+      <div class="grid-two">
+        <h2 class="title">{t('settings.title')}</h2>
+        <AppSelector
+          label={t('settings.choice-language')}
+          items={languageList.value}
+          modelValue={pageStore.language}
+          onUpdate:modelValue={changeLanguage}
+        />
+        <AppSelector
+          label={t('settings.login-position.about')}
+          items={menuPositionItems.value}
+          modelValue={menuPositionValue.value}
+          onUpdate:modelValue={changeLoginPosition}
+        />
+        {!isViewThemeOnly.value && (
+          <AppSelector
+            label={t('settings.choice-desktop')}
+            items={generateDesktopIcons()}
+            modelValue={appStore.currentDesktop?.key}
+            onUpdate:modelValue={changeDesktop}
+          />
+        )}
+        {!isViewThemeOnly.value && (
+          <AppSelector
+            label={t('settings.choice-os')}
+            items={osList}
+            modelValue={appStore.currentOs}
+            onUpdate:modelValue={changeOs}
+          />
+        )}
+        {!isViewThemeOnly.value && isSupportFullApi.value && (
+          <AppSlider
+            label={t('input.zoom-interface')}
+            from={0.5}
+            to={2}
+            step={0.1}
+            modelValue={appStore.zoom}
+            onUpdate:modelValue={updateZoom}
+          />
+        )}
+      </div>
+    )
   }
-
-  changeOs(value: string) {
-    AppModule.SAVE_STATE_APP({ key: 'currentOs', value })
-  }
-
-  buildSelector(labelI18n: SProps['label'], items: SProps['items'], value: SProps['value'], callback: (value: string) => void) {
-    const label = this.$t(`settings.${labelI18n}`)
-    return <AppSelector
-      label={ label }
-      items={ items }
-      value={ value }
-      onInput={ callback }
-    />
-  }
-
-  buildSlider(input: Omit<AppInputThemeSlider, 'type' | 'name' | 'icon'>) {
-    const { label, value, callback, options: { step, min: from, max: to } } = input
-    const props = { to, step, from, label, value }
-
-    return <AppSlider {...{ props, on: { input: callback } } } />
-  }
-
-  @Debounce(100)
-  updateZoom(value: AppInputThemeValue) {
-    setCSSVariable('--zoom', value + '' || '1')
-    AppModule.SET_STATE_APP({ key: 'zoom', value: parseFloat(value + '') })
-  }
-
-  render() {
-    return <div class="grid-two">
-      <h2 class="title"> { this.$t('settings.title') } </h2>
-      { this.buildSelector('choice-language', this.languageList, PageModule.language, this.changeLanguage) }
-      { this.buildSelector('login-position.about', this.menuPositionItems, this.menuPositionValue, this.changeLoginPosition) }
-      { !this.isViewThemeOnly && this.buildSelector('choice-desktop', generateDesktopIcons(), AppModule.currentDesktop?.key, this.changeDesktop) }
-      { !this.isViewThemeOnly && this.buildSelector('choice-os', osList, AppModule.currentOs, this.changeOs) }
-      { !this.isViewThemeOnly && this.isSupportFullApi && this.zoomSlider }
-    </div>
-  }
-}
+})

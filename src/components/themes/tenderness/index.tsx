@@ -1,53 +1,48 @@
-import { Component, Vue } from 'vue-property-decorator'
+import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import GL from '@/utils/gl'
-import { AppModule } from '@/store/app'
+import { useAppStore } from '@/store/app'
+import fragmentShader from './fragment.glsl'
+import vertexShader from './vertex.glsl'
+
 let render: GL
 
-@Component
-export default class TendernessTheme extends Vue {
-  get animationSpeed() {
-    return AppModule.getThemeInput('animation-speed')?.value as number || 45
-  }
+export default defineComponent({
+  name: 'TendernessTheme',
+  setup() {
+    const appStore = useAppStore()
+    const canvasRef = ref<HTMLCanvasElement | null>(null)
 
-  get pxratio() {
-    return AppModule.getThemeInput('pxratio')?.value as number || 0.8
-  }
+    const animationSpeed = computed(() => appStore.getThemeInput('animation-speed')?.value as number || 45)
+    const pxratio = computed(() => appStore.getThemeInput('pxratio')?.value as number || 0.8)
 
-  mounted() {
-    const vm = this
-
-    render = new GL(
-      this.$refs.canvas as HTMLCanvasElement,
-      document.querySelector('script#shader-vs')?.textContent || '',
-      document.querySelector('script#shader-fs')?.textContent || '',
-      window.innerWidth,
-      window.innerHeight,
-      {
-        renderOptions: {
-          externalTimeUse: true
-        },
-        renderHook() {
-          const gl = this as unknown as GL
-
-          gl.time += vm.animationSpeed / 500
-          gl.pxratio = vm.pxratio
-          gl.ctx.uniform1f(gl.programInfo.uniforms.time, gl.time)
+    onMounted(() => {
+      render = new GL(
+        canvasRef.value!,
+        vertexShader,
+        fragmentShader,
+        window.innerWidth,
+        window.innerHeight,
+        {
+          renderOptions: { externalTimeUse: true },
+          renderHook() {
+            const gl = this as unknown as GL
+            gl.time += animationSpeed.value / 500
+            gl.pxratio = pxratio.value
+            gl.ctx.uniform1f(gl.programInfo.uniforms.time, gl.time)
+          }
         }
-      }
+      )
+      render.running = true
+    })
+
+    onBeforeUnmount(() => {
+      render.running = false
+    })
+
+    return () => (
+      <div>
+        <canvas ref={canvasRef} />
+      </div>
     )
-
-    render.running = true
   }
-
-  beforeDestroy() {
-    render.running = false
-  }
-
-  render() {
-    return <div>
-      <canvas ref='canvas' />
-      <script id="shader-fs" type="x-shader/x-fragment"> { require('./fragment.glsl') } </script>
-      <script id="shader-vs" type="x-shader/x-vertex"> { require('./vertex.glsl') } </script>
-    </div>
-  }
-}
+})

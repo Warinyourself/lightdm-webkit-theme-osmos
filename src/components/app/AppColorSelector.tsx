@@ -1,33 +1,28 @@
-import { Component, Prop, Vue } from 'vue-property-decorator'
-import { Chrome } from 'vue-color'
+import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-@Component({
-  components: { Chrome }
+export default defineComponent({
+  name: 'AppColorSelector',
+
+  props: {
+    modelValue: { type: String, default: '#fff' },
+    label: { type: String, default: '' }
+  },
+
+  emits: ['update:modelValue'],
+
+  setup(props, { emit }) {
+    const { t } = useI18n()
+
+    return () => (
+      <div class="color-selector">
+        <p>{t(props.label)}</p>
+        <input
+          type="color"
+          value={props.modelValue}
+          onInput={(e) => emit('update:modelValue', (e.target as HTMLInputElement).value)}
+        />
+      </div>
+    )
+  }
 })
-export default class AppColorSelector extends Vue {
-  @Prop({ type: String, default: '#fff' }) value!: string
-  @Prop({ default: '' }) label!: string
-
-  changeState(event: Event) {
-    event.stopPropagation()
-
-    this.$emit('input', !this.value)
-  }
-
-  render() {
-    return <div class="color-selector">
-      <p> { this.$t(this.label) } </p>
-      <Chrome
-        { ...{
-          props: {
-            disableAlpha: true,
-            disableFields: true,
-            value: this.value
-          },
-          on: this.$listeners
-        }}
-      >
-      </Chrome>
-    </div>
-  }
-}
