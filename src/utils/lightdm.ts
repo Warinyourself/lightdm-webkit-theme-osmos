@@ -280,9 +280,9 @@ class LightdmNode extends LightdmWebkit {
     window.lightdm?.show_prompt?.connect((_message, type) => {
       console.log({ _message, type })
       if (!window.lightdm) return
-      if (type === 0) {
+      if (type === 0 && this._username !== undefined) {
         window.lightdm.respond(this._username)
-      } else if (type === 1 && window.lightdm.in_authentication) {
+      } else if (type === 1 && window.lightdm.in_authentication && this._password !== undefined) {
         window.lightdm.respond(this._password)
       }
     })
