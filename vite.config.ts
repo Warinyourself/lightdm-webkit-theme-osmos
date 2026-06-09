@@ -3,6 +3,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import glsl from 'vite-plugin-glsl'
+import svgLoader from 'vite-svg-loader'
 
 const isGithubView = process.env.VITE_APP_VIEW === 'github'
 
@@ -11,7 +12,8 @@ export default defineConfig({
   plugins: [
     vue(),
     vueJsx(),
-    glsl()
+    glsl(),
+    svgLoader()
   ],
   resolve: {
     alias: {

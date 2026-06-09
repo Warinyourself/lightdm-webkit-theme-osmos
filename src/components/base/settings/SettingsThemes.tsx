@@ -17,7 +17,7 @@ export default defineComponent({
 
     return () => (
       <div class="user-settings-themes">
-        {/* {themes.value.map((theme) => {
+        {themes.value.map((theme) => {
           const isActive = theme.name === activeTheme.value.name
           return (
             <img
@@ -26,7 +26,7 @@ export default defineComponent({
               src={getThemeImage(theme.name)}
             />
           )
-        })} */}
+        })}
       </div>
     )
   }

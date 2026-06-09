@@ -20,6 +20,7 @@ export default defineComponent({
     const handleKeyup = (event: KeyboardEvent) => {
       appStore.password = (event.target as HTMLInputElement)?.value || ''
     }
+    console.log({ appStore})
 
     return () => (
       <div class="user-input">
