@@ -34,7 +34,7 @@ export default defineComponent({
         {!isViewThemeOnly.value && <SettingsUsers />}
         <SettingsHotkeys />
         <div class="help-block">
-          <AppButton onClick={resetSettings} block class="mb-2">
+          <AppButton onClick={resetSettings}>
             {t('settings.reset-settings')}
           </AppButton>
         </div>
