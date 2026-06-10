@@ -1,4 +1,4 @@
-import { defineComponent, computed, resolveComponent, h } from 'vue'
+import { defineComponent, computed, h } from 'vue'
 import { useAppStore } from '@/store/app'
 
 import flow from '@/components/themes/flow'
@@ -9,10 +9,6 @@ import destruction from '@/components/themes/destruction'
 import tenderness from '@/components/themes/tenderness'
 import planet from '@/components/themes/planet'
 import random from '@/components/themes/random'
-import infinity from '@/components/themes/infinity'
-import osmos from '@/components/themes/osmos'
-import space from '@/components/themes/space'
-import suprematism from '@/components/themes/suprematism'
 
 const themeMap: Record<string, any> = {
   flow,
@@ -23,10 +19,6 @@ const themeMap: Record<string, any> = {
   tenderness,
   planet,
   random,
-  infinity,
-  osmos,
-  space,
-  suprematism
 }
 
 export default defineComponent({

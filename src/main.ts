@@ -8,7 +8,6 @@ import { registerComponents } from '@/plugins/components'
 import '@/utils/lightdm'
 
 import './style/index.styl'
-import 'css-doodle'
 
 import ru from '@/locales/ru.json'
 import en from '@/locales/en.json'

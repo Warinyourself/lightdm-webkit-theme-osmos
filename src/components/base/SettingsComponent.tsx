@@ -3,7 +3,6 @@ import { defineComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/store/app'
 import { usePageStore } from '@/store/page'
-import UserAvatar from './UserAvatar'
 import SettingsView from './settings/SettingsView'
 
 export default defineComponent({

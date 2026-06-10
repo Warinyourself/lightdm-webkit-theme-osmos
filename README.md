@@ -25,35 +25,6 @@ sudo sed -i 's/^webkit_theme\s*=\s*\(.*\)/webkit_theme = osmos/g' /etc/lightdm/l
 
 <br />
 
-## Control brightness and battery:
-![image](https://user-images.githubusercontent.com/83131232/206694253-865022cd-5406-45f2-9bf1-6307816adcf7.png)
-
-If you want to control brightness and battery - install [node-greeter](https://github.com/JezerM/nody-greeter#installation).
-
-Set `greeter-session = nody-greeter` in `/etc/lightdm/lightdm.conf`:
-``` sh
-sudo sed -i 's/^\(#\?greeter\)-session\s*=\s*\(.*\)/greeter-session = nody-greeter/g' /etc/lightdm/lightdm.conf
-```
-
-Then edit `/etc/lightdm/web-greeter.yml` to set `theme: osmos`:
-
-``` sh
-sudo sed -i 's/\stheme:\s*\(.*\)/ theme: osmos/g' /etc/lightdm/web-greeter.yml
-```
-
-Link webkit theme with nody greeter themes:
-```sh
-ln -s /usr/share/lightdm-webkit/themes/osmos /usr/share/web-greeter/themes/osmos
-```
-
-To control battery install the [acpid](https://archlinux.org/packages/?name=acpid) package and enable/start acpid.service.
-``` sh
-sudo systemctl enable acpid
-sudo systemctl start acpid
-```
-
-<br />
-
 ## Check the themes:
 [![Random](https://user-images.githubusercontent.com/83131232/153943224-2264f687-7c81-4d06-8424-3f31f8aefd66.png)](https://warinyourself.github.io/lightdm-webkit-theme-osmos/?pxratio=0.8&animation-speed=5&symmetry=0.01&thickness=0.1&hue=360&brightness=1&invert=false&blur=false&no-transition=false&show-framerate=false&only-ui=true&themeName=Random)
 
@@ -71,13 +42,4 @@ sudo systemctl start acpid
 
 [![Flow](https://user-images.githubusercontent.com/83131232/153943203-cfa24684-c94f-4763-945d-3875cd2f0a69.png)](https://warinyourself.github.io/lightdm-webkit-theme-osmos/?pxratio=0.8&animation-speed=10&size=1&blur=false&no-transition=false&show-framerate=false&only-ui=false&themeName=Flow)
 
-[![Infinity](https://user-images.githubusercontent.com/83131232/153943210-e4cc3bc3-3ade-4323-a216-acf787b61d76.png)](https://warinyourself.github.io/lightdm-webkit-theme-osmos/?palette=3&size=11&amount=50&animation-speed=20&blur=false&no-transition=false&show-framerate=false&only-ui=true&themeName=Infinity)
-
 </br>
-
-## ROADMAP
-- Integrates with nody-greeter [x]
-- Add possibility to guest login []
-- Add possibility to pick the wallpaper []
-- Add zoom slider (for hight DPI screens) [x]
-- Add CHANGELOG []
