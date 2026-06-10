@@ -25,7 +25,7 @@ export const useAppStore = defineStore('app', {
     generateRandomThemes: false,
     themes: AppThemes as AppTheme[],
     bodyClass: {
-      blur: false,
+      blur: true,
       'no-transition': false,
       'show-framerate': false,
       'only-ui': false

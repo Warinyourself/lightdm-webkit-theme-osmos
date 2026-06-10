@@ -15,7 +15,7 @@
   --glass-bg-active: rgba(255, 255, 255, 0.14)
   --glass-border: rgba(255, 255, 255, 0.12)
   --glass-border-active: rgba(255, 255, 255, 0.3)
-  --glass-blur: blur(20px) saturate(180%)
+  --glass-blur: none
   --glass-shadow: 0 4px 20px rgba(0, 0, 0, 0.2)
   --glass-glow: 0 0 16px rgba(255, 255, 255, 0.35)
   --gap: 12px
@@ -36,8 +36,7 @@
 
 #app
   &.blur
-    .active-interface
-      backdrop-filter blur(10px)
+    --glass-blur: blur(20px) saturate(180%)
   &.no-transition
     *
       animation-duration 0.01ms !important
