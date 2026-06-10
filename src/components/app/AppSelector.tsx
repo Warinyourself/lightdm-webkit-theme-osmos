@@ -1,4 +1,5 @@
 import AppIcon from '@/components/app/AppIcon.vue'
+import { ArrowBigUp } from '@lucide/vue'
 import { defineComponent, computed, ref, type PropType } from 'vue'
 import { usePageStore } from '@/store/page'
 import type { AppMenuItem } from '@/models/page'
@@ -75,7 +76,7 @@ export default defineComponent({
             {selectorIcon}
             <p class="selector-label-text">{currentValueLabel.value || props.label}</p>
           </h2>
-          <AppIcon name="arrow" class="icon selector-arrow" />
+          <ArrowBigUp class="icon selector-arrow" />
         </div>
       )
     }

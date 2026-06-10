@@ -1,4 +1,4 @@
-import AppIcon from '@/components/app/AppIcon.vue'
+import { Settings, Eye, EyeOff, ArrowRight } from '@lucide/vue'
 import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/store/app'
@@ -20,11 +20,10 @@ export default defineComponent({
     const handleKeyup = (event: KeyboardEvent) => {
       appStore.password = (event.target as HTMLInputElement)?.value || ''
     }
-    console.log({ appStore})
-
+ 
     return () => (
       <div class="user-input">
-        <AppIcon class="settings-button" name="settings" onClick={openSettings} />
+        <Settings class="settings-button" onClick={openSettings} />
 
         <input
           id="password"
@@ -38,14 +37,12 @@ export default defineComponent({
           value={appStore.password}
         />
 
-        <AppIcon
-          class={['icon icon-eye', { hide: !appStore.showPassword }]}
-          name="eye"
-          onClick={() => appStore.toggleShowPassword()}
-        />
+        {appStore.showPassword
+          ? <Eye class="icon icon-eye" onClick={() => appStore.toggleShowPassword()} />
+          : <EyeOff class="icon icon-eye" onClick={() => appStore.toggleShowPassword()} />}
 
         <button class="user-input-login" onClick={() => appStore.login()}>
-          <AppIcon name="arrow" />
+          <ArrowRight />
         </button>
       </div>
     )

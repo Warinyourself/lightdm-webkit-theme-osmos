@@ -57,7 +57,6 @@ export const useAppStore = defineStore('app', {
       desktop: state.desktop,
       username: state.username,
       bodyClass: state.bodyClass,
-      currentOs: state.currentOs,
       currentTheme: state.currentTheme,
       defaultColor: state.defaultColor,
       generateRandomThemes: state.generateRandomThemes
@@ -66,7 +65,6 @@ export const useAppStore = defineStore('app', {
     personalInfo: (state) => ({
       username: state.username,
       currentTheme: state.currentTheme,
-      currentOs: state.currentOs,
       desktop: state.desktop,
       version: state.version,
       defaultColor: state.defaultColor

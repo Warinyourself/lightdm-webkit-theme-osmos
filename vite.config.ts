@@ -13,7 +13,20 @@ export default defineConfig({
     vue(),
     vueJsx(),
     glsl(),
-    svgLoader()
+    svgLoader({
+      svgoConfig: {
+        plugins: [
+          {
+            name: 'preset-default',
+            params: {
+              overrides: {
+                removeViewBox: false
+              }
+            }
+          }
+        ]
+      }
+    })
   ],
   resolve: {
     alias: {

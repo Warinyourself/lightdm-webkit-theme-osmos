@@ -1,4 +1,4 @@
-import AppIcon from '@/components/app/AppIcon.vue'
+import { CircleX } from '@lucide/vue'
 import { defineComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/store/app'
@@ -46,8 +46,7 @@ export default defineComponent({
     return () => (
       <div class="block-settings login-content-settings">
         <div class="login-view active-interface">
-          <AppIcon onClick={openLogin} name="collapse" class="system-icon" />
-          {!isViewThemeOnly.value && <UserAvatar />}
+          <CircleX onClick={openLogin} class="system-icon" />
           <div class="user-settings-tabs">{tabs.value.map(generateTab)}</div>
           <SettingsView />
         </div>

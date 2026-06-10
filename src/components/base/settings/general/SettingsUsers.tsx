@@ -1,4 +1,4 @@
-import AppIcon from '@/components/app/AppIcon.vue'
+import { User } from '@lucide/vue'
 import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/store/app'
@@ -16,7 +16,9 @@ export default defineComponent({
 
       return (
         <div onClick={activateUser} class={`settings-user-block ${isActive ? 'active' : ''}`}>
-          <AppIcon class="settings-user-image" name={user.image || 'user'} />
+          {user.image
+            ? <div class="settings-user-image" style={`background-image: url(${user.image})`} />
+            : <User class="settings-user-image" />}
           <p class="settings-user-name">{user.display_name}</p>
         </div>
       )

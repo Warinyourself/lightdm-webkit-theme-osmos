@@ -1,7 +1,9 @@
-import AppIcon from '@/components/app/AppIcon.vue'
+import { RotateCw, Moon, Snowflake } from '@lucide/vue'
 import { defineComponent, computed } from 'vue'
 import { systemActionsObject } from '@/utils/helper'
 import { LightdmHandler } from '@/utils/lightdm'
+
+const icons = { restart: RotateCw, suspend: Moon, hibernate: Snowflake }
 
 export default defineComponent({
   name: 'ShutdownMenu',
@@ -16,11 +18,14 @@ export default defineComponent({
 
     return () => (
       <div class="shutdown-menu active-interface">
-        {actions.value.map((action) => (
-          <div class="shutdown-item" onClick={action.callback}>
-            <AppIcon name={action.icon} />
-          </div>
-        ))}
+        {actions.value.map((action) => {
+          const Icon = icons[action.icon as keyof typeof icons]
+          return (
+            <div class="shutdown-item" onClick={action.callback}>
+              <Icon />
+            </div>
+          )
+        })}
       </div>
     )
   }

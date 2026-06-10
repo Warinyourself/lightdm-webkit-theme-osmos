@@ -1,5 +1,5 @@
 import { defineComponent, computed, h } from 'vue'
-import AppIcon from '@/components/app/AppIcon.vue'
+import { LoaderCircle } from '@lucide/vue'
 
 const prefix = 'app-button'
 
@@ -54,7 +54,7 @@ export default defineComponent({
       const content = <span class={`${prefix}__content`}>{slots.default?.()}</span>
       const loader = props.loading && (
         <span class={`${prefix}__loader`}>
-          {slots.loader?.() || <AppIcon name="loader" />}
+          {slots.loader?.() || <LoaderCircle class="spin" />}
         </span>
       )
 

@@ -1,4 +1,4 @@
-import AppIcon from '@/components/app/AppIcon.vue'
+import { Check } from '@lucide/vue'
 import { defineComponent, computed } from 'vue'
 
 export default defineComponent({
@@ -24,7 +24,7 @@ export default defineComponent({
       <label class={classes.value}>
         <div class="checkbox-control">
           <div class="checkbox-control-box">
-            <AppIcon name="checkbox" />
+            <Check />
           </div>
           <input
             type="checkbox"

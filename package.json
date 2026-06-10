@@ -11,6 +11,7 @@
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
+    "@lucide/vue": "^1.17.0",
     "css-doodle": "^0.51.0",
     "lodash": "^4.18.1",
     "mousetrap": "^1.6.5",

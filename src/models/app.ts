@@ -1,7 +1,6 @@
 export interface AppSettings {
   zoom: number;
   currentTheme: string;
-  currentOs: string;
   username: string;
   desktop: string;
   defaultColor: string;

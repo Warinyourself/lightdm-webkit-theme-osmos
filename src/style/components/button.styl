@@ -22,6 +22,15 @@
   flex: 1 0 auto;
   width: 100%;
 
+.app-button__loader
+  display flex
+  .spin
+    animation spin 0.8s linear infinite
+
+@keyframes spin
+  to
+    transform rotate(360deg)
+
 .app-button--fab
   padding 4px
   border-radius 12px
