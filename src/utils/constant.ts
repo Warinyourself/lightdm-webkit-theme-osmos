@@ -6,7 +6,6 @@ import {
   brightnessSlider,
   buildInputSlider,
   buildInvertCheckbox,
-  setCSSVariable
 } from './helper'
 
 const background = '#22233D'
