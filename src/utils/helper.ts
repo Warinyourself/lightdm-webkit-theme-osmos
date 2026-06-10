@@ -1,5 +1,4 @@
 import type { AppInputButton, AppInputThemeGeneral, AppInputThemePalette, AppInputThemeSlider, AppTheme } from '@/models/app'
-import { debounce, type DebounceSettings } from 'lodash'
 import type { RouteLocationRaw } from 'vue-router'
 import router from '@/router'
 import { LightdmHandler } from '@/utils/lightdm'
@@ -23,8 +22,12 @@ export function isDifferentRoute(to: RouteLocationRaw) {
   return router.currentRoute.value.fullPath !== resolve.fullPath
 }
 
-export function createDebounce<T extends (...args: any[]) => any>(fn: T, time = 500, options?: DebounceSettings) {
-  return debounce(fn, time, options) as unknown as T
+export function debounce<T extends (...args: any[]) => void>(fn: T, wait = 500) {
+  let timeout: ReturnType<typeof setTimeout>
+  return ((...args: Parameters<T>) => {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => fn(...args), wait)
+  }) as T
 }
 
 export function parseQueryValue(value: string) {

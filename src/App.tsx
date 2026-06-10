@@ -1,9 +1,8 @@
 import { defineComponent, watch } from 'vue'
-import { debounce } from 'lodash'
 import Mousetrap from 'mousetrap'
 import { useAppStore } from '@/store/app'
 import { usePageStore } from '@/store/page'
-import { focusInputPassword, setCSSVariable } from '@/utils/helper'
+import { debounce, focusInputPassword, setCSSVariable } from '@/utils/helper'
 import { hotkeys } from '@/utils/hotkeys'
 
 export default defineComponent({

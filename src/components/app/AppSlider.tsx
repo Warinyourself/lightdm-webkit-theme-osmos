@@ -1,7 +1,7 @@
 import { defineComponent, onMounted, onUpdated, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import noUiSlider from 'nouislider'
-import { debounce } from 'lodash'
+import { debounce } from '@/utils/helper'
 
 export default defineComponent({
   name: 'AppSlider',

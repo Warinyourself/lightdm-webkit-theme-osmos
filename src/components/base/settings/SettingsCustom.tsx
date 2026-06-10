@@ -7,7 +7,7 @@ import AppCheckbox from '@/components/app/AppCheckbox'
 import AppSelector from '@/components/app/AppSelector'
 import AppColorSelector from '@/components/app/AppColorSelector'
 import AppPaletteSelector from '@/components/app/AppPaletteSelector'
-import { createDebounce } from '@/utils/helper'
+import { debounce } from '@/utils/helper'
 import type {
   AppInputButton,
   AppInputColor,
@@ -24,7 +24,7 @@ export default defineComponent({
     const { t } = useI18n()
 
     const inputs = computed(() => appStore.activeTheme?.settings || [])
-    const debouncedSync = createDebounce(() => appStore.syncStoreWithQuery(), 300)
+    const debouncedSync = debounce(() => appStore.syncStoreWithQuery(), 300)
 
     onUpdated(() => debouncedSync())
 
