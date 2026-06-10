@@ -1,4 +1,4 @@
-import { CircleX } from '@lucide/vue'
+import { CircleX, Palette, SlidersHorizontal, Settings } from '@lucide/vue'
 import { defineComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/store/app'
@@ -12,13 +12,15 @@ export default defineComponent({
     const pageStore = usePageStore()
     const { t } = useI18n()
 
-    const isViewThemeOnly = computed(() => appStore.viewThemeOnly)
     const mainTabIndex = computed(() => pageStore.mainTabIndex)
 
     const tabs = computed(() => {
-      const list = [t('settings.choice-themes'), t('settings.title')]
+      const list = [
+        { label: t('settings.choice-themes'), icon: Palette },
+        { label: t('settings.title'), icon: Settings }
+      ]
       if (appStore.activeTheme?.settings?.length !== undefined) {
-        list.splice(1, 0, t('settings.customize-theme'))
+        list.splice(1, 0, { label: t('settings.customize-theme'), icon: SlidersHorizontal })
       }
       return list
     })
@@ -33,11 +35,13 @@ export default defineComponent({
       pageStore.mainTabIndex = index
     }
 
-    const generateTab = (tab: string, index: number) => {
+    const generateTab = (tab: { label: string, icon: typeof Palette }, index: number) => {
       const classes = `user-settings-tab ${mainTabIndex.value === index ? 'active' : ''}`
+      const Icon = tab.icon
       return (
         <div class={classes} onClick={() => activateTab(index)}>
-          {tab}
+          <Icon class="user-settings-tab-icon" />
+          <span>{tab.label}</span>
         </div>
       )
     }
