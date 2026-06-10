@@ -5,7 +5,6 @@
 @import './components/index.styl'
 
 :root
-  --color-active #FA076C
   --color-bg #22233D
   --color-green #91e60a
   --color-blue #04ded4
@@ -33,7 +32,7 @@
 
 /* Handle */
 ::-webkit-scrollbar-thumb
-  background var(--color-active)
+  background var(--glass-border-active)
 
 #app
   &.blur
@@ -45,3 +44,4 @@
       animation-iteration-count 1 !important
       transition-duration 0.01ms !important
       scroll-behavior auto !important
+

@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import type { RouteLocationNormalized } from 'vue-router'
 import router from '@/router'
 
-import type { AppTheme, AppSettings, AppInputTheme, AppInputThemeValue, AppInputThemeGeneral } from '@/models/app'
+import type { AppTheme, AppSettings, AppInputTheme, AppInputThemeValue } from '@/models/app'
 import type { LightdmSession, LightdmUsers } from '@/models/lightdm'
 
 import { isDifferentRoute, parseQueryValue, randomize, randomizeSettingsTheme, setCSSVariable } from '@/utils/helper'
@@ -130,14 +130,6 @@ export const useAppStore = defineStore('app', {
 
     syncThemeColor() {
       const { color } = this.activeTheme
-      let activeColor = color.active
-
-      if (this.activeTheme.settings) {
-        const colorInput = this.activeTheme.settings.find(({ name }) => name === 'activeColor') as AppInputThemeGeneral
-        if (colorInput) activeColor = colorInput.value + ''
-      }
-
-      setCSSVariable('--color-active', activeColor)
       setCSSVariable('--color-bg', color.background)
     },
 
