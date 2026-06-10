@@ -1,17 +1,27 @@
 .selector
-  padding 4px 8px
-  border-radius 4px
+  padding 8px 14px
+  border-radius 14px
   max-height 36px
-  border 1px solid var(--color-unfocus)
+  background var(--glass-bg)
+  border 1px solid var(--glass-border)
+  backdrop-filter var(--glass-blur)
+  -webkit-backdrop-filter var(--glass-blur)
+  box-shadow var(--glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.08)
   color var(--color-unfocus)
   display flex
   align-items center
   justify-content space-between
   cursor pointer
+  transition .25s
   &:hover
-    border-color rgba(255, 255, 255, .8)
+    color white
+    background var(--glass-bg-active)
+    border-color var(--glass-border-active)
   &.active
-    border-color white
+    color white
+    background var(--glass-bg-active)
+    border-color var(--glass-border-active)
+    box-shadow var(--glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.08), var(--glass-glow)
     .selector-arrow
       transform rotate(0deg)
 

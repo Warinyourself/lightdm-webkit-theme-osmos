@@ -17,18 +17,23 @@
 .menu-list
   position absolute
   z-index 10
-  border-radius 7px
+  border-radius 14px
   overflow hidden
+  background var(--glass-bg-active)
+  border 1px solid var(--glass-border)
+  backdrop-filter var(--glass-blur)
+  -webkit-backdrop-filter var(--glass-blur)
+  box-shadow var(--glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.08)
   & .menu-list-item
     display flex
     align-items center
     justify-content space-between
-    padding 4px 5px
+    padding 8px 12px
     width 100%
-    background rgba(0, 0, 0, .4)
+    transition .15s
     &:hover
       text-shadow 0 0 7px currentColor
-      background rgba(0, 0, 0, .5)
+      background rgba(255, 255, 255, 0.12)
 
 .menu-list-top
   top 0
