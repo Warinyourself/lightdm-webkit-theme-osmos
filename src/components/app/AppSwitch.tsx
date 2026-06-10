@@ -1,8 +1,7 @@
-import { Check } from '@lucide/vue'
 import { defineComponent, computed } from 'vue'
 
 export default defineComponent({
-  name: 'AppCheckbox',
+  name: 'AppSwitch',
 
   props: {
     modelValue: { type: Boolean, default: false },
@@ -14,17 +13,17 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const classes = computed(() => ({
-      checkbox: true,
-      'checkbox--active': props.modelValue
+      switch: true,
+      'switch--active': props.modelValue
     }))
 
     const changeState = () => emit('update:modelValue', !props.modelValue)
 
     return () => (
       <label class={classes.value}>
-        <div class="checkbox-control">
-          <div class="checkbox-control-box">
-            <Check />
+        <div class="switch-control">
+          <div class="switch-track">
+            <span class="switch-knob" />
           </div>
           <input
             type="checkbox"

@@ -3,7 +3,7 @@ import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/store/app'
 import AppSlider from '@/components/app/AppSlider'
 import AppButton from '@/components/app/AppButton'
-import AppCheckbox from '@/components/app/AppCheckbox'
+import AppSwitch from '@/components/app/AppSwitch'
 import AppSelector from '@/components/app/AppSelector'
 import AppColorSelector from '@/components/app/AppColorSelector'
 import AppPaletteSelector from '@/components/app/AppPaletteSelector'
@@ -77,7 +77,7 @@ export default defineComponent({
     const buildCheckbox = (input: AppInputThemeGeneral) => {
       const { label, value } = input
       return (
-        <AppCheckbox
+        <AppSwitch
           label={t(label)}
           modelValue={value as boolean}
           onUpdate:modelValue={(v: boolean) => {

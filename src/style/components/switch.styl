@@ -1,0 +1,55 @@
+.switch
+  display flex
+  align-items flex-end
+  &:hover
+    .switch-track
+      border-color var(--glass-border-active)
+
+.switch--active
+  .switch-track
+    background var(--glass-bg-active)
+    border-color var(--glass-border-active)
+  .switch-knob
+    transform translateX(16px)
+    background #fff
+    box-shadow 0 1px 3px rgba(0, 0, 0, .35), inset 0 1px 1px rgba(255, 255, 255, .8), var(--glass-glow)
+
+.switch-control
+  margin 4px
+  cursor pointer
+  margin-right 8px
+  position relative
+  input
+    position absolute
+    opacity 0
+    width 100%
+    height 100%
+    cursor pointer
+    user-select none
+
+.switch-track
+  width 36px
+  height 20px
+  padding 2px
+  border-radius 999px
+  background var(--glass-bg)
+  border 1px solid var(--glass-border)
+  backdrop-filter var(--glass-blur)
+  -webkit-backdrop-filter var(--glass-blur)
+  box-shadow inset 0 1px 3px rgba(0, 0, 0, .2), inset 0 1px 0 rgba(255, 255, 255, .08)
+  display flex
+  align-items center
+  transition background .25s, border-color .25s
+
+.switch-knob
+  width 16px
+  height 16px
+  border-radius 50%
+  background linear-gradient(180deg, #fff, #dcdcdc)
+  box-shadow 0 1px 3px rgba(0, 0, 0, .35), inset 0 1px 1px rgba(255, 255, 255, .8)
+  transition transform .25s cubic-bezier(.4, 0, .2, 1), background .25s
+
+.input-label
+  cursor pointer
+  line-height 1rem
+  margin-bottom 3px

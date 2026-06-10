@@ -1,7 +1,7 @@
 import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/store/app'
-import AppCheckbox from '@/components/app/AppCheckbox'
+import AppSwitch from '@/components/app/AppSwitch'
 
 export default defineComponent({
   name: 'SettingsCheckboxes',
@@ -10,7 +10,7 @@ export default defineComponent({
     const { t } = useI18n()
 
     const buildCheckbox = (name: string) => (
-      <AppCheckbox
+      <AppSwitch
         label={t(`settings.${name}`)}
         modelValue={appStore.bodyClass[name]}
         onUpdate:modelValue={(value: boolean) => {
@@ -26,7 +26,7 @@ export default defineComponent({
         {buildCheckbox('show-framerate')}
         {buildCheckbox('no-transition')}
         {buildCheckbox('only-ui')}
-        <AppCheckbox
+        <AppSwitch
           inline={true}
           label={t('settings.generate-random-theme')}
           modelValue={appStore.generateRandomThemes}
