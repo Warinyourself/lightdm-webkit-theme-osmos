@@ -5,7 +5,6 @@ import { useAppStore } from '@/store/app'
 import { usePageStore } from '@/store/page'
 import { focusInputPassword, setCSSVariable } from '@/utils/helper'
 import { hotkeys } from '@/utils/hotkeys'
-import { initTimer } from '@/utils/time'
 
 export default defineComponent({
   name: 'MainApp',
@@ -46,7 +45,6 @@ export default defineComponent({
 
     appStore.setUpSettings()
     initKeybinds()
-    initTimer()
     initZoom()
 
     watch(

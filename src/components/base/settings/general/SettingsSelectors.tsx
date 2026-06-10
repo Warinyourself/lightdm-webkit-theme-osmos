@@ -6,7 +6,6 @@ import { useRouter } from 'vue-router'
 import AppSelector from '@/components/app/AppSelector'
 import AppSlider from '@/components/app/AppSlider'
 import { createDebounce, generateDesktopIcons, languageMap, setCSSVariable } from '@/utils/helper'
-import { osList } from '@/utils/constant'
 import type { LoginPosition } from '@/models/page'
 
 export default defineComponent({
@@ -18,7 +17,6 @@ export default defineComponent({
     const router = useRouter()
 
     const isViewThemeOnly = computed(() => appStore.viewThemeOnly)
-    const isSupportFullApi = computed(() => appStore.isSupportFullApi)
 
     const languageList = computed(() =>
       pageStore.languages.map((lang) => ({ text: languageMap[lang] || lang, value: lang }))
@@ -51,10 +49,6 @@ export default defineComponent({
       appStore.saveStateApp({ key: 'desktop', value })
     }
 
-    const changeOs = (value: string) => {
-      appStore.saveStateApp({ key: 'currentOs', value })
-    }
-
     const updateZoom = createDebounce((value: number) => {
       setCSSVariable('--zoom', value + '' || '1')
       appStore.zoom = parseFloat(value + '')
@@ -83,15 +77,7 @@ export default defineComponent({
             onUpdate:modelValue={changeDesktop}
           />
         )}
-        {!isViewThemeOnly.value && (
-          <AppSelector
-            label={t('settings.choice-os')}
-            items={osList}
-            modelValue={appStore.currentOs}
-            onUpdate:modelValue={changeOs}
-          />
-        )}
-        {!isViewThemeOnly.value && isSupportFullApi.value && (
+        {/* {!isViewThemeOnly.value && isSupportFullApi.value && (
           <AppSlider
             label={t('input.zoom-interface')}
             from={0.5}
@@ -100,7 +86,7 @@ export default defineComponent({
             modelValue={appStore.zoom}
             onUpdate:modelValue={updateZoom}
           />
-        )}
+        )} */}
       </div>
     )
   }

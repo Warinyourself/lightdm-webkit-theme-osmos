@@ -32,7 +32,6 @@ export default defineComponent({
       <div class={`block-${activeBlock.value?.id}`}>
         <div class={`active-interface login-view login-view--${pageStore.loginPosition}`}>
           <AppIcon name={currentDesktopIcon.value} onClick={openSettingsTab} class="desktop-icon" />
-          <AppIcon name={appStore.currentOs} onClick={openSettingsTab} class="system-icon" />
           <UserAvatar />
           <UserInput />
         </div>

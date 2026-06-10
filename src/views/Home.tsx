@@ -4,7 +4,6 @@ import { usePageStore } from '@/store/page'
 import { useI18n } from 'vue-i18n'
 import { hasSomeParentClass } from '@/utils/helper'
 
-import AppBar from '@/components/app/AppBar'
 import AppMenu from '@/components/app/AppMenu'
 import AppDialog from '@/components/app/AppDialog'
 import SettingsComponent from '@/components/base/SettingsComponent'
@@ -61,7 +60,6 @@ export default defineComponent({
       const isOpenSettings = pageStore.isOpenBlock('settings')
       const hasActiveBlock = !!pageStore.activeBlock
       const showShutdownButton = !appStore.viewThemeOnly && hasActiveBlock
-      const showAppBar = !appStore.viewThemeOnly && appStore.isSupportFullApi && hasActiveBlock
       const showGithubButton = appStore.isGithubMode && hasActiveBlock
 
       return (
@@ -74,7 +72,6 @@ export default defineComponent({
             {isOpenSettings && <SettingsComponent key="SettingsComponent" />}
             {showShutdownButton && <ShutdownButton key="ShutdownButton" />}
             {showGithubButton && <GithubButton key="GithubButton" />}
-            {showAppBar && <AppBar key="AppBar" />}
           </transition-group>
 
           <AppDialog />

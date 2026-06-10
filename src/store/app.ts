@@ -4,7 +4,6 @@ import router from '@/router'
 
 import type { AppTheme, AppSettings, AppInputTheme, AppInputThemeValue, AppInputThemeGeneral } from '@/models/app'
 import type { LightdmSession, LightdmUsers } from '@/models/lightdm'
-import type { LightDMBattery } from 'nody-greeter-types'
 
 import { isDifferentRoute, parseQueryValue, randomize, randomizeSettingsTheme, setCSSVariable } from '@/utils/helper'
 import { AppThemes, defaultTheme } from '@/utils/constant'
@@ -15,13 +14,10 @@ export const useAppStore = defineStore('app', {
   state: () => ({
     version: version as string,
     currentTheme: '',
-    currentOs: 'arch-linux',
     desktop: LightdmHandler.defaultSession,
     username: LightdmHandler.username,
     password: '',
     defaultColor: '#6BBBED',
-    battery: null as LightDMBattery | null,
-    brightness: 0,
     zoom: 1,
     users: LightdmHandler.users as LightdmUsers[],
     desktops: LightdmHandler.sessions as LightdmSession[],
@@ -37,9 +33,6 @@ export const useAppStore = defineStore('app', {
   }),
 
   getters: {
-    isCharging: (state) => state.battery?.status === 'Charging',
-    batteryLevel: (state) => state.battery?.level || 0,
-    isSupportFullApi: () => LightdmHandler.isSupportFullApi,
     showFrameRate: (state) => state.bodyClass['show-framerate'],
     viewThemeOnly: (state) => state.bodyClass['only-ui'],
     isGithubMode: () => import.meta.env.VITE_APP_VIEW === 'github',
@@ -125,7 +118,6 @@ export const useAppStore = defineStore('app', {
 
     changeBodyClass({ key, value }: { key: string; value: boolean }) {
       this.bodyClass[key] = value
-      this.syncBodyClassWithStore({ settings: this.getMainSettings, query: router.currentRoute.value.query })
     },
 
     saveStateApp({ key, value }: { key: string; value: string }) {
@@ -210,16 +202,6 @@ export const useAppStore = defineStore('app', {
       this.themes = syncTheme
     },
 
-    syncBodyClassWithStore({ settings, query }: { settings: AppSettings; query: RouteLocationNormalized['query'] }) {
-      const bodyClassKeys = Object.keys(this.bodyClass)
-      const queryBodyClass = bodyClassKeys.reduce<Record<string, boolean>>((bodyClass, key) => {
-        if (key in query) bodyClass[key] = query[key] === 'true'
-        return bodyClass
-      }, {})
-
-      this.bodyClass = { ...settings.bodyClass, ...queryBodyClass }
-    },
-
     setUpSettings() {
       const query = router.currentRoute.value.query
 
@@ -228,7 +210,6 @@ export const useAppStore = defineStore('app', {
         this.generateRandomThemes = settings.generateRandomThemes || false
 
         if (settings.themes) this.syncThemeWithStore({ settings, query })
-        if (settings.bodyClass) this.syncBodyClassWithStore({ settings, query })
 
         const isExistDE = window.lightdm?.sessions.find(({ key }) => key === settings.desktop)
         if (!isExistDE) settings.desktop = window.lightdm?.sessions[0]?.key || 'openbox'
@@ -236,7 +217,6 @@ export const useAppStore = defineStore('app', {
         const isExistUser = window.lightdm?.users.find(({ username }) => username === settings.username)
         if (!isExistUser) settings.username = window.lightdm?.users[0]?.username || 'Warinyourself'
 
-        this.currentOs = settings.currentOs || 'arch-linux'
         this.desktop = settings.desktop
         this.username = settings.username
         this.zoom = settings.zoom || 1

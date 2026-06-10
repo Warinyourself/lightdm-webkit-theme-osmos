@@ -1,8 +1,3 @@
-async function getAppStore() {
-  const { useAppStore } = await import('@/store/app')
-  return useAppStore()
-}
-
 const DEBUG_PASSWORD = 'password'
 const lightdmDebug = window.lightdm === undefined
 
@@ -15,22 +10,12 @@ if (lightdmDebug) {
     is_authenticated: false,
     authentication_user: undefined,
     default_session: 'plasma-shell',
-    can_access_battery: true,
-    can_access_brightness: true,
     can_suspend: true,
     can_restart: true,
     can_hibernate: true,
     can_shutdown: true,
 
-    battery_data: {
-      level: Math.ceil(Math.random() * 99 + 1),
-      ac_status: true
-    },
-    brightness: Math.ceil(Math.random() * 99 + 1),
-
-    battery_update: { connect: (callback: () => void) => { console.log('battery update') } },
     authentication_complete: { connect: (callback: () => void) => { console.log('authentication complete') } },
-    brightness_update: { connect: (callback: () => void) => { console.log('brightness update') } },
 
     sessions: [
       { name: 'i3wm', key: 'i3' },
@@ -81,9 +66,6 @@ if (lightdmDebug) {
   } as any
 }
 
-const isSupportFullApi =
-  'battery_data' in (window.lightdm || {}) || 'brightness' in (window.lightdm || {})
-
 class LightdmWebkit {
   protected _inputErrorTimer!: null | ReturnType<typeof setTimeout>
 
@@ -91,7 +73,6 @@ class LightdmWebkit {
     return this.sessions[0]?.key || window.lightdm?.default_session || 'i3'
   }
 
-  get isSupportFullApi() { return isSupportFullApi }
   get sessions() { return window.lightdm?.sessions || [] }
   get hasGuestAccount() { return window.lightdm?.has_guest_account }
   get users() { return window.lightdm?.users || [] }
@@ -170,26 +151,6 @@ class LightdmNode extends LightdmWebkit {
         window.lightdm.respond(this._password)
       }
     })
-
-    if (window.lightdm?.can_access_brightness) {
-      this.updateBrightData()
-      window.lightdm?.brightness_update.connect(this.updateBrightData)
-    }
-
-    if (window.lightdm?.can_access_battery) {
-      this.updateBatteryData()
-      window.lightdm?.battery_update.connect(this.updateBatteryData)
-    }
-  }
-
-  public async updateBatteryData(): Promise<void> {
-    const store = await getAppStore()
-    store.battery = window.lightdm?.battery_data || null
-  }
-
-  public async updateBrightData(): Promise<void> {
-    const store = await getAppStore()
-    store.brightness = window.lightdm?.brightness || 0
   }
 
   public init(): void {

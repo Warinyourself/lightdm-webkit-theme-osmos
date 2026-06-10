@@ -15,7 +15,6 @@ export default defineComponent({
         modelValue={appStore.bodyClass[name]}
         onUpdate:modelValue={(value: boolean) => {
           appStore.changeBodyClass({ key: name, value })
-          appStore.syncStoreWithQuery()
         }}
       />
     )

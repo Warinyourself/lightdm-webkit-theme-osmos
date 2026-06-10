@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+/// <reference types="nody-greeter-types" />
 
 declare module '*.svg' {
   import type { DefineComponent } from 'vue'

@@ -214,31 +214,3 @@ export const AppThemes: AppTheme[] = [
     }
   }
 ]
-
-export const osList = [
-  {
-    text: 'Arch Linux',
-    value: 'arch-linux',
-    icon: 'arch-linux'
-  },
-  {
-    text: 'Ubuntu',
-    value: 'ubuntu',
-    icon: 'ubuntu'
-  },
-  {
-    text: 'Fedora',
-    value: 'fedora',
-    icon: 'fedora'
-  },
-  {
-    text: 'Linux Mint',
-    value: 'linux-mint',
-    icon: 'linux-mint'
-  },
-  {
-    text: 'Gentoo',
-    value: 'gentoo',
-    icon: 'gentoo'
-  }
-]
