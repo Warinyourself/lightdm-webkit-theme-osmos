@@ -15,7 +15,6 @@ export interface AppTheme {
   snapshots?: AppThemeSnapshot[];
   name: string;
   color: {
-    active: string;
     background: string;
   };
 }

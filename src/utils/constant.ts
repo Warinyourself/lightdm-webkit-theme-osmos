@@ -14,7 +14,6 @@ export const defaultTheme: AppTheme = {
   name: 'Random',
   component: 'random',
   color: {
-    active: '#04ded4',
     background: '#19102e'
   },
   settings: [
@@ -35,7 +34,6 @@ export const AppThemes: AppTheme[] = [
     name: 'Sphere',
     component: 'sphere',
     color: {
-      active: '#04ded4',
       background
     },
     settings: [
@@ -52,7 +50,6 @@ export const AppThemes: AppTheme[] = [
     name: 'Planet',
     component: 'planet',
     color: {
-      active: '#04ded4',
       background
     },
     settings: [
@@ -78,7 +75,6 @@ export const AppThemes: AppTheme[] = [
     name: 'Destruction',
     component: 'destruction',
     color: {
-      active: '#04ded4',
       background: '#13122E'
     },
     settings: [
@@ -93,7 +89,6 @@ export const AppThemes: AppTheme[] = [
     name: 'Rings',
     component: 'rings',
     color: {
-      active: '#04ded4',
       background
     },
     settings: [
@@ -108,7 +103,6 @@ export const AppThemes: AppTheme[] = [
     name: 'Tenderness',
     component: 'tenderness',
     color: {
-      active: '#04ded4',
       background
     },
     settings: [
@@ -121,7 +115,6 @@ export const AppThemes: AppTheme[] = [
     name: 'Plasma',
     component: 'plasma',
     color: {
-      active: '#04ded4',
       background
     },
     settings: [
@@ -135,7 +128,6 @@ export const AppThemes: AppTheme[] = [
     name: 'Flow',
     component: 'flow',
     color: {
-      active: '#04ded4',
       background
     },
     settings: [
