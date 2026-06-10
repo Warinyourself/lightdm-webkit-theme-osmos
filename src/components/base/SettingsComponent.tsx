@@ -16,7 +16,7 @@ export default defineComponent({
     const mainTabIndex = computed(() => pageStore.mainTabIndex)
 
     const tabs = computed(() => {
-      const list = [t('settings.choice-themes'), t('settings.general')]
+      const list = [t('settings.choice-themes'), t('settings.title')]
       if (appStore.activeTheme?.settings?.length !== undefined) {
         list.splice(1, 0, t('settings.customize-theme'))
       }

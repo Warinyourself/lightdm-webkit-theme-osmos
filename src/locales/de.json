@@ -58,9 +58,8 @@
     "choice-os": "Wahl os",
     "save-theme": "Design speichern",
     "language": "Sprache",
-    "general": "allgemein",
-    "choice-themes": "Auswahlthemen",
-    "customize-theme": "Design anpassen",
+    "choice-themes": "Themen",
+    "customize-theme": "Anpassen",
     "reset-settings": "Einstellungen zurücksetzen",
     "login-position": {
       "title": "Position",

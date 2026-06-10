@@ -47,7 +47,7 @@
     }
   },
   "settings": {
-    "title": "settings",
+    "title": "Settings",
     "themes": "themes",
     "users": "users",
     "blur": "Blur",
@@ -73,9 +73,8 @@
     "choice-os": "Choice os",
     "save-theme": "Save theme",
     "language": "Language",
-    "general": "General",
-    "choice-themes": "Choice themes",
-    "customize-theme": "Customize theme",
+    "choice-themes": "Themes",
+    "customize-theme": "Customize",
     "change-theme": "Сhange theme",
     "reset-settings": "Reset settings",
     "login-position": {

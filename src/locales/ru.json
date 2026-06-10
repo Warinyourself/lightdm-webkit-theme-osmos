@@ -69,9 +69,8 @@
     },
     "choice-language": "Выбор языка",
     "language": "Язык",
-    "general": "Общее",
-    "choice-themes": "Выбор темы",
-    "customize-theme": "Настройка темы",
+    "choice-themes": "Темы",
+    "customize-theme": "Настройка",
     "reset-settings": "Сбросить настройки",
     "change-theme": "Сменить тему",
     "login-position": {
