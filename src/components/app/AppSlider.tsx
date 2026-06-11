@@ -1,7 +1,5 @@
-import { defineComponent, onMounted, onUpdated, ref } from 'vue'
+import { defineComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import noUiSlider from 'nouislider'
-import { debounce } from '@/utils/helper'
 
 export default defineComponent({
   name: 'AppSlider',
@@ -19,35 +17,15 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const { t } = useI18n()
-    const sliderRef = ref<HTMLElement | null>(null)
 
-    const syncSliderValue = debounce(() => {
-      const slider = sliderRef.value as any
-      if (!slider?.noUiSlider) return
-      const sliderValue = parseFloat(slider.noUiSlider.get())
-      if (sliderValue !== props.modelValue) {
-        slider.noUiSlider.set(props.modelValue)
-      }
-    }, 100)
-
-    onMounted(() => {
-      const slider = sliderRef.value as any
-      const isValidValue = props.modelValue !== undefined
-
-      noUiSlider.create(slider, {
-        start: isValidValue ? props.modelValue : props.to,
-        connect: 'lower',
-        step: props.step,
-        range: { min: props.from, max: props.to }
-      })
-
-      const eventChange = props.changeOnUpdate ? 'update' : 'set'
-      slider.noUiSlider.on(eventChange, (values: string[]) => {
-        emit('update:modelValue', parseFloat(values[0] ?? '0'))
-      })
+    const progress = computed(() => {
+      const range = props.to - props.from
+      return range === 0 ? 0 : ((props.modelValue - props.from) / range) * 100
     })
 
-    onUpdated(syncSliderValue)
+    const onChange = (event: Event) => {
+      emit('update:modelValue', parseFloat((event.target as HTMLInputElement).value))
+    }
 
     return () => (
       <div class="app-slider">
@@ -55,7 +33,17 @@ export default defineComponent({
           <p class="mb-2">{t(props.label)}</p>
         </div>
         <div class="center-x">
-          <div ref={sliderRef} class="slider-input" />
+          <input
+            type="range"
+            class="slider-input"
+            style={{ '--progress': `${progress.value}%` }}
+            min={props.from}
+            max={props.to}
+            step={props.step}
+            value={props.modelValue}
+            onInput={props.changeOnUpdate ? onChange : undefined}
+            onChange={!props.changeOnUpdate ? onChange : undefined}
+          />
         </div>
       </div>
     )

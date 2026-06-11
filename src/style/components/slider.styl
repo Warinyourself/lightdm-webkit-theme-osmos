@@ -1,92 +1,57 @@
 .slider-input
-  touch-action none
-  user-select none
-  width calc(100% - 50px)
-  height 2px
-  border-radius 1px
-  background #CDD9ED
-  position relative
-  margin-bottom 10px
-  .noUi-connects
-    cursor pointer
-    .noUi-connect
-      background rgba(255, 255, 255, .5)
-  .noUi-handle
-    &::before,
-    &::after
-      border-radius 20px
-      transform scale(var(--s))
-      transition transform .3s ease, border-radius .3s ease
-    &::before
-      --s .5
-      background rgba(255, 255, 255, .35)
-    &::after
-      --s .2
-      background #fff
-    &.noUi-active
-      &::before
-        --s .6
-      &::after
-        --s .55
+  appearance none
+  -webkit-appearance none
+  width 100%
+  height 4px
+  margin 14px 0 10px
+  border-radius 999px
+  border 1px solid var(--glass-border)
+  background linear-gradient(to right, rgba(255, 255, 255, .6) var(--progress, 0%), var(--glass-bg) var(--progress, 0%))
+  cursor pointer
+  outline none
+  transition border-color .25s
 
-  *
-    touch-action none
-    user-select none
-    -webkit-tap-highlight-color transparent
-  &.noUi-state-tap .noUi-connect,
-  &.noUi-state-tap .noUi-origin
-    transition transform .3s
-  .noUi-target
-    position relative
-  .noUi-base,
-  .noUi-connects
-    position relative
-    z-index 1
-    width 100%
-    height 100%
-  .noUi-origin,
-  .noUi-connect
-    position absolute
-    will-change transform
-    transform-origin 0 0
-    top 0
-    left 0
-    z-index 1
-  .noUi-connects
-    overflow hidden
-    z-index 0
-    border-radius 1px
-    .noUi-connect
-      width 100%
-      height 100%
-  .noUi-handle
-    backface-visibility hidden
-    position absolute
-    outline none
+  &:hover,
+  &:focus
+    border-color var(--glass-border-active)
+
+  &::-webkit-slider-runnable-track
+    height 4px
+    border-radius 999px
+    background transparent
+
+  &::-moz-range-track
+    height 4px
+    border-radius 999px
+    background transparent
+
+  &::-webkit-slider-thumb
+    appearance none
+    -webkit-appearance none
+    width 16px
+    height 16px
+    border-radius 50%
+    background linear-gradient(180deg, #fff, #dcdcdc)
+    box-shadow 0 1px 3px rgba(0, 0, 0, .35), inset 0 1px 1px rgba(255, 255, 255, .8)
     cursor pointer
-    width 30px
-    height 30px
-    right -10px
-    top -19px
-    &::before,
-    &::after
-      content ''
-      position absolute
-    &::before
-      left 0
-      top 0
-      width 40px
-      height 40px
-    &::after
-      left 2px
-      top 2px
-      width 36px
-      height 36px
-  .noUi-origin
-    left auto
-    right 0
-    height 0
-    width 100%
+    transition box-shadow .2s
+
+  &::-moz-range-thumb
+    width 16px
+    height 16px
+    border 0
+    border-radius 50%
+    background linear-gradient(180deg, #fff, #dcdcdc)
+    box-shadow 0 1px 3px rgba(0, 0, 0, .35), inset 0 1px 1px rgba(255, 255, 255, .8)
+    cursor pointer
+
+  &:active::-webkit-slider-thumb,
+  &:focus::-webkit-slider-thumb
+    box-shadow 0 1px 3px rgba(0, 0, 0, .35), inset 0 1px 1px rgba(255, 255, 255, .8), var(--glass-glow)
+
+  &:active::-moz-range-thumb,
+  &:focus::-moz-range-thumb
+    box-shadow 0 1px 3px rgba(0, 0, 0, .35), inset 0 1px 1px rgba(255, 255, 255, .8), var(--glass-glow)
 
 .app-slider__content
   white-space nowrap
