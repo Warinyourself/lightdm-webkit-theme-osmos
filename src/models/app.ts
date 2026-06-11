@@ -4,7 +4,6 @@ export interface AppSettings {
   username: string;
   desktop: string;
   defaultColor: string;
-  generateRandomThemes: boolean;
   bodyClass: Record<string, boolean>;
   themes: AppTheme[];
 }

@@ -20,12 +20,10 @@ if (lightdmDebug) {
     sessions: [
       { name: 'i3wm', key: 'i3' },
       { name: 'KDE 5', key: 'plasma-shell' },
-      { name: 'Kodi', key: 'kodi' },
       { name: 'Gnome 3', key: 'gnome-shell' },
       { name: 'XFCE 4', key: 'xfce' },
       { name: 'Openbox', key: 'openbox' },
       { name: 'Cinnamon', key: 'cinnamon' },
-      { name: 'xmonad', key: 'xmonad' }
     ],
     users: [
       {

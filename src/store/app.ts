@@ -5,7 +5,7 @@ import router from '@/router'
 import type { AppTheme, AppSettings, AppInputTheme, AppInputThemeValue } from '@/models/app'
 import type { LightdmSession, LightdmUsers } from '@/models/lightdm'
 
-import { isDifferentRoute, parseQueryValue, randomize, randomizeSettingsTheme, setCSSVariable } from '@/utils/helper'
+import { isDifferentRoute, parseQueryValue, randomizeSettingsTheme, setCSSVariable } from '@/utils/helper'
 import { AppThemes, defaultTheme } from '@/utils/constant'
 import { LightdmHandler } from '@/utils/lightdm'
 import { version } from '../../package.json'
@@ -22,7 +22,6 @@ export const useAppStore = defineStore('app', {
     users: LightdmHandler.users as LightdmUsers[],
     desktops: LightdmHandler.sessions as LightdmSession[],
     showPassword: false,
-    generateRandomThemes: false,
     themes: AppThemes as AppTheme[],
     bodyClass: {
       blur: true,
@@ -59,7 +58,6 @@ export const useAppStore = defineStore('app', {
       bodyClass: state.bodyClass,
       currentTheme: state.currentTheme,
       defaultColor: state.defaultColor,
-      generateRandomThemes: state.generateRandomThemes
     }),
 
     personalInfo: (state) => ({
@@ -87,9 +85,6 @@ export const useAppStore = defineStore('app', {
       if (isExistTheme && themeSettings) {
         this.changeSettingsTheme({ theme: finalTheme, settings: themeSettings })
       }
-
-      this.syncThemeColor()
-      this.syncStoreWithQuery()
     },
 
     login() {
@@ -156,31 +151,24 @@ export const useAppStore = defineStore('app', {
 
     syncThemeWithStore({ settings, query }: { settings: AppSettings; query: RouteLocationNormalized['query'] }) {
       let themeName = (query.themeName as string) || settings.currentTheme
-      const { generateRandomThemes } = settings
-      const indexTheme = Math.floor(randomize(0, this.themes.length - 1))
 
       const syncTheme = this.themes.reduce((themes: AppTheme[], theme, index) => {
         const cachedTheme = settings.themes.find(({ name }) => name === theme.name)
-        const isActiveTheme = generateRandomThemes ? indexTheme === index : theme.name === themeName
+        const isActiveTheme = theme.name === themeName
         const hasCachedTheme = cachedTheme && cachedTheme.settings
 
         if (hasCachedTheme) {
-          if (isActiveTheme && generateRandomThemes) {
-            themeName = theme.name
-            theme.settings = randomizeSettingsTheme(theme)
-          } else {
-            theme.settings = theme.settings?.map((input) => {
-              const cachedInput = this.getThemeInput(input.name, cachedTheme)
-              let value = cachedInput?.value ?? input.value
+          theme.settings = theme.settings?.map((input) => {
+            const cachedInput = this.getThemeInput(input.name, cachedTheme)
+            let value = cachedInput?.value ?? input.value
 
-              if (isActiveTheme) {
-                const queryInput = input.name in query ? parseQueryValue(query[input.name] as string) : null
-                value = queryInput ?? value
-              }
+            if (isActiveTheme) {
+              const queryInput = input.name in query ? parseQueryValue(query[input.name] as string) : null
+              value = queryInput ?? value
+            }
 
-              return { ...input, value }
-            })
-          }
+            return { ...input, value }
+          })
         }
 
         themes.push(theme)
@@ -197,7 +185,6 @@ export const useAppStore = defineStore('app', {
 
       try {
         const settings: AppSettings = JSON.parse(localStorage.getItem('settings') || '{}')
-        this.generateRandomThemes = settings.generateRandomThemes || false
 
         if (settings.themes) this.syncThemeWithStore({ settings, query })
 
