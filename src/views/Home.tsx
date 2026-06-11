@@ -43,7 +43,6 @@ export default defineComponent({
     locale.value = language
     pageStore.language = language
     pageStore.languages = ['ru', 'en', 'fr', 'de', 'es']
-    pageStore.loginPosition = (localStorage.getItem('loginPosition') as any) || 'center'
     pageStore.openBlock({ id: 'login' })
 
     onMounted(() => {

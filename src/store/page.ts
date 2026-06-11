@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { useAppStore } from '@/store/app'
-import type { InteractiveBlock, InteractiveBlockIds, AppMenu, LoginPosition, AppMenuMain, DialogInterface } from '@/models/page'
+import type { InteractiveBlock, InteractiveBlockIds, AppMenu, AppMenuMain, DialogInterface } from '@/models/page'
 
 export const usePageStore = defineStore('page', {
   state: () => ({
@@ -13,7 +13,6 @@ export const usePageStore = defineStore('page', {
 
     mainTabIndex: 0,
     language: '',
-    loginPosition: 'center' as LoginPosition,
     languages: [] as string[],
     activeBlocks: [] as InteractiveBlock[],
     interactiveBlocks: [

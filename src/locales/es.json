@@ -23,15 +23,6 @@
     "title": "configuración",
     "choice-language": "Idioma de elección",
     "language": "Idioma",
-    "login-position": {
-      "title": "Posición",
-      "about": "Elección de posición de inicio de sesión",
-      "center": "centro",
-      "top": "top",
-      "left": "izquierda",
-      "right": "bien",
-      "bottom": "fondo"
-    },
     "about": "Sistema de configuración"
   }
 }

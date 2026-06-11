@@ -17,7 +17,7 @@ export default defineComponent({
 
     return () => (
       <div class={`block-${activeBlock.value?.id}`}>
-        <div class={`active-interface login-view login-view--${pageStore.loginPosition}`}>
+        <div class="active-interface login-view">
           <UserAvatar />
           <UserInput />
         </div>

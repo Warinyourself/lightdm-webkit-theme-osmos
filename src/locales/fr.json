@@ -23,15 +23,6 @@
     "title": "Paramètres",
     "choice-language": "Choix de la langue",
     "language": "Langue",
-    "login-position": {
-      "title": "Position",
-      "about": "Choix de la position de connexion",
-      "center": "centre",
-      "top": "haut",
-      "left": "gauche",
-      "right": "droite",
-      "bottom": "bas"
-    },
     "about": "Paramètres système"
   }
 }

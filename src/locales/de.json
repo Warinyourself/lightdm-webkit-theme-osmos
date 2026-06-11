@@ -61,15 +61,6 @@
     "choice-themes": "Themen",
     "customize-theme": "Anpassen",
     "reset-settings": "Einstellungen zurücksetzen",
-    "login-position": {
-      "title": "Position",
-      "about": "Anmeldeposition auswählen",
-      "center": "zentrum",
-      "top": "top",
-      "left": "links",
-      "right": "richtig",
-      "bottom": "unten"
-    },
     "about": "Systemeinstellungen"
   }
 }

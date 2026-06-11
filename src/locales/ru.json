@@ -73,15 +73,6 @@
     "customize-theme": "Настройка",
     "reset-settings": "Сбросить настройки",
     "change-theme": "Сменить тему",
-    "login-position": {
-      "title": "Положение",
-      "about": "Выбрать положение логина",
-      "center": "центр",
-      "top": "верх",
-      "left": "влево",
-      "right": "вправо",
-      "bottom": "вниз"
-    },
     "about": "Настройки системы"
   }
 }

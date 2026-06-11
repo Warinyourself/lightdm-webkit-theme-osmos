@@ -77,15 +77,6 @@
     "customize-theme": "Customize",
     "change-theme": "Сhange theme",
     "reset-settings": "Reset settings",
-    "login-position": {
-      "title": "Position",
-      "about": "Choice login position",
-      "center": "center",
-      "top": "top",
-      "left": "left",
-      "right": "right",
-      "bottom": "bottom"
-    },
     "about": "Settings system"
   }
 }

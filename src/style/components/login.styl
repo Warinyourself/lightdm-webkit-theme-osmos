@@ -24,16 +24,7 @@
   min-width var(--login-width)
   height 230px
   z-index 10
-  &.login-view--center
-    transform translate(calc(var(--half-width) - 50%), calc(var(--half-height) - 50%))
-  &.login-view--top
-    transform translate(calc(var(--half-width) - 50%), calc(var(--gap) + var(--height-bar)))
-  &.login-view--right
-    transform translate(calc(100vw - 100% - 12px), calc(var(--half-height) - 50%))
-  &.login-view--bottom
-    transform translate(calc(var(--half-width) - 50%), calc(100vh - 100% - 12px))
-  &.login-view--left
-    transform translate(12px, calc(var(--half-height) - 50%))
+  transform translate(calc(var(--half-width) - 50%), calc(100vh - 100% - 12px))
 
   .slash
     stroke-dasharray 29
