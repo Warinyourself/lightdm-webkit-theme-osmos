@@ -1,9 +1,9 @@
 import { defineComponent, watch } from 'vue'
-import Mousetrap from 'mousetrap'
+import { useMagicKeys, useDebounceFn, whenever } from '@vueuse/core'
 import { useAppStore } from '@/store/app'
 import { usePageStore } from '@/store/page'
-import { debounce, focusInputPassword, setCSSVariable } from '@/utils/helper'
-import { hotkeys } from '@/utils/hotkeys'
+import { focusInputPassword, setCSSVariable } from '@/utils/helper'
+import { hotkeys, toMagicKeyCombo } from '@/utils/hotkeys'
 
 export default defineComponent({
   name: 'MainApp',
@@ -11,15 +11,16 @@ export default defineComponent({
   setup() {
     const appStore = useAppStore()
     const pageStore = usePageStore()
+    const keys = useMagicKeys()
 
     const initZoom = () => {
       setCSSVariable('--zoom', appStore.zoom + '' || '1')
     }
 
     const initKeybinds = () => {
-      hotkeys.forEach(({ keys, callback }) => Mousetrap.bind(keys.join('+'), callback))
+      hotkeys.forEach(({ keys: keyList, callback }) => whenever(keys[toMagicKeyCombo(keyList)]!, callback))
 
-      Mousetrap.bind('escape', () => {
+      whenever(keys.escape!, () => {
         const isFocusPassword = document.querySelector('#password:focus') as HTMLInputElement
         if (pageStore.dialog) {
           pageStore.closeDialog()
@@ -32,7 +33,7 @@ export default defineComponent({
         }
       })
 
-      Mousetrap.bind('enter', () => {
+      whenever(keys.enter!, () => {
         const isFocusPassword = document.querySelector('#password:focus')
         if (isFocusPassword) {
           appStore.login()
@@ -48,7 +49,7 @@ export default defineComponent({
 
     watch(
       () => appStore.getMainSettings,
-      debounce(() => appStore.syncSettingsWithCache(), 100),
+      useDebounceFn(() => appStore.syncSettingsWithCache(), 100),
       { deep: true }
     )
 

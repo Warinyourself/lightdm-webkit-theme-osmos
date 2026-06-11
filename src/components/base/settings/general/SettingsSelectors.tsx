@@ -1,11 +1,12 @@
 import { defineComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useDebounceFn } from '@vueuse/core'
 import { useAppStore } from '@/store/app'
 import { usePageStore } from '@/store/page'
 import { useRouter } from 'vue-router'
 import AppSelector from '@/components/app/AppSelector'
 import AppSlider from '@/components/app/AppSlider'
-import { debounce, generateDesktopIcons, languageMap, setCSSVariable } from '@/utils/helper'
+import { generateDesktopIcons, languageMap, setCSSVariable } from '@/utils/helper'
 import type { LoginPosition } from '@/models/page'
 
 export default defineComponent({
@@ -49,7 +50,7 @@ export default defineComponent({
       appStore.saveStateApp({ key: 'desktop', value })
     }
 
-    const updateZoom = debounce((value: number) => {
+    const updateZoom = useDebounceFn((value: number) => {
       setCSSVariable('--zoom', value + '' || '1')
       appStore.zoom = parseFloat(value + '')
     }, 100)

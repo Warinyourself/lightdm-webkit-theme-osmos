@@ -1,5 +1,6 @@
 import { defineComponent, computed, onUpdated, type VNode } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useDebounceFn } from '@vueuse/core'
 import { useAppStore } from '@/store/app'
 import AppSlider from '@/components/app/AppSlider'
 import AppButton from '@/components/app/AppButton'
@@ -7,7 +8,6 @@ import AppSwitch from '@/components/app/AppSwitch'
 import AppSelector from '@/components/app/AppSelector'
 import AppColorSelector from '@/components/app/AppColorSelector'
 import AppPaletteSelector from '@/components/app/AppPaletteSelector'
-import { debounce } from '@/utils/helper'
 import type {
   AppInputButton,
   AppInputColor,
@@ -24,7 +24,7 @@ export default defineComponent({
     const { t } = useI18n()
 
     const inputs = computed(() => appStore.activeTheme?.settings || [])
-    const debouncedSync = debounce(() => appStore.syncStoreWithQuery(), 300)
+    const debouncedSync = useDebounceFn(() => appStore.syncStoreWithQuery(), 300)
 
     onUpdated(() => debouncedSync())
 

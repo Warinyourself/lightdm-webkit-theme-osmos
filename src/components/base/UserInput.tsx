@@ -31,7 +31,6 @@ export default defineComponent({
           name="password"
           autocomplete="on"
           autofocus
-          class="mousetrap"
           placeholder={t('text.password')}
           onKeyup={handleKeyup}
           value={appStore.password}

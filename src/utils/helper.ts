@@ -22,14 +22,6 @@ export function isDifferentRoute(to: RouteLocationRaw) {
   return router.currentRoute.value.fullPath !== resolve.fullPath
 }
 
-export function debounce<T extends (...args: any[]) => void>(fn: T, wait = 500) {
-  let timeout: ReturnType<typeof setTimeout>
-  return ((...args: Parameters<T>) => {
-    clearTimeout(timeout)
-    timeout = setTimeout(() => fn(...args), wait)
-  }) as T
-}
-
 export function parseQueryValue(value: string) {
   const isBoolean = ['false', 'true'].includes(value)
   if (isBoolean) return value === 'true'

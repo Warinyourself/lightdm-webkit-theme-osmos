@@ -76,3 +76,11 @@ export const hotkeys = [
 ]
 
 export type hotkeysType = (typeof hotkeys)[number]
+
+// Converts a display key list (e.g. ['ctrl', 'P']) into a useMagicKeys combo
+// (e.g. 'ctrl+shift+p'), since an uppercase letter implies the Shift modifier
+export function toMagicKeyCombo(keys: string[]): string {
+  return keys
+    .flatMap((key) => (key.length === 1 && key !== key.toLowerCase() ? ['shift', key.toLowerCase()] : [key.toLowerCase()]))
+    .join('+')
+}
