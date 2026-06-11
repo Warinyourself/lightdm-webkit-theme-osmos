@@ -1,12 +1,10 @@
-import { defineComponent, computed, h } from 'vue'
+import { defineComponent, computed, h, type PropType } from 'vue'
 import { LoaderCircle } from '@lucide/vue'
 
 const prefix = 'app-button'
 
 export default defineComponent({
   name: 'AppButton',
-
-  emits: ['click'],
 
   props: {
     label: String,
@@ -22,7 +20,8 @@ export default defineComponent({
     disabled: Boolean,
     tag: { type: String, default: 'button' },
     to: [Object, String],
-    href: [Object, String]
+    href: [Object, String],
+    onClick: Function as PropType<(event: MouseEvent) => void>
   },
 
   setup(props, { slots, attrs }) {
@@ -33,6 +32,11 @@ export default defineComponent({
       [`${prefix}--block`]: !!props.block
     }))
 
+    const handleClick = (event: MouseEvent) => {
+      if (props.disabled || props.loading) return
+      props.onClick?.(event)
+    }
+
     return () => {
       let tag = props.tag || 'button'
       if (props.to) tag = 'router-link'
@@ -40,7 +44,8 @@ export default defineComponent({
 
       const btnProps: Record<string, any> = {
         class: classes.value,
-        ...attrs
+        ...attrs,
+        onClick: handleClick
       }
 
       if (tag === 'button') {
