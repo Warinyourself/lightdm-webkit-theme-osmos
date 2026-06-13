@@ -1,19 +1,19 @@
 import { defineStore } from 'pinia'
 import { computed, reactive, ref, type Ref } from 'vue'
 
-import type { AppTheme, AppSettings, AppInputTheme, AppInputThemeValue } from '@/models/app'
+import type { AppSettings } from '@/models/app'
 import type { LightdmSession, LightdmUsers } from '@/models/lightdm'
 
-import { randomizeSettingsTheme as buildRandomThemeSettings, setCSSVariable } from '@/utils/helper'
-import { AppThemes, defaultTheme } from '@/utils/constant'
+import { useThemeStore } from '@/store/theme'
 import { LightdmHandler } from '@/utils/lightdm'
 import { version as appVersion } from '../../package.json'
 
 export const useAppStore = defineStore('app', () => {
+  const themeStore = useThemeStore()
+
   const version = appVersion as string
   const isGithubMode = import.meta.env.VITE_APP_VIEW === 'github'
 
-  const currentTheme = ref('')
   const desktop = ref(LightdmHandler.defaultSession)
   const username = ref(LightdmHandler.username)
   const password = ref('')
@@ -22,7 +22,6 @@ export const useAppStore = defineStore('app', () => {
   const users = ref(LightdmHandler.users as LightdmUsers[])
   const desktops = ref(LightdmHandler.sessions as LightdmSession[])
   const showPassword = ref(false)
-  const themes = ref(AppThemes as AppTheme[])
   const bodyClass = reactive<Record<string, boolean>>({
     blur: true,
     'no-transition': false,
@@ -33,71 +32,31 @@ export const useAppStore = defineStore('app', () => {
   const showFrameRate = computed(() => bodyClass['show-framerate'])
   const viewThemeOnly = computed(() => bodyClass['only-ui'])
 
-  const activeTheme = computed((): AppTheme =>
-    themes.value.find(({ name }) => name === currentTheme.value) || defaultTheme)
-
   const currentUser = computed(() => users.value.find((user) => user.username === username.value))
   const currentDesktop = computed(() => desktops.value.find(({ key }) => key === desktop.value))
 
-  const getThemeByName = (theme: string) => themes.value.find(({ name }) => name === theme)
-
-  const getThemeInput = (name: string, theme?: AppTheme) => {
-    const active = themes.value.find((t) => t.name === currentTheme.value) || defaultTheme
-    return (theme || active).settings?.find((input) => input.name === name)
-  }
-
   const getMainSettings = computed((): AppSettings => ({
     zoom: zoom.value,
-    themes: themes.value,
+    themes: themeStore.themes,
     desktop: desktop.value,
     username: username.value,
     bodyClass,
-    currentTheme: currentTheme.value,
+    currentTheme: themeStore.currentTheme,
     defaultColor: defaultColor.value
   }))
 
   const personalInfo = computed(() => ({
     username: username.value,
-    currentTheme: currentTheme.value,
+    currentTheme: themeStore.currentTheme,
     desktop: desktop.value,
     version,
     defaultColor: defaultColor.value
   }))
 
-  const settableRefs: Record<string, Ref<any>> = { desktop, username, password, defaultColor, zoom, currentTheme }
-
-  function randomizeSettingsTheme() {
-    const theme = activeTheme.value
-    theme.settings = buildRandomThemeSettings(theme)
-  }
-
-  async function changeTheme(themeName: string, themeSettings?: AppTheme['settings']) {
-    const isExistTheme = getThemeByName(themeName)
-    const finalTheme = isExistTheme ? themeName : themes.value[0]!.name
-
-    currentTheme.value = finalTheme
-
-    if (isExistTheme && themeSettings) {
-      changeSettingsTheme({ theme: finalTheme, settings: themeSettings })
-    }
-  }
+  const settableRefs: Record<string, Ref<any>> = { desktop, username, password, defaultColor, zoom }
 
   function login() {
     LightdmHandler.login(username.value, password.value, currentDesktop.value?.key)
-  }
-
-  function changeSettingsTheme({ theme, settings }: { theme: string; settings: AppTheme['settings'] }) {
-    const target = themes.value.find(({ name }) => name === theme)
-    if (target) target.settings = settings
-  }
-
-  function changeThemeInput({ input, value }: { input: AppInputTheme; value: AppInputThemeValue }) {
-    input.value = value
-  }
-
-  function changeSettingsThemeInput({ key, value }: { key: string; value: AppInputThemeValue }) {
-    const input = activeTheme.value.settings?.find((i) => i.name === key)
-    if (input) input.value = value
   }
 
   function toggleShowPassword() {
@@ -117,41 +76,11 @@ export const useAppStore = defineStore('app', () => {
     localStorage.setItem('settings', JSON.stringify(getMainSettings.value))
   }
 
-  function syncThemeColor() {
-    const { color } = activeTheme.value
-    setCSSVariable('--color-bg', color.background)
-  }
-
-  function syncThemeWithStore(settings: AppSettings) {
-    const themeName = settings.currentTheme
-
-    const syncTheme = themes.value.reduce((acc: AppTheme[], theme) => {
-      const cachedTheme = settings.themes.find(({ name }) => name === theme.name)
-      const isActiveTheme = theme.name === themeName
-      const hasCachedTheme = cachedTheme && cachedTheme.settings
-
-      if (hasCachedTheme) {
-        theme.settings = theme.settings?.map((input) => {
-          const cachedInput = getThemeInput(input.name, cachedTheme)
-          const value = cachedInput?.value ?? input.value
-          return { ...input, value }
-        })
-      }
-
-      acc.push(theme)
-      if (isActiveTheme) currentTheme.value = themeName
-
-      return acc
-    }, [])
-
-    themes.value = syncTheme
-  }
-
   function setUpSettings() {
     try {
       const settings: AppSettings = JSON.parse(localStorage.getItem('settings') || '{}')
 
-      if (settings.themes) syncThemeWithStore(settings)
+      if (settings.themes) themeStore.syncThemeWithStore(settings)
 
       const isExistDE = window.lightdm?.sessions.find(({ key }) => key === settings.desktop)
       if (!isExistDE) settings.desktop = window.lightdm?.sessions[0]?.key || 'openbox'
@@ -170,7 +99,6 @@ export const useAppStore = defineStore('app', () => {
   return {
     version,
     isGithubMode,
-    currentTheme,
     desktop,
     username,
     password,
@@ -179,29 +107,18 @@ export const useAppStore = defineStore('app', () => {
     users,
     desktops,
     showPassword,
-    themes,
     bodyClass,
     showFrameRate,
     viewThemeOnly,
-    activeTheme,
     currentUser,
     currentDesktop,
-    getThemeByName,
-    getThemeInput,
     getMainSettings,
     personalInfo,
-    randomizeSettingsTheme,
-    changeTheme,
     login,
-    changeSettingsTheme,
-    changeThemeInput,
-    changeSettingsThemeInput,
     toggleShowPassword,
     changeBodyClass,
     saveStateApp,
     syncSettingsWithCache,
-    syncThemeColor,
-    syncThemeWithStore,
     setUpSettings
   }
 })

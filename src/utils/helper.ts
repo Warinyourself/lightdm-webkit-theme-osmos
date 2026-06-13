@@ -7,6 +7,7 @@ import { LightdmHandler } from '@/utils/lightdm'
 // This is safe thanks to ES module live bindings (no circular dep issue at runtime)
 import { useAppStore } from '@/store/app'
 import { usePageStore } from '@/store/page'
+import { useThemeStore } from '@/store/theme'
 
 export const modKey = 'ctrl'
 export const languageMap: Record<string, string> = {
@@ -142,7 +143,7 @@ export const randomButton: AppInputButton = {
   type: 'button',
   icon: 'random',
   callback() {
-    useAppStore().randomizeSettingsTheme()
+    useThemeStore().randomizeSettingsTheme()
   }
 }
 

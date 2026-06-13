@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { useAppStore } from '@/store/app'
+import { useThemeStore } from '@/store/theme'
 import type { InteractiveBlock, InteractiveBlockIds, AppMenu, AppMenuMain, DialogInterface } from '@/models/page'
 
 export const usePageStore = defineStore('page', () => {
@@ -80,7 +81,7 @@ export const usePageStore = defineStore('page', () => {
   }
 
   function openTab({ type }: { type: 'settings' | 'themes' | 'custom' }) {
-    const hasCustomCurrentTheme = useAppStore().activeTheme?.settings?.length !== undefined
+    const hasCustomCurrentTheme = useThemeStore().activeTheme?.settings?.length !== undefined
     let updatedTabIndex = mainTabIndex.value
 
     switch (type) {

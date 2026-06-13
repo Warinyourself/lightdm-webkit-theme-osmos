@@ -1,5 +1,6 @@
 import { usePageStore } from '@/store/page'
 import { useAppStore } from '@/store/app'
+import { useThemeStore } from '@/store/theme'
 import { systemActionsObject, modKey } from '@/utils/helper'
 
 const prefixTitle = 'settings.keyboard.'
@@ -51,7 +52,7 @@ export const hotkeys = [
   {
     keys: [modKey, 'r'],
     title: `${prefixTitle}randomize-theme`,
-    callback: () => useAppStore().randomizeSettingsTheme()
+    callback: () => useThemeStore().randomizeSettingsTheme()
   },
   {
     keys: [modKey, 'i'],

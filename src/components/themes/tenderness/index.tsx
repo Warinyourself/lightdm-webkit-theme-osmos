@@ -1,6 +1,6 @@
 import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import GL from '@/utils/gl'
-import { useAppStore } from '@/store/app'
+import { useThemeStore } from '@/store/theme'
 import fragmentShader from './fragment.glsl'
 import vertexShader from './vertex.glsl'
 
@@ -9,11 +9,11 @@ let render: GL
 export default defineComponent({
   name: 'TendernessTheme',
   setup() {
-    const appStore = useAppStore()
+    const themeStore = useThemeStore()
     const canvasRef = ref<HTMLCanvasElement | null>(null)
 
-    const animationSpeed = computed(() => appStore.getThemeInput('animation-speed')?.value as number || 45)
-    const pxratio = computed(() => appStore.getThemeInput('pxratio')?.value as number || 0.8)
+    const animationSpeed = computed(() => themeStore.getThemeInput('animation-speed')?.value as number || 45)
+    const pxratio = computed(() => themeStore.getThemeInput('pxratio')?.value as number || 0.8)
 
     onMounted(() => {
       render = new GL(

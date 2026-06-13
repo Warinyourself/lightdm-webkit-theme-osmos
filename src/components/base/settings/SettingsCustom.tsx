@@ -1,6 +1,6 @@
 import { defineComponent, computed, type VNode } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useAppStore } from '@/store/app'
+import { useThemeStore } from '@/store/theme'
 import AppSlider from '@/components/app/AppSlider'
 import AppButton from '@/components/app/AppButton'
 import AppSwitch from '@/components/app/AppSwitch'
@@ -19,10 +19,10 @@ import type {
 export default defineComponent({
   name: 'SettingsCustom',
   setup() {
-    const appStore = useAppStore()
+    const themeStore = useThemeStore()
     const { t } = useI18n()
 
-    const inputs = computed(() => appStore.activeTheme?.settings || [])
+    const inputs = computed(() => themeStore.activeTheme?.settings || [])
 
     const buildSlider = (input: AppInputThemeSlider) => {
       const { label, value, options: { step, min: from, max: to } } = input
@@ -34,7 +34,7 @@ export default defineComponent({
           label={label}
           modelValue={value as number}
           onUpdate:modelValue={(v: number) => {
-            appStore.changeSettingsThemeInput({ key: input.name, value: v })
+            themeStore.changeSettingsThemeInput({ key: input.name, value: v })
             input.callback?.(v)
           }}
         />
@@ -49,7 +49,7 @@ export default defineComponent({
           items={[...values]}
           modelValue={value as string}
           onUpdate:modelValue={(v: string) => {
-            appStore.changeSettingsThemeInput({ key: input.name, value: v })
+            themeStore.changeSettingsThemeInput({ key: input.name, value: v })
           }}
         />
       )
@@ -63,7 +63,7 @@ export default defineComponent({
           label={label}
           modelValue={value as string}
           onUpdate:modelValue={(color: AppInputColor) => {
-            appStore.changeSettingsThemeInput({ key: input.name, value: color.hex })
+            themeStore.changeSettingsThemeInput({ key: input.name, value: color.hex })
             input.callback?.(color.hex)
           }}
         />
@@ -77,7 +77,7 @@ export default defineComponent({
           label={t(label)}
           modelValue={value as boolean}
           onUpdate:modelValue={(v: boolean) => {
-            appStore.changeSettingsThemeInput({ key: input.name, value: v })
+            themeStore.changeSettingsThemeInput({ key: input.name, value: v })
             input.callback?.(v)
           }}
         />
@@ -92,7 +92,7 @@ export default defineComponent({
           modelValue={value as number}
           values={values}
           onUpdate:modelValue={(v: number) => {
-            appStore.changeSettingsThemeInput({ key: input.name, value: v })
+            themeStore.changeSettingsThemeInput({ key: input.name, value: v })
           }}
         />
       )

@@ -1,6 +1,6 @@
 import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import GL from '@/utils/gl'
-import { useAppStore } from '@/store/app'
+import { useThemeStore } from '@/store/theme'
 import fragmentShader from './fragment.glsl'
 import vertexShader from './vertex.glsl'
 
@@ -9,13 +9,13 @@ let render: GL
 export default defineComponent({
   name: 'DestructionTheme',
   setup() {
-    const appStore = useAppStore()
+    const themeStore = useThemeStore()
     const canvasRef = ref<HTMLCanvasElement | null>(null)
 
-    const perspective = computed(() => appStore.getThemeInput('perspective')?.value as number || 0.2)
-    const position = computed(() => appStore.getThemeInput('position')?.value as number || 0.2)
-    const animationSpeed = computed(() => appStore.getThemeInput('animation-speed')?.value as number || 45)
-    const pxratio = computed(() => appStore.getThemeInput('pxratio')?.value as number || 0.8)
+    const perspective = computed(() => themeStore.getThemeInput('perspective')?.value as number || 0.2)
+    const position = computed(() => themeStore.getThemeInput('position')?.value as number || 0.2)
+    const animationSpeed = computed(() => themeStore.getThemeInput('animation-speed')?.value as number || 45)
+    const pxratio = computed(() => themeStore.getThemeInput('pxratio')?.value as number || 0.8)
 
     onMounted(() => {
       render = new GL(

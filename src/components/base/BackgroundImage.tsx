@@ -1,5 +1,5 @@
 import { defineComponent, computed, h } from 'vue'
-import { useAppStore } from '@/store/app'
+import { useThemeStore } from '@/store/theme'
 
 import flow from '@/components/themes/flow'
 import sphere from '@/components/themes/sphere'
@@ -24,8 +24,8 @@ const themeMap: Record<string, any> = {
 export default defineComponent({
   name: 'BackgroundImage',
   setup() {
-    const appStore = useAppStore()
-    const theme = computed(() => appStore.activeTheme)
+    const themeStore = useThemeStore()
+    const theme = computed(() => themeStore.activeTheme)
 
     return () => {
       const component = themeMap[theme.value.component ?? 'random'] ?? themeMap.random

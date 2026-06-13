@@ -1,6 +1,6 @@
 import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import GL from '@/utils/gl'
-import { useAppStore } from '@/store/app'
+import { useThemeStore } from '@/store/theme'
 import fragmentShader from './fragment.glsl'
 import vertexShader from './vertex.glsl'
 
@@ -9,16 +9,16 @@ let render: GL
 export default defineComponent({
   name: 'RandomTheme',
   setup() {
-    const appStore = useAppStore()
+    const themeStore = useThemeStore()
     const canvasRef = ref<HTMLCanvasElement | null>(null)
 
-    const hue = computed(() => appStore.getThemeInput('hue')?.value as number || 0)
-    const brightness = computed(() => appStore.getThemeInput('brightness')?.value as number || 0)
-    const invert = computed(() => appStore.getThemeInput('invert')?.value as boolean || false)
-    const animationSpeed = computed(() => appStore.getThemeInput('animation-speed')?.value as number || 45)
-    const symmetry = computed(() => appStore.getThemeInput('symmetry')?.value as number || 64)
-    const thickness = computed(() => appStore.getThemeInput('thickness')?.value as number || 64)
-    const pxratio = computed(() => appStore.getThemeInput('pxratio')?.value as number || 0.8)
+    const hue = computed(() => themeStore.getThemeInput('hue')?.value as number || 0)
+    const brightness = computed(() => themeStore.getThemeInput('brightness')?.value as number || 0)
+    const invert = computed(() => themeStore.getThemeInput('invert')?.value as boolean || false)
+    const animationSpeed = computed(() => themeStore.getThemeInput('animation-speed')?.value as number || 45)
+    const symmetry = computed(() => themeStore.getThemeInput('symmetry')?.value as number || 64)
+    const thickness = computed(() => themeStore.getThemeInput('thickness')?.value as number || 64)
+    const pxratio = computed(() => themeStore.getThemeInput('pxratio')?.value as number || 0.8)
 
     const styleCanvas = computed(() => ({
       filter: `hue-rotate(${hue.value}deg) invert(${Number(invert.value)}) brightness(${brightness.value})`

@@ -1,5 +1,5 @@
 import { defineComponent, computed } from 'vue'
-import { useAppStore } from '@/store/app'
+import { useThemeStore } from '@/store/theme'
 
 const themeImages = import.meta.glob('@/assets/images/themes/*/index.png', { eager: true, import: 'default' }) as Record<string, string>
 
@@ -11,9 +11,9 @@ function getThemeImage(name: string): string {
 export default defineComponent({
   name: 'SettingsThemes',
   setup() {
-    const appStore = useAppStore()
-    const themes = computed(() => appStore.themes)
-    const activeTheme = computed(() => appStore.activeTheme)
+    const themeStore = useThemeStore()
+    const themes = computed(() => themeStore.themes)
+    const activeTheme = computed(() => themeStore.activeTheme)
 
     return () => (
       <div class="user-settings-themes">
@@ -22,7 +22,7 @@ export default defineComponent({
           return (
             <img
               class={`user-settings-theme ${isActive ? 'active' : ''}`}
-              onClick={() => appStore.changeTheme(theme.name)}
+              onClick={() => themeStore.changeTheme(theme.name)}
               src={getThemeImage(theme.name)}
             />
           )

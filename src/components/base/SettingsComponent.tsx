@@ -1,14 +1,14 @@
 import { CircleX, Palette, SlidersHorizontal, Settings } from '@lucide/vue'
 import { defineComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useAppStore } from '@/store/app'
+import { useThemeStore } from '@/store/theme'
 import { usePageStore } from '@/store/page'
 import SettingsView from './settings/SettingsView'
 
 export default defineComponent({
   name: 'SettingsComponent',
   setup() {
-    const appStore = useAppStore()
+    const themeStore = useThemeStore()
     const pageStore = usePageStore()
     const { t } = useI18n()
 
@@ -19,7 +19,7 @@ export default defineComponent({
         { label: t('settings.choice-themes'), icon: Palette },
         { label: t('settings.title'), icon: Settings }
       ]
-      if (appStore.activeTheme?.settings?.length !== undefined) {
+      if (themeStore.activeTheme?.settings?.length !== undefined) {
         list.splice(1, 0, { label: t('settings.customize-theme'), icon: SlidersHorizontal })
       }
       return list
