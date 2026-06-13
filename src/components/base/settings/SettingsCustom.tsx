@@ -1,6 +1,5 @@
-import { defineComponent, computed, onUpdated, type VNode } from 'vue'
+import { defineComponent, computed, type VNode } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useDebounceFn } from '@vueuse/core'
 import { useAppStore } from '@/store/app'
 import AppSlider from '@/components/app/AppSlider'
 import AppButton from '@/components/app/AppButton'
@@ -24,9 +23,6 @@ export default defineComponent({
     const { t } = useI18n()
 
     const inputs = computed(() => appStore.activeTheme?.settings || [])
-    const debouncedSync = useDebounceFn(() => appStore.syncStoreWithQuery(), 300)
-
-    onUpdated(() => debouncedSync())
 
     const buildSlider = (input: AppInputThemeSlider) => {
       const { label, value, options: { step, min: from, max: to } } = input

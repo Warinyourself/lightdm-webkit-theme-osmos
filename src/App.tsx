@@ -2,6 +2,7 @@ import { defineComponent, watch } from 'vue'
 import { useMagicKeys, useDebounceFn, whenever } from '@vueuse/core'
 import { useAppStore } from '@/store/app'
 import { usePageStore } from '@/store/page'
+import { useQuerySync } from '@/composables/useQuerySync'
 import { focusInputPassword, setCSSVariable } from '@/utils/helper'
 import { hotkeys, toMagicKeyCombo } from '@/utils/hotkeys'
 
@@ -44,6 +45,7 @@ export default defineComponent({
     }
 
     appStore.setUpSettings()
+    useQuerySync()
     initKeybinds()
     initZoom()
 

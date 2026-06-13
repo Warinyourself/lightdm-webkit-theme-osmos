@@ -1,11 +1,9 @@
 import { defineStore } from 'pinia'
-import type { RouteLocationNormalized } from 'vue-router'
-import router from '@/router'
 
 import type { AppTheme, AppSettings, AppInputTheme, AppInputThemeValue } from '@/models/app'
 import type { LightdmSession, LightdmUsers } from '@/models/lightdm'
 
-import { isDifferentRoute, parseQueryValue, randomizeSettingsTheme, setCSSVariable } from '@/utils/helper'
+import { randomizeSettingsTheme, setCSSVariable } from '@/utils/helper'
 import { AppThemes, defaultTheme } from '@/utils/constant'
 import { LightdmHandler } from '@/utils/lightdm'
 import { version } from '../../package.json'
@@ -73,7 +71,6 @@ export const useAppStore = defineStore('app', {
     randomizeSettingsTheme() {
       const theme = this.activeTheme
       theme.settings = randomizeSettingsTheme(theme as AppTheme)
-      this.syncStoreWithQuery()
     },
 
     async changeTheme(themeName: string, themeSettings?: AppTheme['settings']) {
@@ -116,7 +113,6 @@ export const useAppStore = defineStore('app', {
     saveStateApp({ key, value }: { key: string; value: string }) {
       (this as any)[key] = value
       localStorage.setItem(key, value)
-      this.syncStoreWithQuery()
     },
 
     syncSettingsWithCache() {
@@ -128,31 +124,10 @@ export const useAppStore = defineStore('app', {
       setCSSVariable('--color-bg', color.background)
     },
 
-    syncStoreWithQuery() {
-      const route = router.currentRoute.value
+    syncThemeWithStore(settings: AppSettings) {
+      const themeName = settings.currentTheme
 
-      const inputQuery = this.activeTheme.settings?.reduce<Record<string, string>>((query, input) => {
-        query[input.name] = input.value + ''
-        return query
-      }, {})
-
-      const bodyClassQuery = Object.entries(this.bodyClass).reduce<Record<string, string>>((query, [key, value]) => {
-        query[key] = value + ''
-        return query
-      }, {})
-
-      const query = { ...inputQuery, ...bodyClassQuery, themeName: this.currentTheme }
-      const routeTo = { name: route.name || '/', query }
-
-      if (isDifferentRoute(routeTo)) {
-        router.replace(routeTo)
-      }
-    },
-
-    syncThemeWithStore({ settings, query }: { settings: AppSettings; query: RouteLocationNormalized['query'] }) {
-      let themeName = (query.themeName as string) || settings.currentTheme
-
-      const syncTheme = this.themes.reduce((themes: AppTheme[], theme, index) => {
+      const syncTheme = this.themes.reduce((themes: AppTheme[], theme) => {
         const cachedTheme = settings.themes.find(({ name }) => name === theme.name)
         const isActiveTheme = theme.name === themeName
         const hasCachedTheme = cachedTheme && cachedTheme.settings
@@ -160,13 +135,7 @@ export const useAppStore = defineStore('app', {
         if (hasCachedTheme) {
           theme.settings = theme.settings?.map((input) => {
             const cachedInput = this.getThemeInput(input.name, cachedTheme)
-            let value = cachedInput?.value ?? input.value
-
-            if (isActiveTheme) {
-              const queryInput = input.name in query ? parseQueryValue(query[input.name] as string) : null
-              value = queryInput ?? value
-            }
-
+            const value = cachedInput?.value ?? input.value
             return { ...input, value }
           })
         }
@@ -181,12 +150,10 @@ export const useAppStore = defineStore('app', {
     },
 
     setUpSettings() {
-      const query = router.currentRoute.value.query
-
       try {
         const settings: AppSettings = JSON.parse(localStorage.getItem('settings') || '{}')
 
-        if (settings.themes) this.syncThemeWithStore({ settings, query })
+        if (settings.themes) this.syncThemeWithStore(settings)
 
         const isExistDE = window.lightdm?.sessions.find(({ key }) => key === settings.desktop)
         if (!isExistDE) settings.desktop = window.lightdm?.sessions[0]?.key || 'openbox'
