@@ -1,6 +1,6 @@
 // Modified so it doesn't really move. Very childish and easy fix.
 #ifdef GL_ES
-precision mediump float;
+precision highp float;
 #endif
 
 uniform vec2 uResolution;
