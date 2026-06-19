@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "npm run type-check && npm run build-only",
+    "build:debug": "VITE_DEBUG=true vite build --minify false",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build"
