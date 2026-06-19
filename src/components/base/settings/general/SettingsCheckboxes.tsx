@@ -9,23 +9,30 @@ export default defineComponent({
     const appStore = useAppStore()
     const { t } = useI18n()
 
-    const buildCheckbox = (name: string) => (
+    const buildBodyClassSwitch = (name: string) => (
       <AppSwitch
         label={t(`settings.${name}`)}
         modelValue={appStore.bodyClass[name]}
-        onUpdate:modelValue={(value: boolean) => {
-          appStore.changeBodyClass({ key: name, value })
-        }}
+        onUpdate:modelValue={(value: boolean) => appStore.changeBodyClass({ key: name, value })}
       />
     )
 
     return () => (
-      <div class="grid-two">
-        <h2 class="title">{t('settings.performance')}</h2>
-        {buildCheckbox('blur')}
-        {buildCheckbox('show-framerate')}
-        {buildCheckbox('no-transition')}
-        {buildCheckbox('only-ui')}
+      <div class="settings-group">
+        {buildBodyClassSwitch('blur')}
+        {buildBodyClassSwitch('show-framerate')}
+        {buildBodyClassSwitch('no-transition')}
+        {buildBodyClassSwitch('only-ui')}
+        <AppSwitch
+          label={t('settings.hotkeys')}
+          modelValue={appStore.hotkeysEnabled}
+          onUpdate:modelValue={(value: boolean) => { appStore.hotkeysEnabled = value }}
+        />
+        <AppSwitch
+          label={t('settings.show-time')}
+          modelValue={appStore.showTime}
+          onUpdate:modelValue={(value: boolean) => { appStore.showTime = value }}
+        />
       </div>
     )
   }

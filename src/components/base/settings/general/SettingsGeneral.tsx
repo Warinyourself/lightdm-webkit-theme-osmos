@@ -32,7 +32,7 @@ export default defineComponent({
         <SettingsCheckboxes />
         <SettingsSelectors />
         {!isViewThemeOnly.value && <SettingsUsers />}
-        <SettingsHotkeys />
+        {appStore.hotkeysEnabled && <SettingsHotkeys />}
         <div class="help-block">
           <AppButton onClick={resetSettings}>
             {t('settings.reset-settings')}
