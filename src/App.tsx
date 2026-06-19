@@ -1,10 +1,11 @@
-import { defineComponent, watch } from 'vue'
+import { defineComponent, watch, computed } from 'vue'
 import { useMagicKeys, useDebounceFn, whenever } from '@vueuse/core'
 import { useAppStore } from '@/store/app'
 import { usePageStore } from '@/store/page'
 import { useQuerySync } from '@/composables/useQuerySync'
 import { focusInputPassword, setCSSVariable } from '@/utils/helper'
 import { hotkeys, toMagicKeyCombo } from '@/utils/hotkeys'
+import { initTimer } from '@/utils/time'
 
 export default defineComponent({
   name: 'MainApp',
@@ -19,7 +20,13 @@ export default defineComponent({
     }
 
     const initKeybinds = () => {
-      hotkeys.forEach(({ keys: keyList, callback }) => whenever(keys[toMagicKeyCombo(keyList)]!, callback))
+      hotkeys.forEach(({ keys: keyList, callback }) => {
+        if (!callback) return
+        whenever(
+          computed(() => !!(keys[toMagicKeyCombo(keyList)]?.value) && appStore.hotkeysEnabled),
+          callback
+        )
+      })
 
       whenever(keys.escape!, () => {
         const isFocusPassword = document.querySelector('#password:focus') as HTMLInputElement
@@ -44,6 +51,7 @@ export default defineComponent({
       })
     }
 
+    initTimer()
     appStore.setUpSettings()
     useQuerySync()
     initKeybinds()
