@@ -1,0 +1,54 @@
+.app-button-group
+  display flex
+  flex-direction column
+  gap 6px
+
+  &__label
+    font-size 0.75rem
+    color var(--color-unfocus)
+    text-transform uppercase
+    letter-spacing 0.05em
+
+  &--block
+    grid-column 1 / -1
+    .app-button-group__items
+      width 100%
+    .app-button-group__item
+      flex 1
+      justify-content center
+
+  &__items
+    display flex
+    align-items center
+    gap 2px
+    padding 4px
+    border-radius 999px
+    background var(--glass-bg)
+    border 1px solid var(--glass-border)
+    width fit-content
+
+  &__item
+    display flex
+    align-items center
+    gap 6px
+    padding 6px 14px
+    border-radius 999px
+    border none
+    background transparent
+    color var(--color-unfocus)
+    cursor pointer
+    transition color .25s, background .25s, box-shadow .25s
+    font-size 0.85rem
+
+    svg
+      width 16px
+      height 16px
+      fill currentColor
+
+    &:hover
+      color white
+
+    &.active
+      color white
+      background var(--glass-bg-active)
+      box-shadow 0 2px 8px rgba(0, 0, 0, 0.2)
