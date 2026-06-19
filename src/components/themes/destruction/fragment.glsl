@@ -2,7 +2,7 @@
  * Original shader from: https://www.shadertoy.com/view/ldyyWm
  */
 #ifdef GL_ES
-precision mediump float;
+precision highp float;
 #endif
 
 uniform float uTime;
@@ -46,11 +46,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
   mat2 r1 = rot(time/4.), r2 = rot(time/2.);
   rd.xz *= r1, ro.xz *= r1, rd.yz *= r2, ro.yz *= r2;
   
-  float t = .0, i = 24. * (1. - exp(- .2 * time - .1));
-  for (int ii = 0; ii < 100; --ii) {
-    if (i <= 0.) break;
-    t += map(ro+rd*t) / 2.;
-    --i;
+  float t = 0.0, i = 24.0 * (1.0 - exp(-0.2 * time - 0.1));
+  for (int ii = 0; ii < 100; ++ii) {
+    if (i <= 0.0) break;
+    t += map(ro + rd * t) / 2.0;
+    i -= 1.0;
   }
 
   fragColor = vec4(1.1 - burn, exp(-t), exp(-t/2.), 1);
