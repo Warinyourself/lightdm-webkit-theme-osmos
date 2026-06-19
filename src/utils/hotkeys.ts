@@ -62,17 +62,17 @@ export const hotkeys = [
   {
     keys: [modKey, 'P'],
     title: `${prefixTitle}poweroff`,
-    callback: systemActionsObject.shutdown
+    callback: systemActionsObject?.shutdown
   },
   {
     keys: [modKey, 'R'],
     title: `${prefixTitle}restart`,
-    callback: systemActionsObject.restart
+    callback: systemActionsObject?.restart
   },
   {
     keys: [modKey, 'S'],
     title: `${prefixTitle}suspend`,
-    callback: systemActionsObject.suspend
+    callback: systemActionsObject?.suspend
   }
 ]
 

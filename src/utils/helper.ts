@@ -1,4 +1,3 @@
-import type { AppInputButton, AppInputThemeGeneral, AppInputThemePalette, AppInputThemeSlider, AppTheme } from '@/models/app'
 import type { RouteLocationRaw } from 'vue-router'
 import router from '@/router'
 import { LightdmHandler } from '@/utils/lightdm'
@@ -7,9 +6,11 @@ import { LightdmHandler } from '@/utils/lightdm'
 // This is safe thanks to ES module live bindings (no circular dep issue at runtime)
 import { useAppStore } from '@/store/app'
 import { usePageStore } from '@/store/page'
-import { useThemeStore } from '@/store/theme'
+
+export { setCSSVariable } from '@/utils/dom'
 
 export const modKey = 'ctrl'
+
 export const languageMap: Record<string, string> = {
   ru: 'Русский',
   en: 'English',
@@ -31,23 +32,6 @@ export function parseQueryValue(value: string) {
   if (isNumber) return +value
 
   return value
-}
-
-export function randomize(min: number, max: number) {
-  return Math.random() * (max - min) + min
-}
-
-export function generateRandomSliderValue(input: AppInputThemeSlider) {
-  const ignoreSliders = ['pxratio', 'brightness']
-  if (ignoreSliders.includes(input.name)) return input.value
-
-  const { min, max } = input.options
-  const decimalPlaces = ((input.options.step + '').split('.')[1] || '').length
-  return +(randomize(min, max).toFixed(decimalPlaces))
-}
-
-export function generateRandomColor() {
-  return '#' + Math.floor(Math.random() * 2 ** 24 - 1).toString(16)
 }
 
 export function getDesktopIcon(desktop = '') {
@@ -116,59 +100,3 @@ export function stopPropagation(event: Event, callback?: () => void): void {
 export function hasSomeParentClass(element: HTMLElement, tag: string): boolean {
   return !!element.closest(tag)
 }
-
-export function randomizeSettingsTheme(theme: AppTheme) {
-  const generateValue: Record<string, (input: any) => any> = {
-    slider: (input: AppInputThemeSlider) => generateRandomSliderValue(input),
-    checkbox: () => Math.random() > 0.5,
-    color: () => generateRandomColor(),
-    palette: (input: AppInputThemePalette) => Math.floor(randomize(0, (input.values?.length || 2) - 1))
-  }
-
-  return theme.settings?.map((input) => {
-    const fn = generateValue[input.type]
-    if (fn) input.value = fn(input)
-    return input
-  })
-}
-
-export function setCSSVariable(property: string, value: string) {
-  document.documentElement.style.setProperty(property, value)
-}
-
-export const randomButton: AppInputButton = {
-  name: 'button',
-  value: 'button',
-  label: 'input.random',
-  type: 'button',
-  icon: 'random',
-  callback() {
-    useThemeStore().randomizeSettingsTheme()
-  }
-}
-
-export function buildInputSlider({
-  name = 'animation-speed',
-  value = 5,
-  min = 1,
-  max = 10,
-  step = 0.01,
-  icon = 'time',
-  changeOnUpdate = true
-} = {}): AppInputThemeSlider {
-  return { name, label: `input.${name}`, value, icon, type: 'slider', options: { changeOnUpdate, max, step, min } }
-}
-
-export function buildInputColor({ name = 'active-color', value = '#00CC99', ...options } = {}): AppInputThemeGeneral {
-  return { name, value, label: `input.${name}`, type: 'color', ...options }
-}
-
-export const pxratio = () => buildInputSlider({ name: 'pxratio', icon: 'pxratio', min: 0.01, max: 1, value: 0.8 })
-export const hueSlider = () => buildInputSlider({ name: 'hue', min: 1, max: 360, step: 1, value: 0 })
-export const brightnessSlider = () => buildInputSlider({ name: 'brightness', min: 0, max: 1, step: 0.01, value: 1 })
-export const buildInvertCheckbox = (): AppInputThemeGeneral => ({
-  name: 'invert',
-  label: 'input.invert',
-  type: 'checkbox',
-  value: false
-})

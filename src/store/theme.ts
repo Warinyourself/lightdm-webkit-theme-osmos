@@ -3,7 +3,8 @@ import { computed, ref } from 'vue'
 
 import type { AppTheme, AppSettings, AppInputTheme, AppInputThemeValue } from '@/models/app'
 
-import { randomizeSettingsTheme as buildRandomThemeSettings, setCSSVariable } from '@/utils/helper'
+import { randomizeSettingsTheme as buildRandomThemeSettings } from '@/utils/themeInputs'
+import { setCSSVariable } from '@/utils/dom'
 import { AppThemes, defaultTheme } from '@/utils/constant'
 
 export const useThemeStore = defineStore('theme', () => {
