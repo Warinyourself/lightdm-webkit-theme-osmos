@@ -36,6 +36,15 @@ export default defineComponent({
 
     return () => (
       <div class="settings-group">
+        {appStore.showTime && (
+          <AppButtonGroup
+            block
+            label={t('settings.time-format')}
+            items={timeFormatItems}
+            modelValue={appStore.timeFormat}
+            onUpdate:modelValue={(value: string) => { appStore.timeFormat = value }}
+          />
+        )}
         <AppButtonGroup
           block
           label={t('settings.choice-language')}
@@ -50,15 +59,6 @@ export default defineComponent({
             items={generateDesktopIcons()}
             modelValue={appStore.currentDesktop?.key}
             onUpdate:modelValue={changeDesktop}
-          />
-        )}
-        {appStore.showTime && (
-          <AppButtonGroup
-            block
-            label={t('settings.time-format')}
-            items={timeFormatItems}
-            modelValue={appStore.timeFormat}
-            onUpdate:modelValue={(value: string) => { appStore.timeFormat = value }}
           />
         )}
       </div>
