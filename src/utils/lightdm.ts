@@ -18,12 +18,12 @@ if (lightdmDebug) {
     authentication_complete: { connect: (callback: () => void) => { console.log('authentication complete') } },
 
     sessions: [
-      { name: 'i3wm', key: 'i3' },
-      { name: 'KDE 5', key: 'plasma-shell' },
-      { name: 'Gnome 3', key: 'gnome-shell' },
-      { name: 'XFCE 4', key: 'xfce' },
-      { name: 'Openbox', key: 'openbox' },
+      { name: 'GNOME', key: 'gnome-shell' },
+      { name: 'KDE', key: 'plasma-shell' },
+      { name: 'XFCE', key: 'xfce' },
       { name: 'Cinnamon', key: 'cinnamon' },
+      { name: 'i3', key: 'i3' },
+      { name: 'Openbox', key: 'openbox' },
     ],
     users: [
       {
