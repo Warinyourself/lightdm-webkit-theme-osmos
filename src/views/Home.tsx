@@ -42,7 +42,7 @@ export default defineComponent({
     const language = localStorage.getItem('language') || 'en'
     locale.value = language
     pageStore.language = language
-    pageStore.languages = ['ru', 'en', 'fr', 'de', 'es']
+    pageStore.languages = ['en', 'ru', 'fr', 'de', 'es']
     pageStore.openBlock({ id: 'login' })
 
     onMounted(() => {

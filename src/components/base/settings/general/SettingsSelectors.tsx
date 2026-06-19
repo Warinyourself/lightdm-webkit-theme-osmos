@@ -1,12 +1,15 @@
 import { defineComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useDebounceFn } from '@vueuse/core'
 import { useAppStore } from '@/store/app'
 import { usePageStore } from '@/store/page'
-import { useRouter } from 'vue-router'
-import AppSelector from '@/components/app/AppSelector'
-import AppSlider from '@/components/app/AppSlider'
-import { generateDesktopIcons, languageMap, setCSSVariable } from '@/utils/helper'
+import AppButtonGroup from '@/components/app/AppButtonGroup'
+import { generateDesktopIcons, languageMap } from '@/utils/helper'
+import { timePresets } from '@/utils/time'
+
+const timeFormatItems = (Object.keys(timePresets) as Array<keyof typeof timePresets>).map((key) => ({
+  value: key,
+  text: key,
+}))
 
 export default defineComponent({
   name: 'SettingsSelectors',
@@ -14,7 +17,6 @@ export default defineComponent({
     const appStore = useAppStore()
     const pageStore = usePageStore()
     const { t, locale } = useI18n()
-    const router = useRouter()
 
     const isViewThemeOnly = computed(() => appStore.viewThemeOnly)
 
@@ -32,38 +34,33 @@ export default defineComponent({
       appStore.saveStateApp({ key: 'desktop', value })
     }
 
-    const updateZoom = useDebounceFn((value: number) => {
-      setCSSVariable('--zoom', value + '' || '1')
-      appStore.zoom = parseFloat(value + '')
-    }, 100)
-
     return () => (
-      <div class="grid-two">
-        <h2 class="title">{t('settings.title')}</h2>
-        <AppSelector
+      <div class="settings-group">
+        <AppButtonGroup
+          block
           label={t('settings.choice-language')}
           items={languageList.value}
           modelValue={pageStore.language}
           onUpdate:modelValue={changeLanguage}
         />
         {!isViewThemeOnly.value && (
-          <AppSelector
+          <AppButtonGroup
+            block
             label={t('settings.choice-desktop')}
             items={generateDesktopIcons()}
             modelValue={appStore.currentDesktop?.key}
             onUpdate:modelValue={changeDesktop}
           />
         )}
-        {/* {!isViewThemeOnly.value && isSupportFullApi.value && (
-          <AppSlider
-            label={t('input.zoom-interface')}
-            from={0.5}
-            to={2}
-            step={0.1}
-            modelValue={appStore.zoom}
-            onUpdate:modelValue={updateZoom}
+        {appStore.showTime && (
+          <AppButtonGroup
+            block
+            label={t('settings.time-format')}
+            items={timeFormatItems}
+            modelValue={appStore.timeFormat}
+            onUpdate:modelValue={(value: string) => { appStore.timeFormat = value }}
           />
-        )} */}
+        )}
       </div>
     )
   }
