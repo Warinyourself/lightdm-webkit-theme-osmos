@@ -37,6 +37,11 @@ export default defineComponent({
           <AppButton onClick={resetSettings}>
             {t('settings.reset-settings')}
           </AppButton>
+          {appStore.isDebugMode && (
+            <AppButton onClick={() => { throw new Error('Debug: manual error') }}>
+              Throw error
+            </AppButton>
+          )}
         </div>
       </div>
     )

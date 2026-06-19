@@ -13,6 +13,7 @@ export const useAppStore = defineStore('app', () => {
 
   const version = appVersion as string
   const isGithubMode = import.meta.env.VITE_APP_VIEW === 'github'
+  const isDebugMode = import.meta.env.VITE_DEBUG === 'true'
 
   const desktop = ref(LightdmHandler.defaultSession)
   const username = ref(LightdmHandler.username)
@@ -99,6 +100,7 @@ export const useAppStore = defineStore('app', () => {
   return {
     version,
     isGithubMode,
+    isDebugMode,
     desktop,
     username,
     password,
