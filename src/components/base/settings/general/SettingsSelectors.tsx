@@ -18,8 +18,6 @@ export default defineComponent({
     const pageStore = usePageStore()
     const { t, locale } = useI18n()
 
-    const isViewThemeOnly = computed(() => appStore.viewThemeOnly)
-
     const languageList = computed(() =>
       pageStore.languages.map((lang) => ({ text: languageMap[lang] || lang, value: lang }))
     )
@@ -52,15 +50,13 @@ export default defineComponent({
           modelValue={pageStore.language}
           onUpdate:modelValue={changeLanguage}
         />
-        {!isViewThemeOnly.value && (
-          <AppButtonGroup
-            block
-            label={t('settings.choice-desktop')}
-            items={generateDesktopIcons()}
-            modelValue={appStore.currentDesktop?.key}
-            onUpdate:modelValue={changeDesktop}
-          />
-        )}
+        <AppButtonGroup
+          block
+          label={t('settings.choice-desktop')}
+          items={generateDesktopIcons()}
+          modelValue={appStore.currentDesktop?.key}
+          onUpdate:modelValue={changeDesktop}
+        />
       </div>
     )
   }

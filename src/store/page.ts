@@ -16,7 +16,6 @@ export const usePageStore = defineStore('page', () => {
     {
       id: 'login',
       closeBeforeMount: ['settings'],
-      mayOpen: () => !useAppStore().viewThemeOnly
     },
     {
       id: 'settings',

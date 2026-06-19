@@ -1,4 +1,4 @@
-import { defineComponent, computed } from 'vue'
+import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/store/app'
 import { useRouter, useRoute } from 'vue-router'
@@ -16,8 +16,6 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
 
-    const isViewThemeOnly = computed(() => appStore.viewThemeOnly)
-
     const resetSettings = () => {
       localStorage.clear()
       appStore.setUpSettings()
@@ -31,7 +29,7 @@ export default defineComponent({
       <div class="user-settings-general">
         <SettingsCheckboxes />
         <SettingsSelectors />
-        {!isViewThemeOnly.value && <SettingsUsers />}
+        <SettingsUsers />
         {appStore.hotkeysEnabled && <SettingsHotkeys />}
         <div class="help-block">
           <AppButton onClick={resetSettings}>

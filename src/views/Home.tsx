@@ -55,10 +55,10 @@ export default defineComponent({
 
     return () => {
       const showFrameRate = appStore.showFrameRate
-      const isOpenLogin = pageStore.isOpenBlock('login') && !appStore.viewThemeOnly
+      const isOpenLogin = pageStore.isOpenBlock('login')
       const isOpenSettings = pageStore.isOpenBlock('settings')
       const hasActiveBlock = !!pageStore.activeBlock
-      const showShutdownButton = !appStore.viewThemeOnly && hasActiveBlock
+      const showShutdownButton = hasActiveBlock
       const showGithubButton = appStore.isGithubMode && hasActiveBlock
 
       return (

@@ -22,7 +22,7 @@ export default defineComponent({
         {buildBodyClassSwitch('blur')}
         {buildBodyClassSwitch('show-framerate')}
         {buildBodyClassSwitch('no-transition')}
-        {buildBodyClassSwitch('only-ui')}
+
         <AppSwitch
           label={t('settings.hotkeys')}
           modelValue={appStore.hotkeysEnabled}

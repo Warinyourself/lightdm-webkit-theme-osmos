@@ -30,11 +30,9 @@ export const useAppStore = defineStore('app', () => {
     blur: true,
     'no-transition': false,
     'show-framerate': false,
-    'only-ui': false
   })
 
   const showFrameRate = computed(() => bodyClass['show-framerate'])
-  const viewThemeOnly = computed(() => bodyClass['only-ui'])
 
   const currentUser = computed(() => users.value.find((user) => user.username === username.value))
   const currentDesktop = computed(() => desktops.value.find(({ key }) => key === desktop.value))
@@ -123,7 +121,6 @@ export const useAppStore = defineStore('app', () => {
     timeFormat,
     bodyClass,
     showFrameRate,
-    viewThemeOnly,
     currentUser,
     currentDesktop,
     getMainSettings,
