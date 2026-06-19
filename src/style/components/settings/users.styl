@@ -8,13 +8,20 @@
   display flex
   padding 12px
   align-items center
-  border-radius 12px
-  border 1px solid var(--color-unfocus)
+  border-radius 16px
+  border 1px solid rgba(255, 255, 255, 0.15)
+  background rgba(255, 255, 255, 0.08)
+  backdrop-filter var(--glass-blur)
+  -webkit-backdrop-filter var(--glass-blur)
   flex-direction column
   justify-content center
+  transition background .25s, border-color .25s
+  &:hover
+    background rgba(255, 255, 255, 0.14)
+    border-color rgba(255, 255, 255, 0.28)
   &.active
-    border-color white
-    box-shadow var(--glass-glow)
+    background rgba(255, 255, 255, 0.2)
+    border-color rgba(255, 255, 255, 0.5)
 
 .settings-user-name
   width 100%
@@ -25,7 +32,7 @@
   overflow hidden
 
 .settings-user-image
-  border-radius 50%
+  border-radius 12px
   width calc(102px / var(--zoom))
   height calc(102px / var(--zoom))
   background-size cover
