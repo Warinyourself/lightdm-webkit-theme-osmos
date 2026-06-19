@@ -2,64 +2,83 @@
   "input": {
     "time": "Zeit",
     "color": "Farbe auswählen",
+    "bottom-color": "Untere Farbe",
     "color-active": "Aktive Farbe auswählen",
     "color-second": "Zweite Farbe auswählen",
-    "slider-amount": "Schiebereglerbetrag auswählen",
+    "slider-amount": "Regleranzahl",
     "dark-mode": "Dunkler Modus",
     "perspective": "Perspektive",
     "depth": "Tiefe",
     "size": "Größe",
     "position": "Position",
-    "amount": "Betrag",
+    "amount": "Menge",
     "hue": "Farbton",
     "zoom": "Zoom",
+    "zoom-interface": "Interface-Zoom",
     "pxratio": "Auflösung",
     "animation-speed": "Animationsgeschwindigkeit",
     "invert": "Invertieren",
     "brightness": "Helligkeit",
-    "random": "zufällig",
+    "random": "Zufällig",
     "symmetry": "Symmetrie",
     "thickness": "Dicke"
   },
   "text": {
-    "password": "passwort",
-    "yes": "ja",
-    "no": "nein"
+    "password": "Passwort",
+    "yes": "Ja",
+    "no": "Nein"
   },
   "modals": {
     "shutdown": {
       "title": "Herunterfahren",
-      "text": "Sind Sie sicher, dass Sie den Computer ausschalten möchten?"
+      "text": "Möchten Sie den Computer wirklich ausschalten?"
     },
     "restart": {
       "title": "Neustart",
-      "text": "Sind Sie sicher, dass Sie Ihren Computer neu starten möchten?"
+      "text": "Möchten Sie den Computer wirklich neu starten?"
     },
     "suspend": {
-      "title": "Aussetzen",
-      "text": "Sind Sie sicher, dass Sie Ihren Computer anhalten möchten?"
+      "title": "Ruhemodus",
+      "text": "Möchten Sie den Computer wirklich in den Ruhemodus versetzen?"
     },
     "hibernate": {
-      "title": "Ruhezustand",
-      "text": "Sind Sie sicher, dass Sie Ihren Computer in den Ruhezustand versetzen möchten?"
+      "title": "Schlafmodus",
+      "text": "Möchten Sie den Computer wirklich in den Schlafmodus versetzen?"
     }
   },
   "settings": {
     "title": "Einstellungen",
-    "themes": "themen",
-    "users": "benutzer",
+    "themes": "Themen",
+    "users": "Benutzer",
     "blur": "Unschärfe",
     "no-transition": "Animationen deaktivieren",
-    "show-framerate": "Framerate anzeigen",
-    "only-ui": "Nur ui anzeigen",
-    "performance": "leistung",
-    "choice-desktop": "Auswahl-Desktop",
+    "show-framerate": "Bildrate anzeigen",
+    "only-ui": "Nur Oberfläche anzeigen",
+    "performance": "Leistung",
+    "choice-desktop": "Desktop-Umgebung",
     "choice-language": "Sprache auswählen",
-    "choice-os": "Wahl os",
+    "generate-random-theme": "Zufälliges Design erstellen",
+    "keyboard": {
+      "title": "Tastenkürzel",
+      "open-themes": "Themen öffnen",
+      "open-custom": "Design-Einstellungen öffnen",
+      "open-settings": "Allgemeine Einstellungen öffnen",
+      "hide-windows": "Fenster schließen",
+      "show-password": "Passwort anzeigen",
+      "randomize-theme": "Zufällige Design-Einstellungen",
+      "poweroff": "Ausschalten",
+      "restart": "Neu starten",
+      "suspend": "Ruhemodus"
+    },
+    "choice-os": "System",
     "save-theme": "Design speichern",
     "language": "Sprache",
     "choice-themes": "Themen",
     "customize-theme": "Anpassen",
+    "change-theme": "Design wechseln",
+    "hotkeys": "Tastenkürzel",
+    "show-time": "Uhrzeit anzeigen",
+    "time-format": "Zeitformat",
     "reset-settings": "Einstellungen zurücksetzen",
     "about": "Systemeinstellungen"
   }

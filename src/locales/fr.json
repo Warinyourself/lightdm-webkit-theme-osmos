@@ -1,28 +1,85 @@
 {
+  "input": {
+    "time": "Heure",
+    "color": "Sélectionner une couleur",
+    "bottom-color": "Couleur du bas",
+    "color-active": "Couleur active",
+    "color-second": "Couleur secondaire",
+    "slider-amount": "Nombre de curseurs",
+    "dark-mode": "Mode sombre",
+    "perspective": "Perspective",
+    "depth": "Profondeur",
+    "size": "Taille",
+    "position": "Position",
+    "amount": "Quantité",
+    "hue": "Teinte",
+    "zoom": "Zoom",
+    "zoom-interface": "Zoom interface",
+    "pxratio": "Résolution",
+    "animation-speed": "Vitesse d'animation",
+    "invert": "Inverser",
+    "brightness": "Luminosité",
+    "random": "Aléatoire",
+    "symmetry": "Symétrie",
+    "thickness": "Épaisseur"
+  },
   "text": {
-    "themes": "thèmes",
     "password": "mot de passe",
     "yes": "oui",
     "no": "non"
   },
   "modals": {
     "shutdown": {
-      "title": "Eteindre",
-      "text": "Voulez-vous vraiment éteindre l'ordinateur?"
+      "title": "Éteindre",
+      "text": "Voulez-vous vraiment éteindre l'ordinateur ?"
     },
     "restart": {
       "title": "Redémarrer",
-      "text": "Voulez-vous vraiment redémarrer votre ordinateur?"
+      "text": "Voulez-vous vraiment redémarrer l'ordinateur ?"
     },
     "suspend": {
       "title": "Suspendre",
-      "text": "Voulez-vous vraiment suspendre votre ordinateur?"
+      "text": "Voulez-vous vraiment suspendre l'ordinateur ?"
+    },
+    "hibernate": {
+      "title": "Hibernation",
+      "text": "Voulez-vous vraiment mettre l'ordinateur en hibernation ?"
     }
   },
   "settings": {
     "title": "Paramètres",
-    "choice-language": "Choix de la langue",
+    "themes": "thèmes",
+    "users": "utilisateurs",
+    "blur": "Flou",
+    "no-transition": "Désactiver les animations",
+    "show-framerate": "Afficher le taux de rafraîchissement",
+    "only-ui": "Afficher uniquement l'interface",
+    "performance": "performance",
+    "choice-desktop": "Environnement de bureau",
+    "choice-language": "Langue",
+    "generate-random-theme": "Générer un thème aléatoire",
+    "keyboard": {
+      "title": "Raccourcis clavier",
+      "open-themes": "Ouvrir les thèmes",
+      "open-custom": "Ouvrir la personnalisation",
+      "open-settings": "Ouvrir les paramètres",
+      "hide-windows": "Fermer les fenêtres",
+      "show-password": "Afficher le mot de passe",
+      "randomize-theme": "Thème aléatoire",
+      "poweroff": "Éteindre",
+      "restart": "Redémarrer",
+      "suspend": "Suspendre"
+    },
+    "choice-os": "Système",
+    "save-theme": "Sauvegarder le thème",
     "language": "Langue",
+    "choice-themes": "Thèmes",
+    "customize-theme": "Personnaliser",
+    "change-theme": "Changer de thème",
+    "hotkeys": "Raccourcis clavier",
+    "show-time": "Afficher l'heure",
+    "time-format": "Format de l'heure",
+    "reset-settings": "Réinitialiser les paramètres",
     "about": "Paramètres système"
   }
 }

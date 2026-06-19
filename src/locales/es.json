@@ -1,28 +1,85 @@
 {
+  "input": {
+    "time": "Hora",
+    "color": "Seleccionar color",
+    "bottom-color": "Color inferior",
+    "color-active": "Color activo",
+    "color-second": "Color secundario",
+    "slider-amount": "Cantidad de controles",
+    "dark-mode": "Modo oscuro",
+    "perspective": "Perspectiva",
+    "depth": "Profundidad",
+    "size": "Tamaño",
+    "position": "Posición",
+    "amount": "Cantidad",
+    "hue": "Tono",
+    "zoom": "Zoom",
+    "zoom-interface": "Zoom de interfaz",
+    "pxratio": "Resolución",
+    "animation-speed": "Velocidad de animación",
+    "invert": "Invertir",
+    "brightness": "Brillo",
+    "random": "Aleatorio",
+    "symmetry": "Simetría",
+    "thickness": "Grosor"
+  },
   "text": {
-    "themes": "temas",
     "password": "contraseña",
-    "yes": "si",
+    "yes": "sí",
     "no": "no"
   },
   "modals": {
     "shutdown": {
       "title": "Apagar",
-      "text": "¿Seguro que quieres apagar la computadora?"
+      "text": "¿Seguro que quieres apagar el ordenador?"
     },
     "restart": {
       "title": "Reiniciar",
-      "text": "¿Seguro que quieres reiniciar tu computadora?"
+      "text": "¿Seguro que quieres reiniciar el ordenador?"
     },
     "suspend": {
       "title": "Suspender",
-      "text": "¿Estás seguro de que quieres suspender tu computadora?"
+      "text": "¿Seguro que quieres suspender el ordenador?"
+    },
+    "hibernate": {
+      "title": "Hibernar",
+      "text": "¿Seguro que quieres hibernar el ordenador?"
     }
   },
   "settings": {
-    "title": "configuración",
-    "choice-language": "Idioma de elección",
+    "title": "Ajustes",
+    "themes": "temas",
+    "users": "Usuarios",
+    "blur": "Desenfoque",
+    "no-transition": "Desactivar animaciones",
+    "show-framerate": "Mostrar tasa de fotogramas",
+    "only-ui": "Mostrar solo la interfaz",
+    "performance": "rendimiento",
+    "choice-desktop": "Entorno de escritorio",
+    "choice-language": "Idioma",
+    "generate-random-theme": "Generar tema aleatorio",
+    "keyboard": {
+      "title": "Atajos de teclado",
+      "open-themes": "Abrir temas",
+      "open-custom": "Abrir personalización",
+      "open-settings": "Abrir ajustes generales",
+      "hide-windows": "Cerrar ventanas",
+      "show-password": "Mostrar contraseña",
+      "randomize-theme": "Tema aleatorio",
+      "poweroff": "Apagar",
+      "restart": "Reiniciar",
+      "suspend": "Suspender"
+    },
+    "choice-os": "Sistema",
+    "save-theme": "Guardar tema",
     "language": "Idioma",
-    "about": "Sistema de configuración"
+    "choice-themes": "Temas",
+    "customize-theme": "Personalizar",
+    "change-theme": "Cambiar tema",
+    "hotkeys": "Atajos de teclado",
+    "show-time": "Mostrar hora",
+    "time-format": "Formato de hora",
+    "reset-settings": "Restablecer ajustes",
+    "about": "Ajustes del sistema"
   }
 }
