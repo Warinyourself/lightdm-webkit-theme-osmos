@@ -8,7 +8,7 @@ import svgLoader from 'vite-svg-loader'
 const isGithubView = process.env.VITE_APP_VIEW === 'github'
 
 export default defineConfig({
-  base: isGithubView ? '/lightdm-webkit-theme-osmos/' : '/',
+  base: isGithubView ? '/lightdm-webkit-theme-osmos/' : './',
   plugins: [
     vue(),
     vueJsx(),
