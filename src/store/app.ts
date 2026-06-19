@@ -23,6 +23,9 @@ export const useAppStore = defineStore('app', () => {
   const users = ref(LightdmHandler.users as LightdmUsers[])
   const desktops = ref(LightdmHandler.sessions as LightdmSession[])
   const showPassword = ref(false)
+  const hotkeysEnabled = ref(false)
+  const showTime = ref(false)
+  const timeFormat = ref('HH:mm')
   const bodyClass = reactive<Record<string, boolean>>({
     blur: true,
     'no-transition': false,
@@ -43,7 +46,10 @@ export const useAppStore = defineStore('app', () => {
     username: username.value,
     bodyClass,
     currentTheme: themeStore.currentTheme,
-    defaultColor: defaultColor.value
+    defaultColor: defaultColor.value,
+    hotkeysEnabled: hotkeysEnabled.value,
+    showTime: showTime.value,
+    timeFormat: timeFormat.value,
   }))
 
   const personalInfo = computed(() => ({
@@ -92,6 +98,9 @@ export const useAppStore = defineStore('app', () => {
       desktop.value = settings.desktop
       username.value = settings.username
       zoom.value = settings.zoom || 1
+      hotkeysEnabled.value = settings.hotkeysEnabled ?? false
+      showTime.value = settings.showTime ?? false
+      timeFormat.value = settings.timeFormat ?? 'HH:mm'
     } catch {
       setUpSettings()
     }
@@ -109,6 +118,9 @@ export const useAppStore = defineStore('app', () => {
     users,
     desktops,
     showPassword,
+    hotkeysEnabled,
+    showTime,
+    timeFormat,
     bodyClass,
     showFrameRate,
     viewThemeOnly,

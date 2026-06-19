@@ -6,6 +6,9 @@ export interface AppSettings {
   defaultColor: string;
   bodyClass: Record<string, boolean>;
   themes: AppTheme[];
+  hotkeysEnabled?: boolean;
+  showTime?: boolean;
+  timeFormat?: string;
 }
 
 export interface AppTheme {

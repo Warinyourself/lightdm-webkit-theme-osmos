@@ -76,6 +76,9 @@
     "choice-themes": "Themes",
     "customize-theme": "Customize",
     "change-theme": "Сhange theme",
+    "hotkeys": "Hotkeys",
+    "show-time": "Show time",
+    "time-format": "Time format",
     "reset-settings": "Reset settings",
     "about": "Settings system"
   }

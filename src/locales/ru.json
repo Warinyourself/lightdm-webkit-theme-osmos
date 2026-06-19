@@ -71,6 +71,9 @@
     "language": "Язык",
     "choice-themes": "Темы",
     "customize-theme": "Настройка",
+    "hotkeys": "Горячие клавиши",
+    "show-time": "Показывать время",
+    "time-format": "Формат времени",
     "reset-settings": "Сбросить настройки",
     "change-theme": "Сменить тему",
     "about": "Настройки системы"
