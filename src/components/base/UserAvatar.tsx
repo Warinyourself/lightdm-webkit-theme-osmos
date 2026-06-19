@@ -1,29 +1,29 @@
 import { User } from '@lucide/vue'
 import { defineComponent } from 'vue'
 import { useAppStore } from '@/store/app'
-import type { LightdmUsers } from '@/models/lightdm'
+import { usePageStore } from '@/store/page'
 
 export default defineComponent({
   name: 'UserAvatar',
   setup() {
     const appStore = useAppStore()
+    const pageStore = usePageStore()
 
-    const buildUserAvatar = (image: string | undefined) =>
-      image
-        ? <img class="user-avatar" src={image} />
-        : <User />
+    const openSettings = () => {
+      pageStore.openTab({ type: 'settings' })
+      pageStore.openBlock({ id: 'settings' })
+    }
 
-    const buildUser = (user: LightdmUsers) => (
-      <div class="user-choice" key={user.username}>
-        {buildUserAvatar(user?.image)}
-        <div class="user-name">{user?.display_name}</div>
-      </div>
-    )
-
-    return () => (
-      <transition-group tag="div" name="fade-bottom" class="transition-group">
-        {appStore.users.filter(({ username }) => username === appStore.currentUser?.username).map(buildUser)}
-      </transition-group>
-    )
+    return () => {
+      const user = appStore.currentUser
+      return (
+        <div class="user-choice" onClick={openSettings}>
+          {user?.image
+            ? <img class="user-avatar" src={user.image} />
+            : <User />}
+          <div class="user-name">{user?.display_name}</div>
+        </div>
+      )
+    }
   }
 })
