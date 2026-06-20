@@ -4,6 +4,7 @@ import { useAppStore } from '@/store/app'
 import { usePageStore } from '@/store/page'
 import { useQuerySync } from '@/composables/useQuerySync'
 import { useLightdm, initLightdm } from '@/composables/useLightdm'
+import { initSystemInfo } from '@/composables/useSystemInfo'
 import { focusInputPassword, setCSSVariable } from '@/utils/helper'
 import { hotkeys, toMagicKeyCombo } from '@/utils/hotkeys'
 import { initTimer } from '@/utils/time'
@@ -54,6 +55,7 @@ export default defineComponent({
 
     initTimer()
     initLightdm()
+    initSystemInfo()
     appStore.setUpSettings()
     useQuerySync()
     initKeybinds()

@@ -9,10 +9,23 @@ if (window.lightdm === undefined) {
     can_restart: true,
     can_hibernate: true,
     can_shutdown: true,
+    can_access_battery: true,
+    can_access_brightness: true,
+
+    battery_data: { name: 'BAT0', level: 78, status: 'Discharging', ac_status: false, capacity: 100, time: '1:30', watt: 10 },
+    brightness: 70,
+
+    layouts: [
+      { name: 'us', description: 'English (US)', short_description: 'en' },
+      { name: 'ru', description: 'Russian', short_description: 'ru' },
+    ],
+    layout: { name: 'us', description: 'English (US)', short_description: 'en' },
 
     authentication_complete: { connect: () => {} },
     show_message: { connect: () => {} },
     show_prompt: { connect: () => {} },
+    battery_update: { connect: () => {} },
+    brightness_update: { connect: () => {} },
 
     sessions: [
       { name: 'GNOME', key: 'gnome-shell' },

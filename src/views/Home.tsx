@@ -12,6 +12,7 @@ import FrameRateBlock from '@/components/base/FrameRateBlock'
 import BackgroundImage from '@/components/base/BackgroundImage'
 import ShutdownButton from '@/components/base/ShutdownButton'
 import GithubButton from '@/components/base/GithubButton'
+import AppBar from '@/components/base/AppBar'
 
 export default defineComponent({
   name: 'HomePage',
@@ -63,6 +64,8 @@ export default defineComponent({
 
       return (
         <div class="index">
+          <AppBar />
+
           {showFrameRate && <FrameRateBlock />}
           <BackgroundImage />
 
