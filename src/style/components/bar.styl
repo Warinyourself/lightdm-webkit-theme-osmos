@@ -1,64 +1,47 @@
 .app-bar
-  --icon-size: 24px
-  position absolute
+  position fixed
   top 0
-  left 0
-  width 100%
-  font-size 0.875rem
-  background var(--background-block)
-  display flex
-  justify-content center
-  height 36px
-  align-items center
-  padding 0 var(--gap)
-
-.app-bar__info
-  display flex
-  gap var(--gap)
-  position absolute
-  right var(--gap)
-
-.app-bar-battery
-  display flex
-  align-items center
-
-.app-bar-battery-icon
-  position relative
-  width var(--icon-size)
-  height calc(var(--icon-size) / 2)
-  border calc(var(--icon-size) / 40) white solid
-  border-radius calc(var(--icon-size) / 9)
-  margin-right calc(var(--gap) / 2)
-  &::before
-    content ''
-    display block
-    top 50%
-    right 0px
-    background white
-    position absolute
-    border-radius 0 calc(var(--icon-size) / 30) calc(var(--icon-size) / 30) 0
-    width calc(var(--icon-size) / 10)
-    height calc(var(--icon-size) / 5)
-    transform translate(100%, -50%)
-
-.app-bar-battery-icon__fill
-  max-width 100%
-  height 100%
-  background var(--color-unfocus)
-  &.charging
-    background var(--color-green)
-
-.app-bar-battery-icon__charge
-  width 80%
-  position absolute
-  top 50%
   left 50%
-  transform translate(-50%, -50%)
+  transform translateX(-50%)
+  z-index 100
 
-.app-bar__bright
-  gap calc(var(--gap) / 2)
   display flex
   align-items center
+  gap 12px
 
-.brightness-icon
-  width 1.1rem
+  padding 8px 20px 10px
+  border-radius 0 0 20px 20px
+  background var(--glass-bg-active)
+  border 0 solid var(--glass-border)
+  border-width 0 1px 1px 1px
+  backdrop-filter var(--glass-blur)
+  -webkit-backdrop-filter var(--glass-blur)
+  box-shadow 0 4px 16px rgba(0, 0, 0, 0.25)
+
+  font-size 0.78rem
+  white-space nowrap
+
+  svg
+    width 14px
+    height 14px
+    flex-shrink 0
+
+.app-bar__item
+  display flex
+  align-items center
+  gap 5px
+  color var(--color-unfocus)
+  transition color .2s
+
+  &--clickable
+    cursor pointer
+    &:hover
+      color white
+
+.app-bar__layout
+  font-weight 600
+  letter-spacing 0.05em
+
+.app-bar__time
+  font-weight 500
+  letter-spacing 0.02em
