@@ -31,7 +31,6 @@ export default defineComponent({
       const component = themeMap[theme.value.component ?? 'random'] ?? themeMap.random
       return (
         <div class="background-image">
-          <div class="mask-background" />
           {h(component)}
         </div>
       )
