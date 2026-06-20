@@ -1,28 +1,22 @@
 import { defineStore } from 'pinia'
-import { computed, reactive, ref, type Ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 
 import type { AppSettings } from '@/models/app'
-import type { LightdmSession, LightdmUsers } from '@/models/lightdm'
 
 import { useThemeStore } from '@/store/theme'
-import { LightdmHandler } from '@/utils/lightdm'
+import { useLightdm } from '@/composables/useLightdm'
 import { version as appVersion } from '../../package.json'
 
 export const useAppStore = defineStore('app', () => {
   const themeStore = useThemeStore()
+  const session = useLightdm()
 
   const version = appVersion as string
   const isGithubMode = import.meta.env.VITE_APP_VIEW === 'github'
   const isDebugMode = import.meta.env.VITE_DEBUG === 'true'
 
-  const desktop = ref(LightdmHandler.defaultSession)
-  const username = ref(LightdmHandler.username)
-  const password = ref('')
   const defaultColor = ref('#6BBBED')
   const zoom = ref(1)
-  const users = ref(LightdmHandler.users as LightdmUsers[])
-  const desktops = ref(LightdmHandler.sessions as LightdmSession[])
-  const showPassword = ref(false)
   const hotkeysEnabled = ref(false)
   const showTime = ref(false)
   const timeFormat = ref('HH:mm')
@@ -34,14 +28,11 @@ export const useAppStore = defineStore('app', () => {
 
   const showFrameRate = computed(() => bodyClass['show-framerate'])
 
-  const currentUser = computed(() => users.value.find((user) => user.username === username.value))
-  const currentDesktop = computed(() => desktops.value.find(({ key }) => key === desktop.value))
-
   const getMainSettings = computed((): AppSettings => ({
     zoom: zoom.value,
     themes: themeStore.themes,
-    desktop: desktop.value,
-    username: username.value,
+    desktop: session.desktop.value,
+    username: session.username.value,
     bodyClass,
     currentTheme: themeStore.currentTheme,
     defaultColor: defaultColor.value,
@@ -50,30 +41,15 @@ export const useAppStore = defineStore('app', () => {
     timeFormat: timeFormat.value,
   }))
 
-  const personalInfo = computed(() => ({
-    username: username.value,
-    currentTheme: themeStore.currentTheme,
-    desktop: desktop.value,
-    version,
-    defaultColor: defaultColor.value
-  }))
-
-  const settableRefs: Record<string, Ref<any>> = { desktop, username, password, defaultColor, zoom }
-
-  function login() {
-    LightdmHandler.login(username.value, password.value, currentDesktop.value?.key)
-  }
-
-  function toggleShowPassword() {
-    showPassword.value = !showPassword.value
-  }
-
   function changeBodyClass({ key, value }: { key: string; value: boolean }) {
     bodyClass[key] = value
   }
 
   function saveStateApp({ key, value }: { key: string; value: string }) {
-    if (key in settableRefs) settableRefs[key]!.value = value
+    if (key === 'desktop') session.desktop.value = value
+    else if (key === 'username') session.username.value = value
+    else if (key === 'defaultColor') defaultColor.value = value
+    else if (key === 'zoom') zoom.value = parseFloat(value)
     localStorage.setItem(key, value)
   }
 
@@ -87,14 +63,12 @@ export const useAppStore = defineStore('app', () => {
 
       if (settings.themes) themeStore.syncThemeWithStore(settings)
 
-      const isExistDE = window.lightdm?.sessions.find(({ key }) => key === settings.desktop)
-      if (!isExistDE) settings.desktop = window.lightdm?.sessions[0]?.key || 'openbox'
+      const validDesktop = window.lightdm?.sessions.find(({ key }) => key === settings.desktop)?.key
+      session.desktop.value = validDesktop || window.lightdm?.sessions[0]?.key || 'openbox'
 
-      const isExistUser = window.lightdm?.users.find(({ username: name }) => name === settings.username)
-      if (!isExistUser) settings.username = window.lightdm?.users[0]?.username || 'Warinyourself'
+      const validUser = window.lightdm?.users.find(({ username }) => username === settings.username)?.username
+      session.username.value = validUser || window.lightdm?.users[0]?.username || ''
 
-      desktop.value = settings.desktop
-      username.value = settings.username
       zoom.value = settings.zoom || 1
       hotkeysEnabled.value = settings.hotkeysEnabled ?? false
       showTime.value = settings.showTime ?? false
@@ -108,28 +82,17 @@ export const useAppStore = defineStore('app', () => {
     version,
     isGithubMode,
     isDebugMode,
-    desktop,
-    username,
-    password,
     defaultColor,
     zoom,
-    users,
-    desktops,
-    showPassword,
     hotkeysEnabled,
     showTime,
     timeFormat,
     bodyClass,
     showFrameRate,
-    currentUser,
-    currentDesktop,
     getMainSettings,
-    personalInfo,
-    login,
-    toggleShowPassword,
     changeBodyClass,
     saveStateApp,
     syncSettingsWithCache,
-    setUpSettings
+    setUpSettings,
   }
 })

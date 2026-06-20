@@ -1,6 +1,6 @@
 import { usePageStore } from '@/store/page'
-import { useAppStore } from '@/store/app'
 import { useThemeStore } from '@/store/theme'
+import { useLightdm } from '@/composables/useLightdm'
 import { systemActionsObject, modKey } from '@/utils/helper'
 
 const prefixTitle = 'settings.keyboard.'
@@ -57,7 +57,7 @@ export const hotkeys = [
   {
     keys: [modKey, 'i'],
     title: `${prefixTitle}show-password`,
-    callback: () => useAppStore().toggleShowPassword()
+    callback: () => useLightdm().toggleShowPassword()
   },
   {
     keys: [modKey, 'P'],

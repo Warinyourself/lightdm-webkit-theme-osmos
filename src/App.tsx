@@ -3,6 +3,7 @@ import { useMagicKeys, useDebounceFn, whenever } from '@vueuse/core'
 import { useAppStore } from '@/store/app'
 import { usePageStore } from '@/store/page'
 import { useQuerySync } from '@/composables/useQuerySync'
+import { useLightdm, initLightdm } from '@/composables/useLightdm'
 import { focusInputPassword, setCSSVariable } from '@/utils/helper'
 import { hotkeys, toMagicKeyCombo } from '@/utils/hotkeys'
 import { initTimer } from '@/utils/time'
@@ -44,7 +45,7 @@ export default defineComponent({
       whenever(keys.enter!, () => {
         const isFocusPassword = document.querySelector('#password:focus')
         if (isFocusPassword) {
-          appStore.login()
+          useLightdm().login()
         } else {
           focusInputPassword()
         }
@@ -52,6 +53,7 @@ export default defineComponent({
     }
 
     initTimer()
+    initLightdm()
     appStore.setUpSettings()
     useQuerySync()
     initKeybinds()

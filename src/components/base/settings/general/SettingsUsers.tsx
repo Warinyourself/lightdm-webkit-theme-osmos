@@ -1,18 +1,18 @@
 import { User } from '@lucide/vue'
 import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useAppStore } from '@/store/app'
+import { useLightdm } from '@/composables/useLightdm'
 import type { LightdmUsers } from '@/models/lightdm'
 
 export default defineComponent({
   name: 'SettingsUsers',
   setup() {
-    const appStore = useAppStore()
+    const session = useLightdm()
     const { t } = useI18n()
 
     const buildUserBlock = (user: LightdmUsers) => {
-      const isActive = user.username === appStore.username
-      const activateUser = () => { appStore.username = user.username }
+      const isActive = user.username === session.username.value
+      const activateUser = () => { session.username.value = user.username }
 
       return (
         <div onClick={activateUser} class={`settings-user-block ${isActive ? 'active' : ''}`}>
@@ -27,7 +27,7 @@ export default defineComponent({
     return () => (
       <div>
         <h2 class="title mb-1">{t('settings.users')}</h2>
-        <div class="users-grid">{appStore.users.map(buildUserBlock)}</div>
+        <div class="users-grid">{session.users.value.map(buildUserBlock)}</div>
       </div>
     )
   }

@@ -1,11 +1,10 @@
 import type { RouteLocationRaw } from 'vue-router'
 import router from '@/router'
-import { LightdmHandler } from '@/utils/lightdm'
 
 // Stores are imported statically but only CALLED inside functions/callbacks
 // This is safe thanks to ES module live bindings (no circular dep issue at runtime)
-import { useAppStore } from '@/store/app'
 import { usePageStore } from '@/store/page'
+import { useLightdm } from '@/composables/useLightdm'
 
 export { setCSSVariable } from '@/utils/dom'
 
@@ -53,7 +52,7 @@ export function getDesktopIcon(desktop = '') {
 }
 
 export function generateDesktopIcons() {
-  return useAppStore().desktops.map((desktop) => ({
+  return useLightdm().desktops.value.map((desktop) => ({
     text: desktop.name,
     value: desktop.key,
     icon: getDesktopIcon(desktop.key)
@@ -70,7 +69,7 @@ export function buildSystemDialog(callbackName: systemActionsType) {
       title: `modals.${callbackName}.title`,
       text: `modals.${callbackName}.text`,
       actions: [
-        { title: 'text.yes', callback: LightdmHandler[callbackName] },
+        { title: 'text.yes', callback: () => useLightdm()[callbackName]() },
         { title: 'text.no', callback: () => pageStore.closeDialog() }
       ]
     })

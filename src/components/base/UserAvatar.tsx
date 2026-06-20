@@ -1,12 +1,12 @@
 import { User } from '@lucide/vue'
 import { defineComponent } from 'vue'
-import { useAppStore } from '@/store/app'
+import { useLightdm } from '@/composables/useLightdm'
 import { usePageStore } from '@/store/page'
 
 export default defineComponent({
   name: 'UserAvatar',
   setup() {
-    const appStore = useAppStore()
+    const session = useLightdm()
     const pageStore = usePageStore()
 
     const openSettings = () => {
@@ -15,7 +15,7 @@ export default defineComponent({
     }
 
     return () => {
-      const user = appStore.currentUser
+      const user = session.currentUser.value
       return (
         <div class="user-choice" onClick={openSettings}>
           {user?.image

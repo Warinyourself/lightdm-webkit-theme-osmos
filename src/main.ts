@@ -5,7 +5,7 @@ import { createI18n } from 'vue-i18n'
 import App from './App'
 import router from './router'
 import { registerComponents } from '@/plugins/components'
-import '@/utils/lightdm'
+import '@/utils/lightdmMock'
 
 import './style/index.styl'
 

@@ -1,13 +1,13 @@
 import { Settings, Eye, EyeOff, ArrowRight } from '@lucide/vue'
 import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useAppStore } from '@/store/app'
 import { usePageStore } from '@/store/page'
+import { useLightdm } from '@/composables/useLightdm'
 
 export default defineComponent({
   name: 'UserInput',
   setup() {
-    const appStore = useAppStore()
+    const session = useLightdm()
     const pageStore = usePageStore()
     const { t } = useI18n()
 
@@ -18,29 +18,29 @@ export default defineComponent({
     }
 
     const handleKeyup = (event: KeyboardEvent) => {
-      appStore.password = (event.target as HTMLInputElement)?.value || ''
+      session.password.value = (event.target as HTMLInputElement)?.value || ''
     }
- 
+
     return () => (
       <div class="user-input">
         <Settings class="settings-button" onClick={openSettings} />
 
         <input
           id="password"
-          type={appStore.showPassword ? 'text' : 'password'}
+          type={session.showPassword.value ? 'text' : 'password'}
           name="password"
           autocomplete="on"
           autofocus
           placeholder={t('text.password')}
           onKeyup={handleKeyup}
-          value={appStore.password}
+          value={session.password.value}
         />
 
-        {appStore.showPassword
-          ? <Eye class="icon icon-eye" onClick={() => appStore.toggleShowPassword()} />
-          : <EyeOff class="icon icon-eye" onClick={() => appStore.toggleShowPassword()} />}
+        {session.showPassword.value
+          ? <Eye class="icon icon-eye" onClick={session.toggleShowPassword} />
+          : <EyeOff class="icon icon-eye" onClick={session.toggleShowPassword} />}
 
-        <button class="user-input-login" onClick={() => appStore.login()}>
+        <button class="user-input-login" onClick={session.login}>
           <ArrowRight />
         </button>
       </div>
