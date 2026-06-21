@@ -1,3 +1,4 @@
+#version 300 es
 #ifdef GL_ES
 precision highp float;
 #endif
@@ -18,11 +19,12 @@ vec3 lambda_0(vec3 x) {
   return x + f(x) * (0.5 - (vec3(gl_FragCoord.xy, 1.0) / uResolution.x));
 }
 
+out vec4 fragColor;
 void main() {
   vec3 i_0 = vec3(0.0,0.0,0.0);
 
 	for (float i_1 = 0.0; i_1 < 32.; i_1++) i_0 = lambda_0(i_0);
 
   vec3 p = i_0;
-  gl_FragColor = vec4(((vec3(2.0,5.0,9.0) + sin(p)) / length(p)),1.0);
+  fragColor = vec4(((vec3(2.0,5.0,9.0) + sin(p)) / length(p)),1.0);
 }

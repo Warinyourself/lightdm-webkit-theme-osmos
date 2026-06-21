@@ -1,3 +1,4 @@
+#version 300 es
 // Modified so it doesn't really move. Very childish and easy fix.
 #ifdef GL_ES
 precision highp float;
@@ -11,6 +12,7 @@ const float fluidSpeed = 60.0;  // Drives speed, higher number will make it slow
 const float color_intensity = 0.5;
 const float position = 1.0;
 
+out vec4 fragColor;
 void main() {
   vec2 p= (position * gl_FragCoord.xy - uResolution) / max(uResolution.x, uResolution.y);
 
@@ -22,5 +24,5 @@ void main() {
   }
 
   vec3 col=vec3(color_intensity*sin(5.0*p.x)+color_intensity,color_intensity*sin(3.0*p.y)+color_intensity,color_intensity*sin(p.x+p.y)+color_intensity);
-  gl_FragColor=vec4(col, 1.0);
+  fragColor=vec4(col, 1.0);
 }

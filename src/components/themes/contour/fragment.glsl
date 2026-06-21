@@ -1,4 +1,4 @@
-#extension GL_OES_standard_derivatives : enable
+#version 300 es
 #ifdef GL_ES
 precision highp float;
 #endif
@@ -92,6 +92,7 @@ float wave(float t) {
   return 0.5 * (1.0 - cos(uScaleContour * M_PI * t));
 }
 
+out vec4 fragColor;
 void main() {
   vec2 uv = uScale * gl_FragCoord.xy / uResolution.y;
 
@@ -112,5 +113,5 @@ void main() {
              - smoothstep(hi - fw, hi + fw, contour_fac);
 
   float brightness = line;
-  gl_FragColor = vec4(mix(uBackground, color, brightness), 1.0);
+  fragColor = vec4(mix(uBackground, color, brightness), 1.0);
 }

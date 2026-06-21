@@ -1,3 +1,4 @@
+#version 300 es
 /**
  * Original shader: https://www.shadertoy.com/view/MsjSW3
  */
@@ -22,6 +23,7 @@ float map(vec3 p){
   return length(p + vec3(sin(t * .7))) * log(length(p) + size) + sin(q.x + sin(q.z + sin(q.y))) * 0.5 - zoom;
 }
 
+out vec4 fragColor;
 void main() {
   vec2 p = gl_FragCoord.xy / uResolution.y - vec2(0.9,.5);
   vec3 cl = vec3(0.);
@@ -44,5 +46,5 @@ void main() {
     saturation += min(rz, smoothness);
   }
 
-  gl_FragColor = vec4(cl, 1.);
+  fragColor = vec4(cl, 1.);
 }

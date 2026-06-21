@@ -1,3 +1,4 @@
+#version 300 es
 /*
  * Original shader from: https://www.shadertoy.com/view/ttKBDd
  */
@@ -179,6 +180,7 @@ void mainImage( out vec4 f, in vec2 u ) {
   f = vec4(col, 1.0);
 }
 
+out vec4 fragColor;
 void main(void) {
-  mainImage(gl_FragColor, gl_FragCoord.xy);
+  mainImage(fragColor, gl_FragCoord.xy);
 }

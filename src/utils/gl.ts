@@ -1,4 +1,4 @@
-type ctxType = WebGLRenderingContext
+type ctxType = WebGL2RenderingContext
 
 interface GLRenderOptions {
   observeMouse?: boolean;
@@ -19,7 +19,7 @@ interface GlOption {
 }
 
 export default class GL {
-  ctx!: WebGLRenderingContext
+  ctx!: WebGL2RenderingContext
   protected el!: HTMLCanvasElement
   program!: WebGLProgram | null
 
@@ -74,10 +74,10 @@ export default class GL {
 
     this.el = el
 
-    const ctx = this.el.getContext('webgl')
+    const ctx = this.el.getContext('webgl2')
 
     if (!ctx) {
-      console.log('Browser doesn\'t support WebGL ')
+      console.log('Browser doesn\'t support WebGL 2')
       return
     }
 

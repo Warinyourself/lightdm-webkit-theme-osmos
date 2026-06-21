@@ -1,3 +1,4 @@
+#version 300 es
 precision highp float;
 
 uniform vec2 uResolution;
@@ -65,6 +66,7 @@ vec3 palette(in float t) {
   return a + b * cos(6.28318 * (c * t + d));
 }
 
+out vec4 fragColor;
 void main() {
   vec2 p = gl_FragCoord.xy / uResolution.xy;
   p.x *= uResolution.x / uResolution.y;
@@ -72,5 +74,5 @@ void main() {
   float value = pow(pattern(p), 2.);
   vec3 color  = palette(value);
 
-  gl_FragColor = vec4(color, 1.);
+  fragColor = vec4(color, 1.);
 }

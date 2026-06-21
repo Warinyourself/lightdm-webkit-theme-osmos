@@ -6,9 +6,9 @@ interface RenderTarget {
 }
 
 // ─── Shared pass vertex shader ───────────────────────────────────────────────
-const PASS_VERT = `
-attribute vec2 aPosition;
-varying vec2 vUv;
+const PASS_VERT = `#version 300 es
+in vec2 aPosition;
+out vec2 vUv;
 void main() {
   vUv = aPosition * 0.5 + 0.5;
   gl_Position = vec4(aPosition, 0.0, 1.0);
@@ -17,7 +17,7 @@ void main() {
 // ─── Separable Gaussian blur ─────────────────────────────────────────────────
 // Call twice (horizontal then vertical) for a full 2D Gaussian blur.
 // uDirection = (1,0) for horizontal, (0,1) for vertical.
-const BLUR_FRAG = `
+const BLUR_FRAG = `#version 300 es
 precision highp float;
 uniform sampler2D uTexture;
 uniform vec2 uResolution;
@@ -26,51 +26,54 @@ uniform float uRadius;
 // Step multiplier: sample every N pixels instead of every 1.
 // Higher values cover a wider area with the same 17 taps — key for wide diffuse bloom.
 uniform float uStepMult;
-varying vec2 vUv;
+in vec2 vUv;
+out vec4 fragColor;
 void main() {
   vec2 step = uDirection / uResolution * uStepMult;
   vec4 color = vec4(0.0);
   float total = 0.0;
   for (float i = -8.0; i <= 8.0; i++) {
     float w = exp(-i * i / (2.0 * uRadius * uRadius));
-    color += texture2D(uTexture, vUv + step * i) * w;
+    color += texture(uTexture, vUv + step * i) * w;
     total += w;
   }
-  gl_FragColor = color / total;
+  fragColor = color / total;
 }`
 
 // ─── Brightness extraction ────────────────────────────────────────────────────
 // Keeps only pixels whose luminance exceeds uThreshold; everything else goes black.
 // Used before the wide bloom pass so scattering only originates from bright light sources.
-const EXTRACT_FRAG = `
+const EXTRACT_FRAG = `#version 300 es
 precision highp float;
 uniform sampler2D uTexture;
 uniform float uThreshold;
-varying vec2 vUv;
+in vec2 vUv;
+out vec4 fragColor;
 void main() {
-  vec4 c = texture2D(uTexture, vUv);
+  vec4 c = texture(uTexture, vUv);
   float lum = dot(c.rgb, vec3(0.2126, 0.7152, 0.0722));
   float bright = max(0.0, lum - uThreshold) / max(1.0 - uThreshold, 0.001);
-  gl_FragColor = vec4(c.rgb * bright, 1.0);
+  fragColor = vec4(c.rgb * bright, 1.0);
 }`
 
 // ─── Dual-bloom composite ─────────────────────────────────────────────────────
 // Combines the original render with two independent bloom layers:
 //   bloom1 — bright tight bloom (enhances perceived saturation / intensity)
 //   bloom2 — wide dim bloom  (simulates lens scattering / atmospheric glow)
-const COMPOSITE_FRAG = `
+const COMPOSITE_FRAG = `#version 300 es
 precision highp float;
 uniform sampler2D uBase;
 uniform sampler2D uBloom1;   // bright tight bloom
 uniform sampler2D uBloom2;   // wide dim bloom
 uniform float uIntensity1;
 uniform float uIntensity2;
-varying vec2 vUv;
+in vec2 vUv;
+out vec4 fragColor;
 void main() {
-  vec4 base   = texture2D(uBase,   vUv);
-  vec4 bloom1 = texture2D(uBloom1, vUv);
-  vec4 bloom2 = texture2D(uBloom2, vUv);
-  gl_FragColor = clamp(base + bloom1 * uIntensity1 + bloom2 * uIntensity2, 0.0, 1.0);
+  vec4 base   = texture(uBase,   vUv);
+  vec4 bloom1 = texture(uBloom1, vUv);
+  vec4 bloom2 = texture(uBloom2, vUv);
+  fragColor = clamp(base + bloom1 * uIntensity1 + bloom2 * uIntensity2, 0.0, 1.0);
 }`
 
 const QUAD = new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1])

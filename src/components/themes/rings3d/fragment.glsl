@@ -1,3 +1,4 @@
+#version 300 es
 // Inspiration: https://www.shadertoy.com/view/WdB3Dw
 #ifdef GL_ES
 precision highp float;
@@ -98,6 +99,7 @@ mat3 calcLookAtMatrix(vec3 ro, vec3 ta, vec3 up) {
   return mat3(uu, vv, ww);
 }
 
+out vec4 fragColor;
 void main() {
   gTime = mod(uTime / 2.0, 1.0);
 
@@ -146,5 +148,5 @@ void main() {
   color = pow(color, vec3(2.0)) * 3.0;
   color = pow(color, vec3(1.0 / 2.2));
 
-  gl_FragColor = vec4(color, 1.0);
+  fragColor = vec4(color, 1.0);
 }

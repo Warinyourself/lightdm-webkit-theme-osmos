@@ -33,7 +33,6 @@ export default defineComponent({
         window.innerWidth,
         window.innerHeight,
         {
-          extensions: ['OES_standard_derivatives'],
           renderOptions: { externalTimeUse: true },
           renderHook() {
             const gl = this as unknown as GL

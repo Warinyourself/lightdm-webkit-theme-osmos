@@ -1,3 +1,4 @@
+#version 300 es
 precision highp float;
 
 uniform float uTime;
@@ -6,7 +7,8 @@ uniform float zoom; // 32.415
 uniform vec2 uResolution;
 float linearity = 2.; // 2.
 
-void main( void ) {
+out vec4 fragColor;
+void main() {
   float mx = max( uResolution.x, uResolution.y );
   vec2 uv = (gl_FragCoord.xy - uResolution.xy * 0.5) / mx;
   uv.x += sin(uTime + uv.y * linearity) * .2;
@@ -35,5 +37,5 @@ void main( void ) {
   float r = -uv.y + (.5 + hue);
   float b = uv.y + (.5 - hue);
 
-  gl_FragColor = vec4(mix(vec3(r, r*.3, b), vec3(c), .3), 1.0);
+  fragColor = vec4(mix(vec3(r, r*.3, b), vec3(c), .3), 1.0);
 }

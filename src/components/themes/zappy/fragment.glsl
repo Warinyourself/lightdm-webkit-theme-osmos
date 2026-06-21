@@ -1,3 +1,4 @@
+#version 300 es
 // Inspiration: https://www.shadertoy.com/view/cfjGzV — Zippy Zaps
 // Credits: -13 thanks to Nguyen2007 ⚡
 #ifdef GL_ES
@@ -13,15 +14,8 @@ uniform float uZoom;
 // Shifts the base colour phase vector, cycling through hue combinations
 uniform float uColorShift;
 
-// tanh is GLSL ES 3.00+ only — not available in WebGL 1.0.
-// Implemented via the identity tanh(x) = (e^2x - 1)/(e^2x + 1).
-// Input clamped to ±15 to prevent exp() overflow on large inputs.
-vec2 tanh(vec2 x) {
-  x = clamp(x, -15.0, 15.0);
-  vec2 e = exp(2.0 * x);
-  return (e - 1.0) / (e + 1.0);
-}
 
+out vec4 fragColor;
 void main() {
   vec2 res = uResolution;
   vec2 u   = gl_FragCoord.xy;
@@ -73,5 +67,5 @@ void main() {
   // Equivalent to: 25.6 / (min(o,13.) + 164./o)
   o = 25.6 * o / (min(o, 13.0) * o + 164.0) - dot(u, u) / 250.0;
 
-  gl_FragColor = vec4(o);
+  fragColor = vec4(o);
 }

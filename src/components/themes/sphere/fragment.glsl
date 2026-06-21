@@ -1,3 +1,4 @@
+#version 300 es
 /*
  * Original shader from: https://www.shadertoy.com/view/lslcWj
  */
@@ -31,7 +32,7 @@ vec3 GetColor(vec3 p) {
   return col * amount;
 }
 
-void mainImage(out vec4 fragColor, in vec2 fragCoord) {
+void mainImage(out vec4 col, in vec2 fragCoord) {
 	vec3 rd = normalize(vec3(2.0 * fragCoord.xy - uResolution.xy, -uResolution.y));
   vec3 ro = vec3(0.0, 0.0, size);
 
@@ -41,7 +42,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
   R(ro.yz, 0.5 * uTime);
 
   float t = 0.0;
-  fragColor.rgb = vec3(0.0353, 0.0275, 0.1255);
+  col.rgb = vec3(0.0353, 0.0275, 0.1255);
   float scale = mix(3.5, 9.0, Sin01(0.068 * uTime));
 
   for (int i = 0; i < 64; i++) {
@@ -51,11 +52,12 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
       break;
     }
     t += .9 * d;
-    fragColor.rgb += 0.05 * GetColor(p);
+    col.rgb += 0.05 * GetColor(p);
   }
 }
 
+out vec4 fragColor;
 void main(void) {
-  mainImage(gl_FragColor, gl_FragCoord.xy);
-  gl_FragColor.a = 1.;
+  mainImage(fragColor, gl_FragCoord.xy);
+  fragColor.a = 1.0;
 }

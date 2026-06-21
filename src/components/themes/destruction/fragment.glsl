@@ -1,3 +1,4 @@
+#version 300 es
 /*
  * Original shader from: https://www.shadertoy.com/view/ldyyWm
  */
@@ -10,10 +11,8 @@ uniform float position;
 uniform float perspective;
 uniform vec2 uResolution;
 
-#define round(x) (floor((x) + 0.5))
-
 float burn;
-float time = uTime + 200.0;
+float time;
 
 mat2 rot(float a) {
   float s=sin(a), c=cos(a);
@@ -40,7 +39,7 @@ float map(vec3 p) {
   return d;
 }
 
-void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
+void mainImage( out vec4 col, in vec2 fragCoord ) {
   vec3 rd = normalize(vec3(2. * fragCoord - uResolution.xy, uResolution.y * position)), ro = vec2(0, -2).xxy;
   
   mat2 r1 = rot(time/4.), r2 = rot(time/2.);
@@ -53,10 +52,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
     i -= 1.0;
   }
 
-  fragColor = vec4(1.1 - burn, exp(-t), exp(-t/2.), 1);
-  // fragColor = vec4(exp(-t) * 4.1, exp(-t/2.) * 0.9, 0.4 - burn * 2.9, 1);
+  col = vec4(1.1 - burn, exp(-t), exp(-t/2.), 1);
+  // col = vec4(exp(-t) * 4.1, exp(-t/2.) * 0.9, 0.4 - burn * 2.9, 1);
 }
 
+out vec4 fragColor;
 void main(void) {
-  mainImage(gl_FragColor, gl_FragCoord.xy);
+  time = uTime + 200.0;
+  mainImage(fragColor, gl_FragCoord.xy);
 }

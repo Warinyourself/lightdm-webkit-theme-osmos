@@ -1,3 +1,4 @@
+#version 300 es
 // Original: http://www.pouet.net/prod.php?which=57245
 // Credits: Danilo Guanabara
 #ifdef GL_ES
@@ -26,6 +27,7 @@ uniform float uBrightness;
 #define t uTime
 #define r uResolution
 
+out vec4 fragColor;
 void main() {
   vec3 c;
   float l, z = t;
@@ -39,5 +41,5 @@ void main() {
     uv += p / l * (sin(z) + 1.) * uAmplitude * abs(sin(l * uFrequency - z - z));
     c[i] = uBrightness / length(mod(uv, 1.) - .5);
   }
-  gl_FragColor = vec4(c / l, 1.0);
+  fragColor = vec4(c / l, 1.0);
 }
