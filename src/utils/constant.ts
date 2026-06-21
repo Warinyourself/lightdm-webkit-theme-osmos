@@ -180,10 +180,10 @@ export const AppThemes: AppTheme[] = [
       buildInputSlider({ name: 'contour',  value: 32,   min: 2,    max: 64,   step: 1    }),
       buildInputSlider({ name: 'width',    value: 0.15, min: 0.01, max: 1,    step: 0.01 }),
       buildInputSlider({ name: 'max-line', value: 0.3,  min: 0.01, max: 1,    step: 0.01 }),
-      buildInputSlider({ name: 'glow',       value: 0.15, min: 0, max: 1,  step: 0.01 }),
-      buildInputSlider({ name: 'glow-width', value: 0.5,  min: 0, max: 1,  step: 0.01 }),
+
       buildInputColor({ name: 'color-active', value: '#FF00FF' }),
       buildInputColor({ name: 'color-second', value: '#00FFFF' }),
+      buildInputColor({ name: 'color-bg',     value: '#000000' }),
       randomButton,
       resetButton
     ]

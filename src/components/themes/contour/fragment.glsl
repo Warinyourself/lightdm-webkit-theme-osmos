@@ -15,11 +15,6 @@ uniform float uScaleContour;
 // Line width: controls how much of the contour field is visible (0 = thin hairlines, 1 = wide bands)
 uniform float uWidth;
 
-// Glow brightness: overall intensity of the bloom halo
-uniform float uGlow;
-
-// Glow width: 0 = wide diffuse bloom, 1 = tight narrow halo (controls pow exponent)
-uniform float uGlowWidth;
 
 // Max line band: caps the upper visible threshold so all lines have similar spatial width
 // smaller = more uniform thin lines, larger = allows wide bands
@@ -30,6 +25,9 @@ uniform vec3 uColor1;
 
 // Second gradient color (RGB)
 uniform vec3 uColor2;
+
+// Background color — shown where lines and glow are absent
+uniform vec3 uBackground;
 
 const float M_PI = 3.14159265;
 const int NUM_OCTAVES = 2;
@@ -113,11 +111,6 @@ void main() {
   float line = smoothstep(lo - fw, lo + fw, contour_fac)
              - smoothstep(hi - fw, hi + fw, contour_fac);
 
-  // Glow: tent-shaped halo centered on the band with controlled falloff on both sides
-  float glowExponent = mix(1.0, 16.0, uGlowWidth);
-  float glow_t = clamp((contour_fac - lo + 0.1) / (uMaxLine + 0.2), 0.0, 1.0);
-  float glow_bell = 1.0 - abs(glow_t * 2.0 - 1.0);
-  float glow = uGlow * pow(glow_bell, glowExponent);
-
-  gl_FragColor = vec4(color * max(line, glow), 1.0);
+  float brightness = line;
+  gl_FragColor = vec4(mix(uBackground, color, brightness), 1.0);
 }
