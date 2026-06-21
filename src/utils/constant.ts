@@ -3,8 +3,10 @@ import {
   pxratio,
   hueSlider,
   randomButton,
+  resetButton,
   brightnessSlider,
   buildInputSlider,
+  buildInputColor,
   buildInvertCheckbox,
 } from './themeInputs'
 
@@ -24,7 +26,8 @@ export const defaultTheme: AppTheme = {
     hueSlider(),
     brightnessSlider(),
     buildInvertCheckbox(),
-    randomButton
+    randomButton,
+    resetButton
   ]
 }
 
@@ -43,7 +46,8 @@ export const AppThemes: AppTheme[] = [
       brightnessSlider(),
       buildInputSlider({ max: 10 }),
       buildInputSlider({ value: 2, max: 3, min: 1.4, name: 'size' }),
-      randomButton
+      randomButton,
+      resetButton
     ]
   },
   {
@@ -68,7 +72,8 @@ export const AppThemes: AppTheme[] = [
           changeOnUpdate: true
         }
       },
-      randomButton
+      randomButton,
+      resetButton
     ]
   },
   {
@@ -82,7 +87,8 @@ export const AppThemes: AppTheme[] = [
       buildInputSlider({ name: 'position', value: 0.1, icon: 'position', max: 1, min: 0.01 }),
       buildInputSlider({ name: 'perspective', value: 0.1, icon: 'perspective', max: 1, min: 0.01 }),
       buildInputSlider({ value: 10, max: 15 }),
-      randomButton
+      randomButton,
+      resetButton
     ]
   },
   {
@@ -96,7 +102,8 @@ export const AppThemes: AppTheme[] = [
       buildInputSlider(),
       buildInputSlider({ name: 'hue', value: 0, icon: 'hue', max: 0.5, min: -0.5 }),
       buildInputSlider({ name: 'zoom', value: 32, icon: 'zoom', max: 100, min: 2 }),
-      randomButton
+      randomButton,
+      resetButton
     ]
   },
   {
@@ -108,7 +115,8 @@ export const AppThemes: AppTheme[] = [
     settings: [
       pxratio(),
       buildInputSlider({ value: 10, max: 15 }),
-      randomButton
+      randomButton,
+      resetButton
     ]
   },
   {
@@ -121,7 +129,8 @@ export const AppThemes: AppTheme[] = [
       pxratio(),
       hueSlider(),
       buildInputSlider({ value: 10, max: 25 }),
-      randomButton
+      randomButton,
+      resetButton
     ]
   },
   {
@@ -137,7 +146,46 @@ export const AppThemes: AppTheme[] = [
       buildInvertCheckbox(),
       buildInputSlider({ value: 10, max: 15 }),
       buildInputSlider({ value: 1, max: 2.8, min: 0.2, name: 'size' }),
-      randomButton
+      randomButton,
+      resetButton
+    ]
+  },
+  {
+    name: 'Tunnel',
+    component: 'tunnel',
+    color: {
+      background: '#000014'
+    },
+    settings: [
+      pxratio(),
+      buildInputSlider({ value: 5, max: 15 }),
+      buildInputSlider({ name: 'step',      value: 0.07, min: 0.01, max: 0.3,  step: 0.01  }),
+      buildInputSlider({ name: 'frequency', value: 9,    min: 1,    max: 20,   step: 0.5   }),
+      buildInputSlider({ name: 'amplitude', value: 1,    min: 0,    max: 3,    step: 0.1   }),
+      buildInputSlider({ name: 'brightness',value: 0.01, min: 0.001,max: 0.05, step: 0.001 }),
+      randomButton,
+      resetButton
+    ]
+  },
+  {
+    name: 'Contour',
+    component: 'contour',
+    color: {
+      background: '#0a001a'
+    },
+    settings: [
+      pxratio(),
+      buildInputSlider({ value: 3, min: 0, max: 15, step: 0.1 }),
+      buildInputSlider({ name: 'scale',    value: 3,    min: 1,    max: 8,    step: 0.1  }),
+      buildInputSlider({ name: 'contour',  value: 32,   min: 2,    max: 64,   step: 1    }),
+      buildInputSlider({ name: 'width',    value: 0.15, min: 0.01, max: 1,    step: 0.01 }),
+      buildInputSlider({ name: 'max-line', value: 0.3,  min: 0.01, max: 1,    step: 0.01 }),
+      buildInputSlider({ name: 'glow',       value: 0.15, min: 0, max: 1,  step: 0.01 }),
+      buildInputSlider({ name: 'glow-width', value: 0.5,  min: 0, max: 1,  step: 0.01 }),
+      buildInputColor({ name: 'color-active', value: '#FF00FF' }),
+      buildInputColor({ name: 'color-second', value: '#00FFFF' }),
+      randomButton,
+      resetButton
     ]
   },
 ]

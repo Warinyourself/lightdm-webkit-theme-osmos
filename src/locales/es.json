@@ -21,7 +21,18 @@
     "brightness": "Brillo",
     "random": "Aleatorio",
     "symmetry": "Simetría",
-    "thickness": "Grosor"
+    "thickness": "Grosor",
+    "step": "Paso de canal",
+    "frequency": "Frecuencia",
+    "amplitude": "Amplitud",
+    "reset": "Restablecer",
+    "scale": "Escala",
+    "contour": "Contorno",
+    "width": "Ancho",
+    "softness": "Suavidad",
+    "glow": "Resplandor",
+    "glow-width": "Ancho del halo",
+    "max-line": "Línea máx."
   },
   "text": {
     "password": "contraseña",

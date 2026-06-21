@@ -9,6 +9,8 @@ import destruction from '@/components/themes/destruction'
 import tenderness from '@/components/themes/tenderness'
 import planet from '@/components/themes/planet'
 import random from '@/components/themes/random'
+import tunnel from '@/components/themes/tunnel'
+import contour from '@/components/themes/contour'
 
 const themeMap: Record<string, any> = {
   flow,
@@ -19,6 +21,8 @@ const themeMap: Record<string, any> = {
   tenderness,
   planet,
   random,
+  tunnel,
+  contour,
 }
 
 export default defineComponent({

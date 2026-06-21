@@ -21,7 +21,18 @@
     "brightness": "Яркость",
     "random": "Случайно",
     "symmetry": "Симметрия",
-    "thickness": "Толщина"
+    "thickness": "Толщина",
+    "step": "Шаг канала",
+    "frequency": "Частота",
+    "amplitude": "Амплитуда",
+    "reset": "Сброс",
+    "scale": "Масштаб",
+    "contour": "Контур",
+    "width": "Ширина",
+    "softness": "Мягкость",
+    "glow": "Свечение",
+    "glow-width": "Ширина свечения",
+    "max-line": "Макс. линия"
   },
   "text": {
     "password": "пароль",

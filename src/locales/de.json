@@ -21,7 +21,18 @@
     "brightness": "Helligkeit",
     "random": "Zufällig",
     "symmetry": "Symmetrie",
-    "thickness": "Dicke"
+    "thickness": "Dicke",
+    "step": "Kanalschritt",
+    "frequency": "Frequenz",
+    "amplitude": "Amplitude",
+    "reset": "Zurücksetzen",
+    "scale": "Skalierung",
+    "contour": "Kontur",
+    "width": "Breite",
+    "softness": "Weichheit",
+    "glow": "Leuchten",
+    "glow-width": "Leuchtbreite",
+    "max-line": "Max. Linie"
   },
   "text": {
     "password": "Passwort",
