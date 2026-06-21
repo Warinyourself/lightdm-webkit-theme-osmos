@@ -32,7 +32,8 @@
     "softness": "Suavidad",
     "glow": "Resplandor",
     "glow-width": "Ancho del halo",
-    "max-line": "Línea máx."
+    "max-line": "Línea máx.",
+    "color-bg": "Fondo"
   },
   "text": {
     "password": "contraseña",

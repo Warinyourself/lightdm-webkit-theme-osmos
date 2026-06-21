@@ -32,7 +32,8 @@
     "softness": "Douceur",
     "glow": "Lueur",
     "glow-width": "Largeur du halo",
-    "max-line": "Ligne max"
+    "max-line": "Ligne max",
+    "color-bg": "Arrière-plan"
   },
   "text": {
     "password": "mot de passe",

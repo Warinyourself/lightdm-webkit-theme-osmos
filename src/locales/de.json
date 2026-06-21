@@ -32,7 +32,8 @@
     "softness": "Weichheit",
     "glow": "Leuchten",
     "glow-width": "Leuchtbreite",
-    "max-line": "Max. Linie"
+    "max-line": "Max. Linie",
+    "color-bg": "Hintergrund"
   },
   "text": {
     "password": "Passwort",
