@@ -11,6 +11,8 @@ import planet from '@/components/themes/planet'
 import random from '@/components/themes/random'
 import tunnel from '@/components/themes/tunnel'
 import contour from '@/components/themes/contour'
+import rings3d from '@/components/themes/rings3d'
+import zappy from '@/components/themes/zappy'
 
 const themeMap: Record<string, any> = {
   flow,
@@ -23,6 +25,8 @@ const themeMap: Record<string, any> = {
   random,
   tunnel,
   contour,
+  rings3d,
+  zappy,
 }
 
 export default defineComponent({

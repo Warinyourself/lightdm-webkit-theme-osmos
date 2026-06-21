@@ -33,7 +33,14 @@
     "glow": "Glow",
     "glow-width": "Glow Width",
     "max-line": "Max Line",
-    "color-bg": "Background"
+    "color-bg": "Background",
+    "tube-size": "Tube Size",
+    "bubble-size": "Bubble Size",
+    "fog-density": "Fog Density",
+    "spectrum-speed": "Spectrum Speed",
+    "color-glow": "Glow Color",
+    "color-fog": "Fog Color",
+    "color-shift": "Color Shift"
   },
   "text": {
     "password": "password",

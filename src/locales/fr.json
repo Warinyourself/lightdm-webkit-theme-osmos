@@ -33,7 +33,14 @@
     "glow": "Lueur",
     "glow-width": "Largeur du halo",
     "max-line": "Ligne max",
-    "color-bg": "Arrière-plan"
+    "color-bg": "Arrière-plan",
+    "tube-size": "Épaisseur du tube",
+    "bubble-size": "Taille de la bulle",
+    "fog-density": "Densité du brouillard",
+    "spectrum-speed": "Vitesse du spectre",
+    "color-glow": "Couleur du halo",
+    "color-fog": "Couleur du brouillard",
+    "color-shift": "Décalage couleur"
   },
   "text": {
     "password": "mot de passe",

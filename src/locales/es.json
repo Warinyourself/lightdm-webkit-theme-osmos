@@ -33,7 +33,14 @@
     "glow": "Resplandor",
     "glow-width": "Ancho del halo",
     "max-line": "Línea máx.",
-    "color-bg": "Fondo"
+    "color-bg": "Fondo",
+    "tube-size": "Grosor del tubo",
+    "bubble-size": "Tamaño de burbuja",
+    "fog-density": "Densidad de niebla",
+    "spectrum-speed": "Velocidad del espectro",
+    "color-glow": "Color del brillo",
+    "color-fog": "Color de la niebla",
+    "color-shift": "Desplazamiento de color"
   },
   "text": {
     "password": "contraseña",

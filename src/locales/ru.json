@@ -33,7 +33,14 @@
     "glow": "Свечение",
     "glow-width": "Ширина свечения",
     "max-line": "Макс. линия",
-    "color-bg": "Фон"
+    "color-bg": "Фон",
+    "tube-size": "Размер трубки",
+    "bubble-size": "Размер пузыря",
+    "fog-density": "Плотность тумана",
+    "spectrum-speed": "Скорость спектра",
+    "color-glow": "Цвет свечения",
+    "color-fog": "Цвет тумана",
+    "color-shift": "Сдвиг цвета"
   },
   "text": {
     "password": "пароль",

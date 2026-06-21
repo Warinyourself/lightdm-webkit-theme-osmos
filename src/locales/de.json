@@ -33,7 +33,14 @@
     "glow": "Leuchten",
     "glow-width": "Leuchtbreite",
     "max-line": "Max. Linie",
-    "color-bg": "Hintergrund"
+    "color-bg": "Hintergrund",
+    "tube-size": "Rohrdicke",
+    "bubble-size": "Blasengröße",
+    "fog-density": "Nebeldichte",
+    "spectrum-speed": "Spektralgeschwindigkeit",
+    "color-glow": "Leuchtfarbe",
+    "color-fog": "Nebelfarbe",
+    "color-shift": "Farbversatz"
   },
   "text": {
     "password": "Passwort",
