@@ -64,7 +64,7 @@ export default defineComponent({
 
       return (
         <div class="index">
-          <AppBar />
+          {isOpenLogin && <AppBar />}
 
           {showFrameRate && <FrameRateBlock />}
           <BackgroundImage />
