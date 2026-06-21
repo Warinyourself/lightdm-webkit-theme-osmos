@@ -20,7 +20,7 @@ interface GlOption {
 
 export default class GL {
   ctx!: WebGLRenderingContext
-  private el!: HTMLCanvasElement
+  protected el!: HTMLCanvasElement
   program!: WebGLProgram | null
 
   private vertexShader!: WebGLShader
