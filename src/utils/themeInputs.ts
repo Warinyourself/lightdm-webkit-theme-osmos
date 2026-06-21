@@ -43,6 +43,16 @@ export const randomButton: AppInputButton = {
   }
 }
 
+export const resetButton: AppInputButton = {
+  name: 'button',
+  value: 'button',
+  label: 'input.reset',
+  type: 'button',
+  callback() {
+    void import('@/store/theme').then(({ useThemeStore }) => useThemeStore().resetTheme())
+  }
+}
+
 export function buildInputSlider({
   name = 'animation-speed',
   value = 5,

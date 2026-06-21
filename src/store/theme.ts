@@ -7,6 +7,14 @@ import { randomizeSettingsTheme as buildRandomThemeSettings } from '@/utils/them
 import { setCSSVariable } from '@/utils/dom'
 import { AppThemes, defaultTheme } from '@/utils/constant'
 
+// Snapshot of default input values captured before any mutations
+const _defaults = new Map<string, Record<string, AppInputThemeValue>>(
+  AppThemes.map((theme) => [
+    theme.name,
+    Object.fromEntries((theme.settings || []).map((input) => [input.name, input.value]))
+  ])
+)
+
 export const useThemeStore = defineStore('theme', () => {
   const currentTheme = ref('')
   const themes = ref(AppThemes as AppTheme[])
@@ -24,6 +32,17 @@ export const useThemeStore = defineStore('theme', () => {
   function randomizeSettingsTheme() {
     const theme = activeTheme.value
     theme.settings = buildRandomThemeSettings(theme)
+  }
+
+  function resetTheme() {
+    const defaults = _defaults.get(currentTheme.value)
+    if (!defaults) return
+    const target = themes.value.find(({ name }) => name === currentTheme.value)
+    if (!target?.settings) return
+    target.settings = target.settings.map((input) => ({
+      ...input,
+      value: defaults[input.name] ?? input.value
+    }))
   }
 
   async function changeTheme(themeName: string, themeSettings?: AppTheme['settings']) {
@@ -88,6 +107,7 @@ export const useThemeStore = defineStore('theme', () => {
     getThemeByName,
     getThemeInput,
     randomizeSettingsTheme,
+    resetTheme,
     changeTheme,
     changeSettingsTheme,
     changeThemeInput,
