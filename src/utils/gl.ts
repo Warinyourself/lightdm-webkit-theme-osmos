@@ -15,6 +15,7 @@ interface GlOption {
   renderHook: () => void;
   renderOptions?: GLRenderOptions;
   windowListener?: WindowListenerCallback[];
+  extensions?: string[];
 }
 
 export default class GL {
@@ -81,6 +82,8 @@ export default class GL {
     }
 
     this.ctx = ctx
+
+    options?.extensions?.forEach((ext) => ctx.getExtension(ext))
 
     // Create the shaders
     this.vertexShader = this.createShaderOfType(this.ctx, this.ctx.VERTEX_SHADER, vertexShaderSource) as WebGLShader
