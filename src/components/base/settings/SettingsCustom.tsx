@@ -9,7 +9,6 @@ import AppColorSelector from '@/components/app/AppColorSelector'
 import AppPaletteSelector from '@/components/app/AppPaletteSelector'
 import type {
   AppInputButton,
-  AppInputColor,
   AppInputThemeGeneral,
   AppInputThemePalette,
   AppInputThemeSelector,
@@ -62,9 +61,9 @@ export default defineComponent({
           class={options?.class}
           label={label}
           modelValue={value as string}
-          onUpdate:modelValue={(color: AppInputColor) => {
-            themeStore.changeSettingsThemeInput({ key: input.name, value: color.hex })
-            input.callback?.(color.hex)
+          onUpdate:modelValue={(color: string) => {
+            themeStore.changeSettingsThemeInput({ key: input.name, value: color })
+            input.callback?.(color)
           }}
         />
       )
