@@ -1,10 +1,10 @@
 import { defineComponent, computed } from 'vue'
 import { useThemeStore } from '@/store/theme'
 
-const themeImages = import.meta.glob('@/assets/images/themes/*/index.png', { eager: true, import: 'default' }) as Record<string, string>
+const themeImages = import.meta.glob('@/assets/images/themes/preview/*.png', { eager: true, import: 'default' }) as Record<string, string>
 
 function getThemeImage(name: string): string {
-  const key = Object.keys(themeImages).find((k) => k.includes(`/${name.toLowerCase()}/`))
+  const key = Object.keys(themeImages).find((k) => k.endsWith(`/${name.toLowerCase()}.png`))
   return key ? (themeImages[key] ?? 'notFound') : 'notFound'
 }
 
