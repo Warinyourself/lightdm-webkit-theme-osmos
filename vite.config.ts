@@ -37,5 +37,10 @@ export default defineConfig({
     preprocessorOptions: {
       stylus: {}
     }
+  },
+  build: {
+    // Disable CSS minification: LightningCSS drops unprefixed 'backdrop-filter'
+    // when it detects a WebKit-only target, breaking blur in webkit-greeter.
+    cssMinify: false
   }
 })
