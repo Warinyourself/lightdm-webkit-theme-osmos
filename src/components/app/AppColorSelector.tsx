@@ -16,7 +16,7 @@ export default defineComponent({
 
     return () => (
       <div class="color-selector">
-        <p>{t(props.label)}</p>
+        <p>{t(props.label)} <span class="caption">{props.modelValue}</span></p>
         <input
           type="color"
           value={props.modelValue}

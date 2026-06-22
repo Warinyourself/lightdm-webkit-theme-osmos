@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 
 import type { AppTheme, AppSettings, AppInputTheme, AppInputThemeValue } from '@/models/app'
 
-import { randomizeSettingsTheme as buildRandomThemeSettings } from '@/utils/themeInputs'
+import { randomizeSettingsTheme as buildRandomThemeSettings } from '@/utils/theme-inputs'
 import { setCSSVariable } from '@/utils/dom'
 import { AppThemes, defaultTheme } from '@/utils/constant'
 

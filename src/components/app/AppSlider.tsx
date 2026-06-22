@@ -31,6 +31,7 @@ export default defineComponent({
       <div class="app-slider">
         <div class="app-slider__content">
           <p class="mb-2">{t(props.label)}</p>
+          <span class={"caption"}>{props.modelValue}</span>
         </div>
         <div class="center-x">
           <input

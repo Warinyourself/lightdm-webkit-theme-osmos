@@ -14,7 +14,7 @@ export default defineComponent({
     const themeStore = useThemeStore()
     const canvasRef = ref<HTMLCanvasElement | null>(null)
 
-    const animationSpeed = computed(() => themeStore.getThemeInput('animation-speed')?.value as number || 5)
+    const animationSpeed = computed(() => themeStore.getThemeInput('animation-speed')?.value as number || 0.7)
     const pxratio        = computed(() => themeStore.getThemeInput('pxratio')?.value        as number || 0.8)
     const scale          = computed(() => themeStore.getThemeInput('scale')?.value          as number || 3.0)
     const contour        = computed(() => themeStore.getThemeInput('contour')?.value        as number || 32.0)

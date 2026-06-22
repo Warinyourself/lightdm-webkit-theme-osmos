@@ -38,13 +38,7 @@ export default defineComponent({
       const bat = sys.battery.value
 
       return (
-        <div class="app-bar">
-          {appStore.showTime && (
-            <div class="app-bar__item">
-              <span class="app-bar__time">{formattedTime.value}</span>
-            </div>
-          )}
-
+        <div class="app-bar active-block">
           {desktop && (
             <div class="app-bar__item">
               <AppIcon name={getDesktopIcon(desktop.key)} />
@@ -55,6 +49,12 @@ export default defineComponent({
           {layout && (
             <div class="app-bar__item app-bar__item--clickable" onClick={sys.cycleLayout}>
               <span class="app-bar__layout">{layout.short_description.toUpperCase()}</span>
+            </div>
+          )}
+
+          {appStore.showTime && (
+            <div class="app-bar__item">
+              <span class="app-bar__time">{formattedTime.value}</span>
             </div>
           )}
 

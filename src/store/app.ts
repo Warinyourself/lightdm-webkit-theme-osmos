@@ -18,8 +18,8 @@ export const useAppStore = defineStore('app', () => {
   const defaultColor = ref('#6BBBED')
   const zoom = ref(1)
   const hotkeysEnabled = ref(false)
-  const showTime = ref(false)
-  const timeFormat = ref('HH:mm')
+  const showTime = ref(true)
+  const timeFormat = ref('short')
   const bodyClass = reactive<Record<string, boolean>>({
     blur: true,
     'no-transition': false,
@@ -50,6 +50,7 @@ export const useAppStore = defineStore('app', () => {
     else if (key === 'username') session.username.value = value
     else if (key === 'defaultColor') defaultColor.value = value
     else if (key === 'zoom') zoom.value = parseFloat(value)
+
     localStorage.setItem(key, value)
   }
 
@@ -71,8 +72,8 @@ export const useAppStore = defineStore('app', () => {
 
       zoom.value = settings.zoom || 1
       hotkeysEnabled.value = settings.hotkeysEnabled ?? false
-      showTime.value = settings.showTime ?? false
-      timeFormat.value = settings.timeFormat ?? 'HH:mm'
+      showTime.value = settings.showTime ?? true
+      timeFormat.value = settings.timeFormat ?? 'short'
     } catch {
       setUpSettings()
     }
