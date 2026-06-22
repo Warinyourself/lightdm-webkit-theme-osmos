@@ -53,15 +53,27 @@ export const resetButton: AppInputButton = {
   }
 }
 
-export function buildInputSlider({
-  name = 'animation-speed',
-  value = 5,
-  min = 1,
-  max = 10,
-  step = 0.01,
-  icon = 'time',
-  changeOnUpdate = true
-} = {}): AppInputThemeSlider {
+interface BuildInputSliderOptions {
+  name: string
+  value: number
+  min: number
+  max: number
+  step: number
+  icon: string
+  changeOnUpdate: boolean
+}
+
+export function buildInputSlider(options?: Partial<BuildInputSliderOptions>): AppInputThemeSlider {
+  const {
+    name = 'animation-speed',
+    value = 5,
+    min = 1,
+    max = 10,
+    step = 0.01,
+    icon = 'time',
+    changeOnUpdate = true
+  } = options || {}
+
   return { name, label: `input.${name}`, value, icon, type: 'slider', options: { changeOnUpdate, max, step, min } }
 }
 
@@ -69,9 +81,12 @@ export function buildInputColor({ name = 'active-color', value = '#00CC99', ...o
   return { name, value, label: `input.${name}`, type: 'color', ...options }
 }
 
-export const pxratio = () => buildInputSlider({ name: 'pxratio', icon: 'pxratio', min: 0.01, max: 1, value: 0.8 })
+export const pxratio = (options: Partial<BuildInputSliderOptions> = {}) => buildInputSlider({ name: 'pxratio', icon: 'pxratio', min: 0.01, max: 1, value: 0.8, ...options })
+
 export const hueSlider = () => buildInputSlider({ name: 'hue', min: 1, max: 360, step: 1, value: 0 })
+
 export const brightnessSlider = () => buildInputSlider({ name: 'brightness', min: 0, max: 1, step: 0.01, value: 1 })
+
 export const buildInvertCheckbox = (): AppInputThemeGeneral => ({
   name: 'invert',
   label: 'input.invert',
