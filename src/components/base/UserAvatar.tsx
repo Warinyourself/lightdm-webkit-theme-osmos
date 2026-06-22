@@ -14,6 +14,7 @@ export default defineComponent({
       pageStore.openBlock({ id: 'settings' })
     }
 
+    // TODO: Если не удалось загрузить пользователя, то демонстрируем изображение по умолчанию.
     return () => {
       const user = session.currentUser.value
       return (

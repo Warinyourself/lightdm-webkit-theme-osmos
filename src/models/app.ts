@@ -71,6 +71,8 @@ export interface AppInputThemeOptions {
 }
 
 export interface AppInputThemeOptionsSlider extends AppInputThemeOptions {
+  value?: number;
+  icon?: string;
   min: number;
   max: number;
   step: number;

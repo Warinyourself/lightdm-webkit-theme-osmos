@@ -1,4 +1,5 @@
 import type { AppInputButton, AppInputThemeGeneral, AppInputThemePalette, AppInputThemeSlider, AppTheme } from '@/models/app'
+import { AppInputThemeOptionsSlider } from '@/models/app.ts'
 
 export function randomize(min: number, max: number) {
   return Math.random() * (max - min) + min
@@ -53,17 +54,7 @@ export const resetButton: AppInputButton = {
   }
 }
 
-interface BuildInputSliderOptions {
-  name: string
-  value: number
-  min: number
-  max: number
-  step: number
-  icon: string
-  changeOnUpdate: boolean
-}
-
-export function buildInputSlider(options?: Partial<BuildInputSliderOptions>): AppInputThemeSlider {
+export function buildInputSlider(options?: Partial<AppInputThemeOptionsSlider & AppInputThemeSlider>): AppInputThemeSlider {
   const {
     name = 'animation-speed',
     value = 5,
@@ -81,7 +72,7 @@ export function buildInputColor({ name = 'active-color', value = '#00CC99', ...o
   return { name, value, label: `input.${name}`, type: 'color', ...options }
 }
 
-export const pxratio = (options: Partial<BuildInputSliderOptions> = {}) => buildInputSlider({ name: 'pxratio', icon: 'pxratio', min: 0.01, max: 1, value: 0.8, ...options })
+export const pxratio = (options: Partial<AppInputThemeOptionsSlider> = {}) => buildInputSlider({ name: 'pxratio', icon: 'pxratio', min: 0.01, max: 1, value: 0.8, ...options })
 
 export const hueSlider = () => buildInputSlider({ name: 'hue', min: 1, max: 360, step: 1, value: 0 })
 
