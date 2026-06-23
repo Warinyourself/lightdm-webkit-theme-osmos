@@ -34,7 +34,9 @@ export default defineConfig({
     }
   },
   optimizeDeps: {
-    exclude: ['vividgl']
+    // Rolldown (Vite 8) dep scanner fails to parse JSX syntax.
+    // All deps ship ESM so pre-bundling is not needed.
+    disabled: true
   },
   css: {
     preprocessorOptions: {
