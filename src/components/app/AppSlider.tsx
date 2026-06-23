@@ -1,4 +1,4 @@
-import { defineComponent, computed } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
@@ -10,20 +10,36 @@ export default defineComponent({
     from: { type: Number, default: 0 },
     to: { type: Number, default: 100 },
     step: { type: Number, default: 1 },
-    changeOnUpdate: { type: Boolean, default: false }
+    changeOnUpdate: { type: Boolean, default: false } // kept for API compat, ignored
   },
 
   emits: ['update:modelValue'],
 
   setup(props, { emit }) {
     const { t } = useI18n()
+    const dragging = ref(false)
+
+    // Local display value tracks thumb position during drag without touching the store
+    const localValue = ref<number | null>(null)
+    const displayValue = computed(() => localValue.value ?? props.modelValue)
 
     const progress = computed(() => {
       const range = props.to - props.from
-      return range === 0 ? 0 : ((props.modelValue - props.from) / range) * 100
+      return range === 0 ? 0 : ((displayValue.value - props.from) / range) * 100
     })
 
-    const onChange = (event: Event) => {
+    const onInput = (event: Event) => {
+      const v = parseFloat((event.target as HTMLInputElement).value)
+      localValue.value = v
+      emit('update:modelValue', v)
+    }
+
+    const onPointerDown = () => { dragging.value = true }
+
+    const onPointerUp = (event: Event) => {
+      dragging.value = false
+      localValue.value = null
+      // Emit final value on release to guarantee sync
       emit('update:modelValue', parseFloat((event.target as HTMLInputElement).value))
     }
 
@@ -31,7 +47,7 @@ export default defineComponent({
       <div class="app-slider">
         <div class="app-slider__content">
           <p class="mb-2">{t(props.label)}</p>
-          <span class={"caption"}>{props.modelValue}</span>
+          <span class="caption">{displayValue.value}</span>
         </div>
         <div class="center-x">
           <input
@@ -42,8 +58,9 @@ export default defineComponent({
             max={props.to}
             step={props.step}
             value={props.modelValue}
-            onInput={props.changeOnUpdate ? onChange : undefined}
-            onChange={!props.changeOnUpdate ? onChange : undefined}
+            onInput={onInput}
+            onPointerdown={onPointerDown}
+            onPointerup={onPointerUp}
           />
         </div>
       </div>
