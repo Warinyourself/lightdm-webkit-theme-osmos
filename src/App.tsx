@@ -5,6 +5,7 @@ import { usePageStore } from '@/store/page'
 import { useQuerySync } from '@/composables/useQuerySync'
 import { useLightdm, initLightdm } from '@/composables/useLightdm'
 import { initSystemInfo } from '@/composables/useSystemInfo'
+import { useSettingsStorage } from '@/composables/useSettingsStorage'
 import { focusInputPassword, setCSSVariable } from '@/utils/helper'
 import { hotkeys, toMagicKeyCombo } from '@/utils/hotkeys'
 import { initTimer } from '@/utils/time'
@@ -15,6 +16,7 @@ export default defineComponent({
   setup() {
     const appStore = useAppStore()
     const pageStore = usePageStore()
+    const storage = useSettingsStorage()
     const keys = useMagicKeys()
 
     const initZoom = () => {
@@ -63,7 +65,7 @@ export default defineComponent({
 
     watch(
       () => appStore.getMainSettings,
-      useDebounceFn(() => appStore.syncSettingsWithCache(), 100),
+      useDebounceFn((settings) => storage.save(settings), 100),
       { deep: true }
     )
 

@@ -1,6 +1,7 @@
 import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/store/app'
+import { useSettingsStorage } from '@/composables/useSettingsStorage'
 import { useRouter, useRoute } from 'vue-router'
 import AppButton from '@/components/app/AppButton'
 import SettingsUsers from './SettingsUsers'
@@ -16,8 +17,10 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
 
+    const storage = useSettingsStorage()
+
     const resetSettings = () => {
-      localStorage.clear()
+      storage.clear()
       appStore.setUpSettings()
       if (Object.keys(route.query).length) {
         router.replace({})

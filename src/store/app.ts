@@ -5,6 +5,7 @@ import type { AppSettings } from '@/models/app'
 
 import { useThemeStore } from '@/store/theme'
 import { useLightdm } from '@/composables/useLightdm'
+import { useSettingsStorage } from '@/composables/useSettingsStorage'
 import { version as appVersion } from '../../package.json'
 
 export const useAppStore = defineStore('app', () => {
@@ -54,29 +55,24 @@ export const useAppStore = defineStore('app', () => {
     localStorage.setItem(key, value)
   }
 
-  function syncSettingsWithCache() {
-    localStorage.setItem('settings', JSON.stringify(getMainSettings.value))
-  }
+  const storage = useSettingsStorage()
 
   function setUpSettings() {
-    try {
-      const settings: AppSettings = JSON.parse(localStorage.getItem('settings') || '{}')
+    const settings = storage.load()
+    if (!settings) return
 
-      if (settings.themes) themeStore.syncThemeWithStore(settings)
+    if (settings.themes) themeStore.syncThemeWithStore(settings)
 
-      const validDesktop = window.lightdm?.sessions.find(({ key }) => key === settings.desktop)?.key
-      session.desktop.value = validDesktop || window.lightdm?.sessions[0]?.key || 'openbox'
+    const validDesktop = window.lightdm?.sessions.find(({ key }) => key === settings.desktop)?.key
+    session.desktop.value = validDesktop || window.lightdm?.sessions[0]?.key || 'openbox'
 
-      const validUser = window.lightdm?.users.find(({ username }) => username === settings.username)?.username
-      session.username.value = validUser || window.lightdm?.users[0]?.username || ''
+    const validUser = window.lightdm?.users.find(({ username }) => username === settings.username)?.username
+    session.username.value = validUser || window.lightdm?.users[0]?.username || ''
 
-      zoom.value = settings.zoom || 1
-      hotkeysEnabled.value = settings.hotkeysEnabled ?? false
-      showTime.value = settings.showTime ?? true
-      timeFormat.value = settings.timeFormat ?? 'short'
-    } catch {
-      setUpSettings()
-    }
+    zoom.value = settings.zoom || 1
+    hotkeysEnabled.value = settings.hotkeysEnabled ?? false
+    showTime.value = settings.showTime ?? true
+    timeFormat.value = settings.timeFormat ?? 'short'
   }
 
   return {
@@ -93,7 +89,6 @@ export const useAppStore = defineStore('app', () => {
     getMainSettings,
     changeBodyClass,
     saveStateApp,
-    syncSettingsWithCache,
     setUpSettings,
   }
 })
