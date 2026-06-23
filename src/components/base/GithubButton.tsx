@@ -1,4 +1,4 @@
-import AppIcon from '@/components/app/AppIcon.vue'
+import AppIcon from '@/components/app/AppIcon'
 import { defineComponent } from 'vue'
 import AppButton from '@/components/app/AppButton'
 

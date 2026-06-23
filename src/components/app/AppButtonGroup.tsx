@@ -1,5 +1,5 @@
 import { defineComponent, type PropType } from 'vue'
-import AppIcon from '@/components/app/AppIcon.vue'
+import AppIcon from '@/components/app/AppIcon'
 
 export interface ButtonGroupItem {
   text?: string

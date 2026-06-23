@@ -5,7 +5,7 @@ import { useSystemInfo } from '@/composables/useSystemInfo'
 import { useAppStore } from '@/store/app'
 import { usePageStore } from '@/store/page'
 import { getDesktopIcon, systemActionsObject } from '@/utils/helper'
-import AppIcon from '@/components/app/AppIcon.vue'
+import AppIcon from '@/components/app/AppIcon'
 import timeRef, { timePresets, type TimePreset } from '@/utils/time'
 
 export default defineComponent({

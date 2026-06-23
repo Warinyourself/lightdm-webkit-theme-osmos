@@ -1,4 +1,4 @@
-import AppIcon from '@/components/app/AppIcon.vue'
+import AppIcon from '@/components/app/AppIcon'
 import { defineComponent, ref, watch, computed, onMounted, onBeforeUnmount } from 'vue'
 import { usePageStore } from '@/store/page'
 import { useAppStore } from '@/store/app'

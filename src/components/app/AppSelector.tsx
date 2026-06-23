@@ -1,4 +1,4 @@
-import AppIcon from '@/components/app/AppIcon.vue'
+import AppIcon from '@/components/app/AppIcon'
 import { ArrowBigUp } from '@lucide/vue'
 import { defineComponent, computed, ref, type PropType } from 'vue'
 import { usePageStore } from '@/store/page'
