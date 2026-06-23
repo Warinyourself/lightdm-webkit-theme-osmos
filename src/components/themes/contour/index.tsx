@@ -18,7 +18,7 @@ export default defineComponent({
     const pxratio        = computed(() => themeStore.getThemeInput('pxratio')?.value        as number || 0.8)
     const scale          = computed(() => themeStore.getThemeInput('scale')?.value          as number || 3.0)
     const contour        = computed(() => themeStore.getThemeInput('contour')?.value        as number || 32.0)
-    const width          = computed(() => themeStore.getThemeInput('width')?.value          as number || 0.15)
+    const width          = computed(() => themeStore.getThemeInput('width')?.value          as number || 0.7)
 
     const maxLine        = computed(() => themeStore.getThemeInput('max-line')?.value       as number || 0.3)
     const color1         = computed(() => themeStore.getThemeInput('color-active')?.value   as string || '#FF00FF')
