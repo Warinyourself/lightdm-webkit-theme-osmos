@@ -2,19 +2,13 @@
   "input": {
     "time": "Time",
     "color": "Select color",
-    "bottom-color": "Bottom color",
     "color-active": "Select active color",
     "color-second": "Select second color",
-    "slider-amount": "Choice slider amount",
-    "dark-mode": "Dark mode",
     "perspective": "Perspective",
-    "depth": "Depth",
     "size": "Size",
     "position": "Position",
-    "amount": "Amount",
     "hue": "Hue",
     "zoom": "Zoom",
-    "zoom-interface": "Zoom interface",
     "pxratio": "Resolution",
     "animation-speed": "Animation speed",
     "invert": "Invert",
@@ -29,9 +23,7 @@
     "scale": "Scale",
     "contour": "Contour",
     "width": "Width",
-    "softness": "Softness",
     "glow": "Glow",
-    "glow-width": "Glow Width",
     "max-line": "Max Line",
     "color-bg": "Background",
     "tube-size": "Tube Size",
@@ -72,10 +64,8 @@
     "blur": "Blur",
     "no-transition": "Disable animations",
     "show-framerate": "Show framerate",
-    "performance": "performance",
     "choice-desktop": "Choice desktop",
     "choice-language": "Choice language",
-    "generate-random-theme": "Generate random theme",
     "keyboard": {
       "title": "Hotkeys",
       "open-themes": "Open theme",
@@ -88,16 +78,12 @@
       "restart": "Restart",
       "suspend": "Suspend"
     },
-    "choice-os": "Choice os",
-    "save-theme": "Save theme",
     "language": "Language",
     "choice-themes": "Themes",
     "customize-theme": "Customize",
-    "change-theme": "Сhange theme",
     "hotkeys": "Hotkeys",
     "show-time": "Show time",
     "time-format": "Time format",
-    "reset-settings": "Reset settings",
-    "about": "Settings system"
+    "reset-settings": "Reset settings"
   }
 }

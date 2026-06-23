@@ -2,19 +2,13 @@
   "input": {
     "time": "Время",
     "color": "Выбрать цвет",
-    "bottom-color": "Выбрать нижний цвет",
     "color-active": "Выбрать активный цвет",
     "color-second": "Выбрать второстепенный цвет",
-    "slider-amount": "Количество ползунков",
-    "dark-mode": "Тёмный режим",
     "perspective": "Перспектива",
-    "depth": "Глубина",
     "size": "Размер",
     "position": "Позиция",
-    "amount": "Количество",
     "hue": "Оттенок",
     "zoom": "Увеличение",
-    "zoom-interface": "Увеличение интерфейса",
     "pxratio": "Разрешение экрана",
     "animation-speed": "Скорость анимации",
     "invert": "Инвертировать",
@@ -29,9 +23,7 @@
     "scale": "Масштаб",
     "contour": "Контур",
     "width": "Ширина",
-    "softness": "Мягкость",
     "glow": "Свечение",
-    "glow-width": "Ширина свечения",
     "max-line": "Макс. линия",
     "color-bg": "Фон",
     "tube-size": "Размер трубки",
@@ -72,10 +64,8 @@
     "blur": "Размытие",
     "no-transition": "Отключить анимацию",
     "show-framerate": "Показывать частоту кадров",
-    "performance": "производительность",
     "choice-desktop": "Окружение рабочего стола",
     "choice-language": "Выбор языка",
-    "generate-random-theme": "Генерировать случайную тему",
     "keyboard": {
       "title": "Горячие клавиши",
       "open-themes": "Открыть темы",
@@ -88,16 +78,12 @@
       "restart": "Перезагрузить",
       "suspend": "Приостановить"
     },
-    "choice-os": "Система",
-    "save-theme": "Сохранить тему",
     "language": "Язык",
     "choice-themes": "Темы",
     "customize-theme": "Настройка",
-    "change-theme": "Сменить тему",
     "hotkeys": "Горячие клавиши",
     "show-time": "Показывать время",
     "time-format": "Формат времени",
-    "reset-settings": "Сбросить настройки",
-    "about": "Настройки системы"
+    "reset-settings": "Сбросить настройки"
   }
 }

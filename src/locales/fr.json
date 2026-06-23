@@ -2,19 +2,13 @@
   "input": {
     "time": "Heure",
     "color": "Sélectionner une couleur",
-    "bottom-color": "Couleur du bas",
     "color-active": "Couleur active",
     "color-second": "Couleur secondaire",
-    "slider-amount": "Nombre de curseurs",
-    "dark-mode": "Mode sombre",
     "perspective": "Perspective",
-    "depth": "Profondeur",
     "size": "Taille",
     "position": "Position",
-    "amount": "Quantité",
     "hue": "Teinte",
     "zoom": "Zoom",
-    "zoom-interface": "Zoom interface",
     "pxratio": "Résolution",
     "animation-speed": "Vitesse d'animation",
     "invert": "Inverser",
@@ -29,9 +23,7 @@
     "scale": "Échelle",
     "contour": "Contour",
     "width": "Largeur",
-    "softness": "Douceur",
     "glow": "Lueur",
-    "glow-width": "Largeur du halo",
     "max-line": "Ligne max",
     "color-bg": "Arrière-plan",
     "tube-size": "Épaisseur du tube",
@@ -72,10 +64,8 @@
     "blur": "Flou",
     "no-transition": "Désactiver les animations",
     "show-framerate": "Afficher le taux de rafraîchissement",
-    "performance": "performance",
     "choice-desktop": "Environnement de bureau",
     "choice-language": "Langue",
-    "generate-random-theme": "Générer un thème aléatoire",
     "keyboard": {
       "title": "Raccourcis clavier",
       "open-themes": "Ouvrir les thèmes",
@@ -88,16 +78,12 @@
       "restart": "Redémarrer",
       "suspend": "Suspendre"
     },
-    "choice-os": "Système",
-    "save-theme": "Sauvegarder le thème",
     "language": "Langue",
     "choice-themes": "Thèmes",
     "customize-theme": "Personnaliser",
-    "change-theme": "Changer de thème",
     "hotkeys": "Raccourcis clavier",
     "show-time": "Afficher l'heure",
     "time-format": "Format de l'heure",
-    "reset-settings": "Réinitialiser les paramètres",
-    "about": "Paramètres système"
+    "reset-settings": "Réinitialiser les paramètres"
   }
 }

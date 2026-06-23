@@ -2,19 +2,13 @@
   "input": {
     "time": "Zeit",
     "color": "Farbe auswählen",
-    "bottom-color": "Untere Farbe",
     "color-active": "Aktive Farbe auswählen",
     "color-second": "Zweite Farbe auswählen",
-    "slider-amount": "Regleranzahl",
-    "dark-mode": "Dunkler Modus",
     "perspective": "Perspektive",
-    "depth": "Tiefe",
     "size": "Größe",
     "position": "Position",
-    "amount": "Menge",
     "hue": "Farbton",
     "zoom": "Zoom",
-    "zoom-interface": "Interface-Zoom",
     "pxratio": "Auflösung",
     "animation-speed": "Animationsgeschwindigkeit",
     "invert": "Invertieren",
@@ -29,9 +23,7 @@
     "scale": "Skalierung",
     "contour": "Kontur",
     "width": "Breite",
-    "softness": "Weichheit",
     "glow": "Leuchten",
-    "glow-width": "Leuchtbreite",
     "max-line": "Max. Linie",
     "color-bg": "Hintergrund",
     "tube-size": "Rohrdicke",
@@ -72,10 +64,8 @@
     "blur": "Unschärfe",
     "no-transition": "Animationen deaktivieren",
     "show-framerate": "Bildrate anzeigen",
-    "performance": "Leistung",
     "choice-desktop": "Desktop-Umgebung",
     "choice-language": "Sprache auswählen",
-    "generate-random-theme": "Zufälliges Design erstellen",
     "keyboard": {
       "title": "Tastenkürzel",
       "open-themes": "Themen öffnen",
@@ -88,16 +78,12 @@
       "restart": "Neu starten",
       "suspend": "Ruhemodus"
     },
-    "choice-os": "System",
-    "save-theme": "Design speichern",
     "language": "Sprache",
     "choice-themes": "Themen",
     "customize-theme": "Anpassen",
-    "change-theme": "Design wechseln",
     "hotkeys": "Tastenkürzel",
     "show-time": "Uhrzeit anzeigen",
     "time-format": "Zeitformat",
-    "reset-settings": "Einstellungen zurücksetzen",
-    "about": "Systemeinstellungen"
+    "reset-settings": "Einstellungen zurücksetzen"
   }
 }
