@@ -4,7 +4,7 @@ import { computed, ref } from 'vue'
 import type { AppTheme, AppSettings, AppInputTheme, AppInputThemeValue } from '@/models/app'
 
 import { randomizeSettingsTheme as buildRandomThemeSettings } from '@/utils/theme-inputs'
-import { setCSSVariable } from '@/utils/dom'
+
 import { AppThemes, defaultTheme } from '@/utils/constant'
 
 // Snapshot of default input values captured before any mutations
@@ -70,10 +70,6 @@ export const useThemeStore = defineStore('theme', () => {
     if (input) input.value = value
   }
 
-  function syncThemeColor() {
-    const { color } = activeTheme.value
-    setCSSVariable('--color-bg', color.background)
-  }
 
   function syncThemeWithStore(settings: AppSettings) {
     const themeName = settings.currentTheme
@@ -112,7 +108,6 @@ export const useThemeStore = defineStore('theme', () => {
     changeSettingsTheme,
     changeThemeInput,
     changeSettingsThemeInput,
-    syncThemeColor,
     syncThemeWithStore
   }
 })
