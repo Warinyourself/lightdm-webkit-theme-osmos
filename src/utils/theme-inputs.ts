@@ -1,6 +1,5 @@
 import type { AppInputButton, AppInputThemeGeneral, AppInputThemePalette, AppInputThemeSlider, AppTheme } from '@/models/app'
-import { AppInputThemeOptionsSlider } from '@/models/app.ts'
-
+import type { AppInputThemeOptionsSlider } from '@/models/app'
 export function randomize(min: number, max: number) {
   return Math.random() * (max - min) + min
 }
