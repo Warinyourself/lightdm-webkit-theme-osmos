@@ -56,6 +56,21 @@ void main() {
   fragColor = vec4(c.rgb * bright, 1.0);
 }`
 
+// ─── Pixelation ──────────────────────────────────────────────────────────────
+// Quantises screen coordinates to uPixelSize×uPixelSize blocks, sampling from
+// the block centre — gives a retro pixel-art look applied before bloom.
+const PIXELATE_FRAG = `#version 300 es
+precision highp float;
+uniform sampler2D uTexture;
+uniform vec2 uResolution;
+uniform float uPixelSize;   // block size in screen pixels (1 = no effect)
+in vec2 vUv;
+out vec4 fragColor;
+void main() {
+  vec2 block = floor(gl_FragCoord.xy / uPixelSize) * uPixelSize + uPixelSize * 0.5;
+  fragColor = texture(uTexture, block / uResolution);
+}`
+
 // ─── Dual-bloom composite ─────────────────────────────────────────────────────
 // Combines the original render with two independent bloom layers:
 //   bloom1 — bright tight bloom (enhances perceived saturation / intensity)
@@ -91,6 +106,8 @@ export interface PostProcessOptions {
   intensityB?: number
   stepMultB?: number
   thresholdB?: number  // luminance threshold before blur: 0 = blur everything, 0.5 = only bright pixels
+  // Pixelation applied before bloom — 1 = off, higher = larger pixel blocks
+  pixelSize?: number
 }
 
 export default class PostProcessGL extends GL {
@@ -101,9 +118,11 @@ export default class PostProcessGL extends GL {
 
   private _blurProgram!: WebGLProgram
   private _extractProgram!: WebGLProgram
+  private _pixelateProgram!: WebGLProgram
   private _compositeProgram!: WebGLProgram
   private _quadBuffer!: WebGLBuffer
   private _extractTarget!: RenderTarget
+  private _pixelateTarget!: RenderTarget
 
   ppOptions: Required<PostProcessOptions>
   ppEnabled: boolean
@@ -122,6 +141,7 @@ export default class PostProcessGL extends GL {
     this.ppOptions = {
       passesA: 1, radiusA: 5,   intensityA: 1.2, stepMultA: 1,
       passesB: 1, radiusB: 0.5, intensityB: 1.2, stepMultB: 1, thresholdB: 0,
+      pixelSize: 1,
       ...ppOptions
     }
     this._initPostProcess()
@@ -169,8 +189,10 @@ export default class PostProcessGL extends GL {
     this._pongTarget  = this._createTarget(w, h)
     this._extraTarget = this._createTarget(w, h)
     this._extractTarget    = this._createTarget(w, h)
+    this._pixelateTarget   = this._createTarget(w, h)
     this._blurProgram      = this._compilePassProgram(BLUR_FRAG)
     this._extractProgram   = this._compilePassProgram(EXTRACT_FRAG)
+    this._pixelateProgram  = this._compilePassProgram(PIXELATE_FRAG)
     this._compositeProgram = this._compilePassProgram(COMPOSITE_FRAG)
     this._quadBuffer = this.ctx.createBuffer()!
     this.ctx.bindBuffer(this.ctx.ARRAY_BUFFER, this._quadBuffer)
@@ -231,6 +253,19 @@ export default class PostProcessGL extends GL {
     gl.drawArrays(gl.TRIANGLES, 0, 6)
   }
 
+  private _pixelatePass(src: RenderTarget) {
+    const gl = this.ctx
+    gl.bindFramebuffer(gl.FRAMEBUFFER, this._pixelateTarget.fbo)
+    gl.useProgram(this._pixelateProgram)
+    this._bindQuad(this._pixelateProgram)
+    gl.activeTexture(gl.TEXTURE0)
+    gl.bindTexture(gl.TEXTURE_2D, src.texture)
+    gl.uniform1i(gl.getUniformLocation(this._pixelateProgram, 'uTexture'), 0)
+    gl.uniform2f(gl.getUniformLocation(this._pixelateProgram, 'uResolution'), this.el.width, this.el.height)
+    gl.uniform1f(gl.getUniformLocation(this._pixelateProgram, 'uPixelSize'), this.ppOptions.pixelSize)
+    gl.drawArrays(gl.TRIANGLES, 0, 6)
+  }
+
   // ─── Resize ─────────────────────────────────────────────────────────────────
 
   override resize() {
@@ -238,7 +273,7 @@ export default class PostProcessGL extends GL {
     if (!this._mainTarget) return
     const w = this.el.width
     const h = this.el.height
-    for (const t of [this._mainTarget, this._pingTarget, this._pongTarget, this._extraTarget, this._extractTarget]) {
+    for (const t of [this._mainTarget, this._pingTarget, this._pongTarget, this._extraTarget, this._extractTarget, this._pixelateTarget]) {
       this.ctx.bindTexture(this.ctx.TEXTURE_2D, t.texture)
       this.ctx.texImage2D(this.ctx.TEXTURE_2D, 0, this.ctx.RGBA, w, h, 0, this.ctx.RGBA, this.ctx.UNSIGNED_BYTE, null)
     }
@@ -268,7 +303,7 @@ export default class PostProcessGL extends GL {
       return
     }
 
-    const { passesA, radiusA, intensityA, stepMultA, passesB, radiusB, intensityB, stepMultB, thresholdB } = this.ppOptions
+    const { passesA, radiusA, intensityA, stepMultA, passesB, radiusB, intensityB, stepMultB, thresholdB, pixelSize } = this.ppOptions
 
     // Pass 1: render main shader to offscreen texture
     gl.useProgram(this.program)
@@ -282,7 +317,12 @@ export default class PostProcessGL extends GL {
     if (this.renderHook) this.renderHook()
     gl.drawArrays(gl.TRIANGLES, 0, 6)
 
-    const bloomA = this._runBlur(this._mainTarget, passesA, radiusA, false, stepMultA)
+    // Optional pixelation applied before bloom so the effect covers both base and glow
+    const renderBase = pixelSize > 1
+      ? (this._pixelatePass(this._mainTarget), this._pixelateTarget)
+      : this._mainTarget
+
+    const bloomA = this._runBlur(renderBase, passesA, radiusA, false, stepMultA)
 
     // If thresholdB > 0: extract bright pixels first so bloom B scatters only from light sources
     const bloomBSrc = thresholdB > 0
@@ -295,7 +335,7 @@ export default class PostProcessGL extends GL {
     this._bindQuad(this._compositeProgram)
 
     gl.activeTexture(gl.TEXTURE0)
-    gl.bindTexture(gl.TEXTURE_2D, this._mainTarget.texture)
+    gl.bindTexture(gl.TEXTURE_2D, renderBase.texture)
     gl.uniform1i(gl.getUniformLocation(this._compositeProgram, 'uBase'), 0)
 
     gl.activeTexture(gl.TEXTURE1)

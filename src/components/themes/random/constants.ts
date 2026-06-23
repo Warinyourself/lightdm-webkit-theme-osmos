@@ -1,5 +1,6 @@
 import type { AppTheme } from '@/models/app'
-import { pxratio, hueSlider, brightnessSlider, randomButton, resetButton, buildInputSlider, buildInvertCheckbox } from '@/utils/theme-inputs'
+import { pxratio, hueSlider, brightnessSlider, randomButton, resetButton, buildInputSlider, buildInvertCheckbox,
+} from '@/utils/theme-inputs'
 
 export const RANDOM_SETTINGS: AppTheme = {
   name: 'Random',

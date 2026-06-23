@@ -1,5 +1,6 @@
 import type { AppTheme } from '@/models/app'
-import { pxratio, hueSlider, randomButton, resetButton, buildInputSlider } from '@/utils/theme-inputs'
+import { pxratio, hueSlider, randomButton, resetButton, buildInputSlider,
+} from '@/utils/theme-inputs'
 
 export const PLASMA_SETTINGS: AppTheme = {
   name: 'Plasma',

@@ -30,8 +30,15 @@ export default class GL {
   height!: number
 
   innerRunning = false
+  pixelSize = 1  // >1 enables pixelation post-pass (e.g. 6 = 6×6 pixel blocks)
 
   positions!: number[]
+
+  // ─── Pixelation resources (lazy-initialised on first use) ───────────────────
+  private _pxFbo: WebGLFramebuffer | null = null
+  private _pxTex: WebGLTexture | null = null
+  private _pxProg: WebGLProgram | null = null
+  private _pxQuad: WebGLBuffer | null = null
   positionBuffer!: WebGLBuffer | null
 
   listeners: WindowListenerCallback[] = []
@@ -172,16 +179,38 @@ export default class GL {
   render() {
     this.running && requestAnimationFrame(this.render)
 
+    const gl = this.ctx
+    const usePixelate = this.pixelSize > 1
+
+    if (usePixelate) {
+      if (!this._pxFbo) this._initPixelate()
+      gl.bindFramebuffer(gl.FRAMEBUFFER, this._pxFbo)
+    }
+
     if (!this.renderOptions.externalTimeUse) {
       this.time = (Date.now() - this.startTime) / 1000
-      this.ctx.uniform1f(this.programInfo.uniforms.time, this.time)
+      gl.uniform1f(this.programInfo.uniforms.time, this.time)
     }
 
-    if (this.renderHook) {
-      this.renderHook()
-    }
+    if (this.renderHook) this.renderHook()
+    gl.drawArrays(gl.TRIANGLES, 0, 6)
 
-    this.ctx.drawArrays(this.ctx.TRIANGLES, 0, 6)
+    if (usePixelate) {
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null)
+      gl.useProgram(this._pxProg)
+      gl.bindBuffer(gl.ARRAY_BUFFER, this._pxQuad)
+      const loc = gl.getAttribLocation(this._pxProg!, 'aPos')
+      gl.enableVertexAttribArray(loc)
+      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0)
+      gl.activeTexture(gl.TEXTURE0)
+      gl.bindTexture(gl.TEXTURE_2D, this._pxTex)
+      gl.uniform1i(gl.getUniformLocation(this._pxProg!, 'uTex'), 0)
+      gl.uniform2f(gl.getUniformLocation(this._pxProg!, 'uRes'), this.el.width, this.el.height)
+      gl.uniform1f(gl.getUniformLocation(this._pxProg!, 'uSize'), this.pixelSize)
+      gl.drawArrays(gl.TRIANGLES, 0, 6)
+      gl.useProgram(this.program)
+      this.initBuffers(this.positions)
+    }
   }
 
   initBuffers(positions: number[]) {
@@ -235,6 +264,56 @@ export default class GL {
     this.ctx.uniform2fv(this.programInfo.uniforms.resolution, [width * this.pxratio, height * this.pxratio])
 
     this.initBuffers(this.positions)
+
+    if (this._pxTex) {
+      this.ctx.bindTexture(this.ctx.TEXTURE_2D, this._pxTex)
+      this.ctx.texImage2D(this.ctx.TEXTURE_2D, 0, this.ctx.RGBA, this.el.width, this.el.height, 0, this.ctx.RGBA, this.ctx.UNSIGNED_BYTE, null)
+      this.ctx.bindTexture(this.ctx.TEXTURE_2D, null)
+    }
+  }
+
+  private _initPixelate() {
+    const gl = this.ctx
+    const w = this.el.width
+    const h = this.el.height
+
+    this._pxTex = gl.createTexture()
+    gl.bindTexture(gl.TEXTURE_2D, this._pxTex)
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+
+    this._pxFbo = gl.createFramebuffer()
+    gl.bindFramebuffer(gl.FRAMEBUFFER, this._pxFbo)
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this._pxTex, 0)
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null)
+    gl.bindTexture(gl.TEXTURE_2D, null)
+
+    const compile = (type: number, src: string) => {
+      const s = gl.createShader(type)!
+      gl.shaderSource(s, src)
+      gl.compileShader(s)
+      return s
+    }
+    this._pxProg = gl.createProgram()!
+    gl.attachShader(this._pxProg, compile(gl.VERTEX_SHADER, `#version 300 es
+in vec2 aPos; out vec2 vUv;
+void main() { vUv = aPos * 0.5 + 0.5; gl_Position = vec4(aPos, 0.0, 1.0); }`))
+    gl.attachShader(this._pxProg, compile(gl.FRAGMENT_SHADER, `#version 300 es
+precision highp float;
+uniform sampler2D uTex; uniform vec2 uRes; uniform float uSize;
+in vec2 vUv; out vec4 fragColor;
+void main() {
+  vec2 b = floor(gl_FragCoord.xy / uSize) * uSize + uSize * 0.5;
+  fragColor = texture(uTex, b / uRes);
+}`))
+    gl.linkProgram(this._pxProg)
+
+    this._pxQuad = gl.createBuffer()!
+    gl.bindBuffer(gl.ARRAY_BUFFER, this._pxQuad)
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, -1,1, 1,-1, 1,1]), gl.STATIC_DRAW)
   }
 
   createShaderOfType(ctx: ctxType, type: GLenum, source: string) {

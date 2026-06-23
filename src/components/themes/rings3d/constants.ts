@@ -1,5 +1,6 @@
 import type { AppTheme } from '@/models/app'
-import { pxratio, randomButton, resetButton, buildInputSlider, buildInputColor } from '@/utils/theme-inputs'
+import { pxratio, randomButton, resetButton, buildInputSlider, buildInputColor,
+} from '@/utils/theme-inputs'
 
 export const RINGS3D_SETTINGS: AppTheme = {
   name: 'Rings3D',

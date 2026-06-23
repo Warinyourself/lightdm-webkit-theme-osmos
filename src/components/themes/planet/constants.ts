@@ -1,5 +1,6 @@
 import type { AppTheme } from '@/models/app'
-import { pxratio, randomButton, resetButton, buildInputSlider } from '@/utils/theme-inputs'
+import { pxratio, randomButton, resetButton, buildInputSlider,
+} from '@/utils/theme-inputs'
 
 export const PLANET_SETTINGS: AppTheme = {
   name: 'Planet',

@@ -83,3 +83,10 @@ export const buildInvertCheckbox = (): AppInputThemeGeneral => ({
   type: 'checkbox',
   value: false
 })
+
+export const buildCheckbox = (name: string, value = false): AppInputThemeGeneral => ({
+  name,
+  label: `input.${name}`,
+  type: 'checkbox' as const,
+  value
+})
